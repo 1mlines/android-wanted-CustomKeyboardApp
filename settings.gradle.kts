@@ -13,5 +13,7 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "android-wanted-CustomKeyboardApp"
-include (":presentation")
-include(":data")
+
+include(":Keyboard")
+include(":Keyboard:presentation")
+include(":Keyboard:data")

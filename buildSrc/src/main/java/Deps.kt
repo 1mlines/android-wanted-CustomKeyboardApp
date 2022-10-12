@@ -14,28 +14,22 @@ object Deps {
 
     object Hilt {
         private val hiltAndroid by lazy { "com.google.dagger:hilt-android:${Versions.Hilt.hiltVersion}" }
-        private const val hiltLifecycleViewmodel =
-            "androidx.hilt:hilt-lifecycle-viewmodel:${Versions.Hilt.hiltLifecycleViewmodelVersion}"
-
         val hiltCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.Hilt.hiltVersion}" }
 
         val hiltList = listOf(
-            hiltAndroid,
-//            hiltLifecycleViewmodel
+            hiltAndroid
         )
     }
 
     object Room {
         private val roomRuntime by lazy { "androidx.room:room-runtime:${Versions.Room.roomVersion}" }
-        private val roomExtension by lazy { "androidx.room:room-ktx:$${Versions.Room.roomVersion}" }
+        private val roomExtension by lazy { "androidx.room:room-ktx:${Versions.Room.roomVersion}" }
         val roomCompiler by lazy { "androidx.room:room-compiler:${Versions.Room.roomVersion}" }
-        val roomTest by lazy { "androidx.room:room-testing:$${Versions.Room.roomVersion}" }
+        val roomTest by lazy { "androidx.room:room-testing:${Versions.Room.roomVersion}" }
 
         val roomList = listOf(
             roomRuntime,
             roomExtension
         )
-
     }
-
 }
