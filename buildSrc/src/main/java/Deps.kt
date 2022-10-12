@@ -25,4 +25,17 @@ object Deps {
         )
     }
 
+    object Room {
+        private val roomRuntime by lazy { "androidx.room:room-runtime:${Versions.Room.roomVersion}" }
+        private val roomExtension by lazy { "androidx.room:room-ktx:$${Versions.Room.roomVersion}" }
+        val roomCompiler by lazy { "androidx.room:room-compiler:${Versions.Room.roomVersion}" }
+        val roomTest by lazy { "androidx.room:room-testing:$${Versions.Room.roomVersion}" }
+
+        val roomList = listOf(
+            roomRuntime,
+            roomExtension
+        )
+
+    }
+
 }

@@ -43,4 +43,7 @@ dependencies {
     Deps.Hilt.hiltList.forEach(::implementation)
     kapt(Deps.Hilt.hiltCompiler)
 
+    Deps.Room.roomList.forEach(::implementation)
+    kapt(Deps.Room.roomCompiler)
+    testImplementation(Deps.Room.roomTest)
 }

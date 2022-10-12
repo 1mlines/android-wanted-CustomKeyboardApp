@@ -23,4 +23,8 @@ object Versions {
         const val hiltLifecycleViewmodelVersion = "1.0.0-alpha03"
     }
 
+    object Room {
+       const val roomVersion = "2.4.3"
+    }
+
 }
