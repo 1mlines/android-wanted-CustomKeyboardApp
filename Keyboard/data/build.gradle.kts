@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -19,9 +20,9 @@ android {
 
 dependencies {
     Deps.Hilt.hiltList.forEach(::implementation)
-    annotationProcessor(Deps.Hilt.hiltCompiler)
+    kapt(Deps.Hilt.hiltCompiler)
 
     Deps.Room.roomList.forEach(::implementation)
-    annotationProcessor(Deps.Room.roomCompiler)
+    kapt(Deps.Room.roomCompiler)
     testImplementation(Deps.Room.roomTest)
 }
