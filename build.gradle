@@ -11,6 +11,7 @@ buildscript {
         timber_version = "5.0.1"
         lifecycle_version = "2.5.1"
         room_version = "2.4.3"
+        coroutine_version = "1.6.4"
     }
 }
 
