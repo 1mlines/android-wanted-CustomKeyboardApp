@@ -1,6 +1,5 @@
 package com.hugh.presentation.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hugh.data.repository.ClipBoardRepository

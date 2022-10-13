@@ -9,4 +9,8 @@ class ClipBoardActor(private val keyboardHandler: ClipBoardHandler) {
     fun insertClipData(text: String) {
         keyboardHandler.clipAction(ClipBoardState.Insert(text))
     }
+
+    fun deleteClipData(id: Long) {
+        keyboardHandler.clipAction(ClipBoardState.Delete(id))
+    }
 }
