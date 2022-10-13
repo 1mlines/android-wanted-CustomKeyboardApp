@@ -23,7 +23,6 @@ class KeyboardKorean constructor(
     lateinit var koreanLayout: LinearLayout
     var isCaps:Boolean = false
     var buttons:MutableList<Button> = mutableListOf<Button>()
-    lateinit var hangulMaker: HangulMaker
     var inputConnection:InputConnection? = null
         set(inputConnection){
             field = inputConnection
@@ -47,7 +46,6 @@ class KeyboardKorean constructor(
 
     fun init(){
         koreanLayout = layoutInflater.inflate(com.hugh.presentation.R.layout.keyboard_action, null) as LinearLayout
-        hangulMaker = HangulMaker(inputConnection!!)
 
         val menupadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.menupad_line
@@ -93,7 +91,6 @@ class KeyboardKorean constructor(
     }
 
     fun getLayout():LinearLayout{
-        hangulMaker = HangulMaker(inputConnection!!)
         setLayoutComponents()
         return koreanLayout
     }
@@ -166,10 +163,9 @@ class KeyboardKorean constructor(
             when (actionButton.text.toString()) {
                 else -> {
                     try{
-                        hangulMaker.directlyCommit()
                         inputConnection?.commitText(actionButton.text.toString(), 1)
                     }catch (e: NumberFormatException){
-                        hangulMaker.commit(actionButton.text.toString().toCharArray().get(0))
+
                     }
                     if(isCaps){
                         modeChange()
@@ -298,7 +294,6 @@ class KeyboardKorean constructor(
     }
     fun getSpaceAction(): View.OnClickListener{
         return View.OnClickListener{
-            hangulMaker.commitSpace()
         }
     }
 
@@ -320,10 +315,6 @@ class KeyboardKorean constructor(
                         KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0,
                         KeyEvent.FLAG_SOFT_KEYBOARD)
                 )
-                hangulMaker.clear()
-            }
-            else{
-                hangulMaker.delete()
             }
         }
     }
@@ -336,7 +327,6 @@ class KeyboardKorean constructor(
 
     fun getEnterAction(): View.OnClickListener{
         return View.OnClickListener{
-            hangulMaker.directlyCommit()
             val eventTime = SystemClock.uptimeMillis()
             inputConnection?.sendKeyEvent(
                 KeyEvent(eventTime, eventTime,
