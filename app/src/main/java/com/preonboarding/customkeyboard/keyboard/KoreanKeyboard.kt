@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.children
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import com.preonboarding.customkeyboard.KeyboardActionListener
 import com.preonboarding.customkeyboard.Mode
@@ -238,6 +237,7 @@ class KoreanKeyBoard(
             val cursor = inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
             cursor?.let {
                 if (cursor.length >= 2) {
+                    inputConnection?.finishComposingText()
                     sendKeyEvent()
                     combiner.clear()
                 } else {
@@ -255,6 +255,7 @@ class KoreanKeyBoard(
             val cursor = inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
             cursor?.let {
                 if (cursor.length >= 2) {
+                    inputConnection?.finishComposingText()
                     sendKeyEvent()
                     combiner.clear()
                 }
@@ -275,7 +276,6 @@ class KoreanKeyBoard(
     private fun sendKeyEvent() {
         val eventTime = SystemClock.uptimeMillis()
         inputConnection?.apply {
-            finishComposingText()
             sendKeyEvent(
                 KeyEvent(
                     eventTime, eventTime,
@@ -292,8 +292,6 @@ class KoreanKeyBoard(
             )
         }
     }
-
-/*    private */
 
     private fun setSpecialKey(imageView: ImageView, drawable: Int, listener: View.OnClickListener) {
         imageView.apply {
