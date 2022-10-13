@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 keyboardViewModel.copyFlow.collect { state ->
-                    clipBoardActor.insertClipData(state)
+                    keyboardViewModel.insertClipData(state)
                 }
             }
         }

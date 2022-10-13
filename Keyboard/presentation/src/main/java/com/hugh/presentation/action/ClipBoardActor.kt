@@ -6,10 +6,6 @@ class ClipBoardActor(private val keyboardHandler: ClipBoardHandler) {
         keyboardHandler.clipAction(ClipBoardAction.Copy(text))
     }
 
-    fun insertClipData(state: ClipState.Clip) {
-        keyboardHandler.clipAction(ClipBoardAction.Insert(state))
-    }
-
     fun deleteClipData(id: Long) {
         keyboardHandler.clipAction(ClipBoardAction.Delete(id))
     }

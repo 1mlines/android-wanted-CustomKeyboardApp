@@ -31,9 +31,6 @@ class KeyboardViewModel @Inject constructor(
             is ClipBoardAction.Copy -> {
                 copyClipData(action.text)
             }
-            is ClipBoardAction.Insert -> {
-                insertClipData(action.state)
-            }
             is ClipBoardAction.Delete -> {
                 deleteClipData(action.id)
             }
@@ -46,17 +43,17 @@ class KeyboardViewModel @Inject constructor(
         }
     }
 
-    private fun insertClipData(state: ClipState.Clip) {
+    private fun deleteClipData(id: Long) {
+        viewModelScope.launch {
+            clipBoardRepository.deleteClipData(id)
+        }
+    }
+
+    fun insertClipData(state: ClipState.Clip) {
         viewModelScope.launch {
             clipBoardRepository.insertClipData(
                 ClipBoardData.EMPTY.copy(text = state.text)
             )
-        }
-    }
-
-    private fun deleteClipData(id: Long) {
-        viewModelScope.launch {
-            clipBoardRepository.deleteClipData(id)
         }
     }
 }
