@@ -18,18 +18,6 @@ fun String.getTypeOfKR(): KRType? {
     }
 }
 
-fun String.getEachIndex(): Triple<Int, Int, Int> {
-    //조합 : (초성 * 21 + 중성) * 28 + 종성 + 0xAC00
-    //초성 : ((문자유니코드 - 0xAC00)/28)/21
-    //중성 : (문자유니코드 - 0xAC00) / 28 % 21
-    //종성 : (문자유니코드 - 0xAC00) % 28
-    val letterCode = this.codePointAt(0) - 0xAC00
-    val first = letterCode / 28 / 21
-    val middle = letterCode / 28 % 21
-    val last = letterCode % 28
-    return Triple(first, middle, last)
-}
-
 fun String.getDoubleVowel(vowel: String): String {
     //ㅚ ㅙ ㅘ
     // ㅟ ㅞ ㅝ
