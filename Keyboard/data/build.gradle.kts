@@ -19,6 +19,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":Keyboard:model"))
+
     Deps.Hilt.hiltList.forEach(::implementation)
     kapt(Deps.Hilt.hiltCompiler)
 

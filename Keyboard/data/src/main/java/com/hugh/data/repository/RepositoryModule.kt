@@ -11,7 +11,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindKeyboardRepository(
-        keyboardRepositoryImpl: KeyboardRepositoryImpl
-    ): KeyboardRepository
+        keyboardRepositoryImpl: ClipBoardRepositoryImpl
+    ): ClipBoardRepository
 
 }

@@ -35,10 +35,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
+    dataBinding {
+        enable =true
+    }
+
 }
 
 dependencies {
     implementation(project(":Keyboard:data"))
+    implementation(project(":Keyboard:model"))
 
     implementation(Deps.androidxCore)
     implementation(Deps.material)
