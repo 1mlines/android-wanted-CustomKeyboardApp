@@ -1,20 +1,15 @@
 package com.hugh.presentation.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.hugh.presentation.R
 import com.hugh.presentation.action.ClipBoardActor
 import com.hugh.presentation.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
 
     private val keyboardViewModel: KeyboardViewModel by viewModels()
     private val clipBoardActor by lazy { ClipBoardActor(keyboardViewModel) }
@@ -22,15 +17,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        mainBinding.actor = clipBoardActor
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                keyboardViewModel.copyFlow.collect { state ->
-                    keyboardViewModel.insertClipData(state)
-                }
-            }
+        setContent {
+            CustomKeyBoardApp()
         }
+//        mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+//        mainBinding.actor = clipBoardActor
+//
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                keyboardViewModel.copyFlow.collect { state ->
+//                    keyboardViewModel.insertClipData(state)
+//                }
+//            }
+//        }
     }
 }
