@@ -33,4 +33,32 @@ object Deps {
             roomExtension
         )
     }
+
+    object Compose {
+        val activityCompose by lazy { "androidx.activity:activity-compose:1.5.0" }
+        val composeUI by lazy { "androidx.compose.ui:ui:1.2.1" }
+        val composeUITooling by lazy { "androidx.compose.ui:ui-tooling:1.2.1" }
+        val composeFoundation by lazy { "androidx.compose.foundation:foundation:1.2.1" }
+        val composeMaterial by lazy { "androidx.compose.material:material:1.2.1" }
+        val composeNavigation by lazy { "androidx.navigation:navigation-compose:2.5.2" }
+        val composeImmutable by lazy { "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5" }
+        val composeFlowLayout by lazy { "com.google.accompanist:accompanist-flowlayout:0.24.13-rc" }
+        val composeLiveData by lazy { "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1" }
+        val composeMaterialIcon by lazy { "androidx.compose.material:material-icons-core:1.2.1" }
+        val composeMaterialIconExtended by lazy { "androidx.compose.material:material-icons-extended:1.2.1" }
+
+        val composeList = listOf(
+            activityCompose,
+            composeUI,
+            composeUITooling,
+            composeFoundation,
+            composeMaterial,
+            composeNavigation,
+            composeImmutable,
+            composeFlowLayout,
+            composeLiveData,
+            composeMaterialIcon,
+            composeMaterialIconExtended
+        )
+    }
 }
