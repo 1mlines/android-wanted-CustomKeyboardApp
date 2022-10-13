@@ -1,4 +1,4 @@
-package com.preonboarding.customkeyboard.keyboard
+package com.preonboarding.customkeyboard.presentation.keyboard
 
 import android.content.Context
 import android.view.inputmethod.InputConnection

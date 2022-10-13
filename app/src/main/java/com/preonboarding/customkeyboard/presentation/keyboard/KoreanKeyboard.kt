@@ -1,4 +1,4 @@
-package com.preonboarding.customkeyboard.keyboard
+package com.preonboarding.customkeyboard.presentation.keyboard
 
 import android.content.Context
 import android.content.res.Configuration
@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
-import com.preonboarding.customkeyboard.KeyboardActionListener
+import com.preonboarding.customkeyboard.presentation.KeyboardActionListener
 import com.preonboarding.customkeyboard.R
 
 class KoreanKeyBoard(
