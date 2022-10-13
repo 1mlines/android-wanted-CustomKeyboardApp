@@ -3,9 +3,10 @@ package com.preonboarding.customkeyboard.keyboard
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
-import android.inputmethodservice.Keyboard
-import android.media.AudioManager
-import android.os.*
+import android.os.Build
+import android.os.Handler
+import android.os.SystemClock
+import android.os.Vibrator
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -31,9 +32,6 @@ class KeyboardKorean constructor(
     lateinit var vibrator: Vibrator
     lateinit var sharedPreferences: SharedPreferences
     var inputConnection: InputConnection? = null
-        set(inputConnection) {
-            field = inputConnection
-        }
     var sound = 0
     var vibrate = 0
     val numpadText = listOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
@@ -41,11 +39,7 @@ class KeyboardKorean constructor(
     val secondLineText = listOf<String>("ㅁ", "ㄴ", "ㅇ", "ㄹ", "ㅎ", "ㅗ", "ㅓ", "ㅏ", "ㅣ")
     val thirdLineText = listOf<String>("CAPS", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "DEL")
     val fourthLineText = listOf<String>("!#1", "한/영", ",", "space", ".", "Enter")
-    val firstLongClickText = listOf("!", "@", "#", "$", "%", "^", "&", "*", "(", ")")
-    val secondLongClickText = listOf<String>("~", "+", "-", "×", "♥", ":", ";", "'", "\"")
-    val thirdLongClickText = listOf("", "_", "<", ">", "/", ",", "?")
     val myKeysText = ArrayList<List<String>>()
-    val myLongClickKeysText = ArrayList<List<String>>()
     val layoutLines = ArrayList<LinearLayout>()
     var downView: View? = null
     var capsView: ImageView? = null
@@ -58,7 +52,7 @@ class KeyboardKorean constructor(
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
 
         val height = sharedPreferences.getInt("keyboardHeight", 150)
-        val config = context.getResources().configuration
+        val config = context.resources.configuration
         sound = sharedPreferences.getInt("keyboardSound", -1)
         vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
@@ -106,11 +100,6 @@ class KeyboardKorean constructor(
         myKeysText.add(secondLineText)
         myKeysText.add(thirdLineText)
         myKeysText.add(fourthLineText)
-
-        myLongClickKeysText.clear()
-        myLongClickKeysText.add(firstLongClickText)
-        myLongClickKeysText.add(secondLongClickText)
-        myLongClickKeysText.add(thirdLongClickText)
 
         layoutLines.clear()
         layoutLines.add(numpadLine)
@@ -189,37 +178,15 @@ class KeyboardKorean constructor(
         }
     }
 
-
-    private fun playClick(i: Int) {
-        val am = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager?
-        when (i) {
-            32 -> am!!.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR)
-            Keyboard.KEYCODE_DONE, 10 -> am!!.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN)
-            Keyboard.KEYCODE_DELETE -> am!!.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE)
-            else -> am!!.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD, -1.toFloat())
-        }
-    }
-
-    private fun playVibrate() {
-        if (vibrate > 0) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator.vibrate(VibrationEffect.createOneShot(70, vibrate))
-            } else {
-                vibrator.vibrate(70)
-            }
-        }
-    }
-
     private fun getMyClickListener(actionButton: Button): View.OnClickListener {
 
         val clickListener = (View.OnClickListener {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
             }
-            playVibrate()
-            val cursorcs: CharSequence? =
+            val cursors: CharSequence? =
                 inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
-            if (cursorcs != null && cursorcs.length >= 2) {
+            if (cursors != null && cursors.length >= 2) {
 
                 val eventTime = SystemClock.uptimeMillis()
                 inputConnection?.finishComposingText()
@@ -242,13 +209,12 @@ class KeyboardKorean constructor(
             when (actionButton.text.toString()) {
 
                 else -> {
-                    playClick(actionButton.text.toString().toCharArray().get(0).toInt())
                     try {
                         val myText = Integer.parseInt(actionButton.text.toString())
                         hangulMaker.directlyCommit()
                         inputConnection?.commitText(actionButton.text.toString(), 1)
                     } catch (e: NumberFormatException) {
-                        hangulMaker.commit(actionButton.text.toString().toCharArray().get(0))
+                        hangulMaker.commit(actionButton.text.toString().toCharArray()[0])
                     }
                     if (isCaps) {
                         modeChange()
@@ -262,7 +228,7 @@ class KeyboardKorean constructor(
 
     fun getOnTouchListener(clickListener: View.OnClickListener): View.OnTouchListener {
         val handler = Handler()
-        val initailInterval = 500
+        val initialInterval = 500
         val normalInterval = 100
         val handlerRunnable = object : Runnable {
             override fun run() {
@@ -272,10 +238,10 @@ class KeyboardKorean constructor(
         }
         val onTouchListener = object : View.OnTouchListener {
             override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
-                when (motionEvent?.getAction()) {
+                when (motionEvent?.action) {
                     MotionEvent.ACTION_DOWN -> {
                         handler.removeCallbacks(handlerRunnable)
-                        handler.postDelayed(handlerRunnable, initailInterval.toLong())
+                        handler.postDelayed(handlerRunnable, initialInterval.toLong())
                         downView = view!!
                         clickListener.onClick(view)
                         return true
@@ -302,7 +268,6 @@ class KeyboardKorean constructor(
         for (line in layoutLines.indices) {
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
-            var longClickIndex = 0
             for (item in children.indices) {
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
                 val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
@@ -346,21 +311,15 @@ class KeyboardKorean constructor(
                     "한/영" -> {
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
-                        myOnClickListener = object : View.OnClickListener {
-                            override fun onClick(p0: View?) {
-                                keyboardInterationListener.modechange(0)
-                            }
-                        }
+                        myOnClickListener =
+                            View.OnClickListener { keyboardInterationListener.modechange(0) }
                         actionButton.setOnClickListener(myOnClickListener)
                     }
                     "!#1" -> {
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
-                        myOnClickListener = object : View.OnClickListener {
-                            override fun onClick(p0: View?) {
-                                keyboardInterationListener.modechange(2)
-                            }
-                        }
+                        myOnClickListener =
+                            View.OnClickListener { keyboardInterationListener.modechange(2) }
                         actionButton.setOnClickListener(myOnClickListener)
                     }
                     else -> {
@@ -377,15 +336,12 @@ class KeyboardKorean constructor(
 
     fun getSpaceAction(): View.OnClickListener {
         return View.OnClickListener {
-            playClick('ㅂ'.toInt())
-            playVibrate()
             hangulMaker.commitSpace()
         }
     }
 
     fun getDeleteAction(): View.OnClickListener {
         return View.OnClickListener {
-            playVibrate()
             val cursorcs: CharSequence? =
                 inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
             if (cursorcs != null && cursorcs.length >= 2) {
@@ -415,14 +371,12 @@ class KeyboardKorean constructor(
 
     fun getCapsAction(): View.OnClickListener {
         return View.OnClickListener {
-            playVibrate()
             modeChange()
         }
     }
 
     fun getEnterAction(): View.OnClickListener {
         return View.OnClickListener {
-            playVibrate()
             hangulMaker.directlyCommit()
             val eventTime = SystemClock.uptimeMillis()
             inputConnection?.sendKeyEvent(
