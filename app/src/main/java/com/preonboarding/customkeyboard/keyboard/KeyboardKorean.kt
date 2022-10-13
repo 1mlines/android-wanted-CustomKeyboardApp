@@ -6,14 +6,12 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Handler
 import android.os.SystemClock
-import android.os.Vibrator
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputConnection
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.view.children
 import com.myhome.rpgkeyboard.KeyboardInterationListener
@@ -26,35 +24,29 @@ class KeyboardKorean constructor(
 ) {
 
     lateinit var koreanLayout: LinearLayout
-    var isCaps: Boolean = false
+    var isShift: Boolean = false
     var buttons: MutableList<Button> = mutableListOf<Button>()
     lateinit var hangulMaker: HangulMaker
-    lateinit var vibrator: Vibrator
     lateinit var sharedPreferences: SharedPreferences
     var inputConnection: InputConnection? = null
-    var sound = 0
-    var vibrate = 0
+
     val numpadText = listOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
     val firstLineText = listOf<String>("ㅂ", "ㅈ", "ㄷ", "ㄱ", "ㅅ", "ㅛ", "ㅕ", "ㅑ", "ㅐ", "ㅔ")
     val secondLineText = listOf<String>("ㅁ", "ㄴ", "ㅇ", "ㄹ", "ㅎ", "ㅗ", "ㅓ", "ㅏ", "ㅣ")
-    val thirdLineText = listOf<String>("CAPS", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "DEL")
-    val fourthLineText = listOf<String>("!#1", "한/영", ",", "space", ".", "Enter")
+    val thirdLineText = listOf<String>("Shift", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "Back")
+    val fourthLineText = listOf<String>("1@#", "한/영", "?", "space", ".", "Enter")
     val myKeysText = ArrayList<List<String>>()
     val layoutLines = ArrayList<LinearLayout>()
     var downView: View? = null
-    var capsView: ImageView? = null
 
     fun init() {
-        koreanLayout = layoutInflater.inflate(R.layout.keyboard_action, null) as LinearLayout
+        koreanLayout = layoutInflater.inflate(R.layout.layout_keyboard, null) as LinearLayout
         hangulMaker = HangulMaker(inputConnection!!)
-        vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         sharedPreferences = context.getSharedPreferences("setting", Context.MODE_PRIVATE)
 
         val height = sharedPreferences.getInt("keyboardHeight", 150)
         val config = context.resources.configuration
-        sound = sharedPreferences.getInt("keyboardSound", -1)
-        vibrate = sharedPreferences.getInt("keyboardVibrate", -1)
 
         val numpadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.numpad_line
@@ -119,11 +111,13 @@ class KeyboardKorean constructor(
 
 
     fun modeChange() {
-        if (isCaps) {
-            isCaps = false
-            capsView?.setImageResource(R.drawable.ic_caps_unlock)
+        if (isShift) {
+            isShift = false
             for (button in buttons) {
                 when (button.text.toString()) {
+                    "Shift" -> {
+                        button.setTextColor(R.color.black)
+                    }
                     "ㅃ" -> {
                         button.text = "ㅂ"
                     }
@@ -148,10 +142,12 @@ class KeyboardKorean constructor(
                 }
             }
         } else {
-            isCaps = true
-            capsView?.setImageResource(R.drawable.ic_caps_lock)
+            isShift = true
             for (button in buttons) {
                 when (button.text.toString()) {
+                    "Shift" -> {
+                        button.setTextColor(R.color.purple_500)
+                    }
                     "ㅂ" -> {
                         button.text = "ㅃ"
                     }
@@ -210,13 +206,12 @@ class KeyboardKorean constructor(
 
                 else -> {
                     try {
-                        val myText = Integer.parseInt(actionButton.text.toString())
                         hangulMaker.directlyCommit()
                         inputConnection?.commitText(actionButton.text.toString(), 1)
                     } catch (e: NumberFormatException) {
                         hangulMaker.commit(actionButton.text.toString().toCharArray()[0])
                     }
-                    if (isCaps) {
+                    if (isShift) {
                         modeChange()
                     }
                 }
@@ -270,57 +265,41 @@ class KeyboardKorean constructor(
             val myText = myKeysText[line]
             for (item in children.indices) {
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
-                val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener? = null
                 when (myText[item]) {
                     "space" -> {
-                        spacialKey.setImageResource(R.drawable.ic_space_bar)
-                        spacialKey.visibility = View.VISIBLE
-                        actionButton.visibility = View.GONE
+                        actionButton.text = myText[item]
                         myOnClickListener = getSpaceAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
-                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                        actionButton.setOnClickListener(myOnClickListener)
+                        actionButton.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        actionButton.setBackgroundResource(R.drawable.key_background)
                     }
-                    "DEL" -> {
-                        spacialKey.setImageResource(R.drawable.del)
-                        spacialKey.visibility = View.VISIBLE
-                        actionButton.visibility = View.GONE
+                    "Back" -> {
+                        actionButton.text = myText[item]
                         myOnClickListener = getDeleteAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        actionButton.setOnClickListener(myOnClickListener)
+                        actionButton.setOnTouchListener(getOnTouchListener(myOnClickListener))
                     }
-                    "CAPS" -> {
-                        spacialKey.setImageResource(R.drawable.ic_caps_unlock)
-                        spacialKey.visibility = View.VISIBLE
-                        actionButton.visibility = View.GONE
-                        capsView = spacialKey
+                    "Shift" -> {
+                        actionButton.text = myText[item]
                         myOnClickListener = getCapsAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                        actionButton.setOnClickListener(myOnClickListener)
+                        actionButton.setBackgroundResource(R.drawable.key_background)
                     }
                     "Enter" -> {
-                        spacialKey.setImageResource(R.drawable.ic_enter)
-                        spacialKey.visibility = View.VISIBLE
-                        actionButton.visibility = View.GONE
+                        actionButton.text = myText[item]
                         myOnClickListener = getEnterAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
-                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                        actionButton.setOnClickListener(myOnClickListener)
+                        actionButton.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        actionButton.setBackgroundResource(R.drawable.key_background)
                     }
                     "한/영" -> {
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
-                        myOnClickListener =
-                            View.OnClickListener { keyboardInterationListener.modechange(0) }
-                        actionButton.setOnClickListener(myOnClickListener)
                     }
-                    "!#1" -> {
+                    "!@#" -> {
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
-                        myOnClickListener =
-                            View.OnClickListener { keyboardInterationListener.modechange(2) }
-                        actionButton.setOnClickListener(myOnClickListener)
                     }
                     else -> {
                         actionButton.text = myText[item]

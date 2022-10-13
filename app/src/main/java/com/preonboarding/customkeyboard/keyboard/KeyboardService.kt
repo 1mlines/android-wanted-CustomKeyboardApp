@@ -14,7 +14,6 @@ class KeyboardService : InputMethodService() {
     lateinit var keyboardFrame: FrameLayout
 
     lateinit var keyboardKorean: KeyboardKorean
-    var isQwerty = 0 // shared preference에 데이터를 저장하고 불러오는 기능 필요
 
     val keyboardInterationListener = object : KeyboardInterationListener {
         //inputconnection이 null일경우 재요청하는 부분 필요함
