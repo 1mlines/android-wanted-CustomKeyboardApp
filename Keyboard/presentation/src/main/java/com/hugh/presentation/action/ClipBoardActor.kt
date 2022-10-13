@@ -1,16 +1,18 @@
 package com.hugh.presentation.action
 
+import com.hugh.model.ClipBoardState
+
 class ClipBoardActor(private val keyboardHandler: ClipBoardHandler) {
 
     fun copyText(text: String) {
-        keyboardHandler.clipAction(ClipBoardState.Copy(text))
+        keyboardHandler.clipAction(ClipBoardAction.Copy(text))
     }
 
-    fun insertClipData(text: String) {
-        keyboardHandler.clipAction(ClipBoardState.Insert(text))
+    fun insertClipData(state: ClipBoardState) {
+        keyboardHandler.clipAction(ClipBoardAction.Insert(state))
     }
 
     fun deleteClipData(id: Long) {
-        keyboardHandler.clipAction(ClipBoardState.Delete(id))
+        keyboardHandler.clipAction(ClipBoardAction.Delete(id))
     }
 }

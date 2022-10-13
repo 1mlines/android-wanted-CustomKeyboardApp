@@ -4,7 +4,7 @@ import androidx.room.withTransaction
 import com.hugh.data.room.KeyboardDatabase
 import com.hugh.data.room.model.asEntity
 import com.hugh.data.room.model.asModel
-import com.hugh.model.ClipBoardData
+import com.hugh.model.ClipBoardState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -14,19 +14,19 @@ class LocalDataSource @Inject constructor(
 ) {
     private val keyboardDao = keyboardDatabase.getKeyboardDao()
 
-    suspend fun insertClipData(data: ClipBoardData) {
+    suspend fun insertClipData(data: ClipBoardState) {
         keyboardDatabase.withTransaction {
             keyboardDao.insertClip(data.asEntity())
         }
     }
 
-    suspend fun deleteClipData(id: Long) {
+    suspend fun deleteClipData(data: ClipBoardState) {
         keyboardDatabase.withTransaction {
-            keyboardDao.deleteClip(id)
+            keyboardDao.deleteClip(data.id)
         }
     }
 
-    fun getClipsFlow(): Flow<List<ClipBoardData>> {
+    fun getClipsFlow(): Flow<List<ClipBoardState>> {
         return keyboardDao.getClips().map { clips ->
             clips.map {
                 it.asModel()

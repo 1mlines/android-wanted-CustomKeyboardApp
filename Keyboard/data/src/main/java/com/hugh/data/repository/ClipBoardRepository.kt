@@ -1,13 +1,13 @@
 package com.hugh.data.repository
 
-import com.hugh.model.ClipBoardData
+import com.hugh.model.ClipBoardState
 import kotlinx.coroutines.flow.Flow
 
 interface ClipBoardRepository {
 
-    suspend fun insertClipData(data: ClipBoardData)
+    suspend fun insertClipData(data: ClipBoardState)
 
-    suspend fun deleteClipData(id: Long)
+    suspend fun deleteClipData(data: ClipBoardState)
 
-    fun getClipsFlow(): Flow<List<ClipBoardData>>
+    fun getClipsFlow(): Flow<List<ClipBoardState>>
 }
