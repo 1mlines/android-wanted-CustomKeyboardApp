@@ -12,19 +12,12 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardFrame: FrameLayout
     lateinit var keyboardKorean: KeyboardKorean
     lateinit var keyboardClipboard: KeyboardClipboard
-    //lateinit var keyboardEnglish:KeyboardEnglish
 
 
     val keyboardInterationListener = object : KeyboardInterationListener {
         override fun modechange(mode: Int) {
             currentInputConnection.finishComposingText()
             when(mode) {
-                /*0 -> {
-                    keyboardFrame.removeAllViews()
-                    keyboardEnglish.inputConnection = currentInputConnection
-                    keyboardFrame.addView(keyboardEnglish.getLayout())
-
-                }*/
                 1 -> {
                     keyboardFrame.removeAllViews()
                     keyboardKorean.inputConnection = currentInputConnection
@@ -47,14 +40,11 @@ class KeyBoardService : InputMethodService() {
     }
 
     override fun onCreateInputView(): View {
-        keyboardKorean = KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
-        //keyboardEnglish = KeyboardEnglish(applicationContext, layoutInflater, keyboardInterationListener)
-        keyboardClipboard = KeyboardClipboard(applicationContext, layoutInflater, keyboardInterationListener)
+        keyboardKorean = KeyboardKorean(layoutInflater, keyboardInterationListener)
+        keyboardClipboard = KeyboardClipboard(layoutInflater, keyboardInterationListener)
 
         keyboardKorean.inputConnection = currentInputConnection
         keyboardKorean.init()
-        //keyboardEnglish.inputConnection = currentInputConnection
-        //keyboardEnglish.init()
 
         keyboardClipboard.inputConnection = currentInputConnection
         keyboardClipboard.init()
@@ -67,12 +57,5 @@ class KeyBoardService : InputMethodService() {
         currentInputConnection.finishComposingText()
         keyboardFrame.removeAllViews()
         keyboardInterationListener.modechange(1)
-        /*if(currentInputEditorInfo.inputType == EditorInfo.TYPE_CLASS_NUMBER){
-            keyboardFrame.removeAllViews()
-            //keyboardFrame.addView(KeyboardNumpad.newInstance(applicationContext, layoutInflater, currentInputConnection, keyboardInterationListener))
-        }
-        else{
-            keyboardInterationListener.modechange(1)
-        }*/
     }
 }

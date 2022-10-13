@@ -1,5 +1,6 @@
 package com.hugh.presentation.ui.keyboard
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.*
 import android.view.KeyEvent
@@ -15,7 +16,6 @@ import com.hugh.presentation.R
 import java.lang.NumberFormatException
 
 class KeyboardKorean constructor(
-    var context:Context,
     var layoutInflater: LayoutInflater,
     var keyboardInterationListener: KeyboardInterationListener
 ){
@@ -29,7 +29,6 @@ class KeyboardKorean constructor(
             field = inputConnection
         }
 
-    //test
     val menupadText = listOf<String>("Home", "Clip")
 
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
@@ -50,11 +49,9 @@ class KeyboardKorean constructor(
         koreanLayout = layoutInflater.inflate(com.hugh.presentation.R.layout.keyboard_action, null) as LinearLayout
         hangulMaker = HangulMaker(inputConnection!!)
 
-        //test
         val menupadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.menupad_line
         )
-
         val numpadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.numpad_line
         )
@@ -166,32 +163,9 @@ class KeyboardKorean constructor(
     private fun getMyClickListener(actionButton:Button): View.OnClickListener{
 
         val clickListener = (View.OnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
-            }
-            val cursorcs:CharSequence? =  inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
-            if(cursorcs != null && cursorcs.length >= 2){
-
-                val eventTime = SystemClock.uptimeMillis()
-                inputConnection?.finishComposingText()
-                inputConnection?.sendKeyEvent(
-                    KeyEvent(eventTime, eventTime,
-                        KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0,
-                        KeyEvent.FLAG_SOFT_KEYBOARD)
-                )
-                inputConnection?.sendKeyEvent(
-                    KeyEvent(
-                        SystemClock.uptimeMillis(), eventTime,
-                        KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0,
-                        KeyEvent.FLAG_SOFT_KEYBOARD)
-                )
-                hangulMaker.clear()
-            }
             when (actionButton.text.toString()) {
-
                 else -> {
                     try{
-                        val myText = Integer.parseInt(actionButton.text.toString())
                         hangulMaker.directlyCommit()
                         inputConnection?.commitText(actionButton.text.toString(), 1)
                     }catch (e: NumberFormatException){
@@ -218,6 +192,7 @@ class KeyboardKorean constructor(
             }
         }
         val onTouchListener = object: View.OnTouchListener {
+            @SuppressLint("ClickableViewAccessibility")
             override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
                 when (motionEvent?.getAction()) {
                     MotionEvent.ACTION_DOWN -> {
@@ -249,12 +224,22 @@ class KeyboardKorean constructor(
         for(line in layoutLines.indices){
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
-            var longClickIndex = 0
             for(item in children.indices){
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
                 val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener? = null
                 when(myText[item]){
+                    "Home" -> {
+                        actionButton.text = myText[item]
+                        buttons.add(actionButton)
+                        myOnClickListener = object : View.OnClickListener{
+                            override fun onClick(p0: View?) {
+                                keyboardInterationListener.modechange(1)
+                            }
+                        }
+                        actionButton.setOnClickListener(myOnClickListener)
+                    }
+
                     "Clip" -> {
                         actionButton.text = myText[item]
                         buttons.add(actionButton)
@@ -265,7 +250,6 @@ class KeyboardKorean constructor(
                         }
                         actionButton.setOnClickListener(myOnClickListener)
                     }
-
                     "space" -> {
                         spacialKey.setImageResource(R.drawable.ic_space_bar)
                         spacialKey.visibility = View.VISIBLE
@@ -300,26 +284,6 @@ class KeyboardKorean constructor(
                         spacialKey.setOnClickListener(myOnClickListener)
                         spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                         spacialKey.setBackgroundResource(R.drawable.key_background)
-                    }
-                    "한/영" -> {
-                        actionButton.text = myText[item]
-                        buttons.add(actionButton)
-                        myOnClickListener = object : View.OnClickListener{
-                            override fun onClick(p0: View?) {
-                                keyboardInterationListener.modechange(0)
-                            }
-                        }
-                        actionButton.setOnClickListener(myOnClickListener)
-                    }
-                    "!#1" -> {
-                        actionButton.text = myText[item]
-                        buttons.add(actionButton)
-                        myOnClickListener = object : View.OnClickListener{
-                            override fun onClick(p0: View?) {
-                                keyboardInterationListener.modechange(2)
-                            }
-                        }
-                        actionButton.setOnClickListener(myOnClickListener)
                     }
                     else -> {
                         actionButton.text = myText[item]
@@ -387,6 +351,4 @@ class KeyboardKorean constructor(
             )
         }
     }
-
-
 }

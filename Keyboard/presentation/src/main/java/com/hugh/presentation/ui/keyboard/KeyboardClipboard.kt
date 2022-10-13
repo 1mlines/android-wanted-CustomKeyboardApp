@@ -11,7 +11,6 @@ import androidx.core.view.children
 import com.hugh.presentation.R
 
 class KeyboardClipboard constructor(
-    var context: Context,
     var layoutInflater: LayoutInflater,
     var keyboardInterationListener: KeyboardInterationListener
 ){
@@ -53,10 +52,8 @@ class KeyboardClipboard constructor(
         for(line in layoutLines.indices){
             val children = layoutLines[line].children.toList()
             val myText = myKeysText[line]
-            var longClickIndex = 0
             for(item in children.indices){
                 val actionButton = children[item].findViewById<Button>(R.id.key_button)
-                val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener? = null
                 when(myText[item]){
                     "Home" -> {
@@ -70,7 +67,16 @@ class KeyboardClipboard constructor(
                         actionButton.setOnClickListener(myOnClickListener)
                     }
 
-
+                    "Clip" -> {
+                        actionButton.text = myText[item]
+                        buttons.add(actionButton)
+                        myOnClickListener = object : View.OnClickListener{
+                            override fun onClick(p0: View?) {
+                                keyboardInterationListener.modechange(2)
+                            }
+                        }
+                        actionButton.setOnClickListener(myOnClickListener)
+                    }
                 }
                 children[item].setOnClickListener(myOnClickListener)
             }
