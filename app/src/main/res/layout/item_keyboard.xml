@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingHorizontal="4dp"
+    android:paddingVertical="3dp">
 
     <TextView
         android:id="@+id/tv_second_text"
@@ -18,7 +20,10 @@
         android:id="@+id/btn_key"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:duplicateParentState="true" />
+        android:background="#3F3D3D"
+        android:duplicateParentState="true"
+        android:gravity="center"
+        android:textColor="@color/white" />
 
     <ImageView
         android:id="@+id/iv_special_key"
