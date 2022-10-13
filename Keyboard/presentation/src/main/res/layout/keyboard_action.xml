@@ -4,6 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
+        android:id="@+id/menupad_line"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <include
+            layout="@layout/keyboard_item"
+            android:id="@+id/action_key_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </include>
+        <include
+            layout="@layout/keyboard_item"
+            android:id="@+id/action_key_clipboard"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+        </include>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/numpad_line"
         android:layout_width="match_parent"
         android:layout_height="50dp"

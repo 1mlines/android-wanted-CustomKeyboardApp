@@ -28,6 +28,10 @@ class KeyboardKorean constructor(
         set(inputConnection){
             field = inputConnection
         }
+
+    //test
+    val menupadText = listOf<String>("Home", "Clip")
+
     val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
     val firstLineText = listOf<String>("ㅂ","ㅈ","ㄷ","ㄱ","ㅅ","ㅛ","ㅕ","ㅑ","ㅐ","ㅔ")
     val secondLineText = listOf<String>("ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ")
@@ -46,6 +50,11 @@ class KeyboardKorean constructor(
         koreanLayout = layoutInflater.inflate(com.hugh.presentation.R.layout.keyboard_action, null) as LinearLayout
         hangulMaker = HangulMaker(inputConnection!!)
 
+        //test
+        val menupadLine = koreanLayout.findViewById<LinearLayout>(
+            R.id.menupad_line
+        )
+
         val numpadLine = koreanLayout.findViewById<LinearLayout>(
             R.id.numpad_line
         )
@@ -63,6 +72,7 @@ class KeyboardKorean constructor(
         )
 
         myKeysText.clear()
+        myKeysText.add(menupadText)
         myKeysText.add(numpadText)
         myKeysText.add(firstLineText)
         myKeysText.add(secondLineText)
@@ -75,6 +85,7 @@ class KeyboardKorean constructor(
         myLongClickKeysText.add(thirdLongClickText)
 
         layoutLines.clear()
+        layoutLines.add(menupadLine)
         layoutLines.add(numpadLine)
         layoutLines.add(firstLine)
         layoutLines.add(secondLine)
