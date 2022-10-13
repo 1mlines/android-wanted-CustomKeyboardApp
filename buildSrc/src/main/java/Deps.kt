@@ -46,6 +46,7 @@ object Deps {
         val composeLiveData by lazy { "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1" }
         val composeMaterialIcon by lazy { "androidx.compose.material:material-icons-core:1.2.1" }
         val composeMaterialIconExtended by lazy { "androidx.compose.material:material-icons-extended:1.2.1" }
+        val composeHiltNavigation by lazy {"androidx.hilt:hilt-navigation-compose:1.0.0"}
 
         val composeList = listOf(
             activityCompose,
