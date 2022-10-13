@@ -3,9 +3,10 @@ package com.hugh.presentation.ui.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hugh.data.repository.ClipBoardRepository
-import com.hugh.model.ClipBoardState
+import com.hugh.model.ClipBoardData
 import com.hugh.presentation.action.ClipBoardHandler
 import com.hugh.presentation.action.ClipBoardAction
+import com.hugh.presentation.action.ClipState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +19,9 @@ class KeyboardViewModel @Inject constructor(
     private val clipBoardRepository: ClipBoardRepository
 ) : ViewModel(), ClipBoardHandler {
 
-    private val _copyFlow = MutableStateFlow(ClipBoardState.EMPTY)
+    private val _copyFlow = MutableStateFlow(
+        ClipState.Clip(text = "")
+    )
     val copyFlow = _copyFlow
         .asStateFlow()
         .filter { it.text.isNotEmpty() }
@@ -39,19 +42,21 @@ class KeyboardViewModel @Inject constructor(
 
     private fun copyClipData(clip: String) {
         viewModelScope.launch {
-            _copyFlow.emit(ClipBoardState.EMPTY.copy(text = clip))
+            _copyFlow.emit(ClipState.Clip(text = clip))
         }
     }
 
-    private fun insertClipData(state: ClipBoardState) {
+    private fun insertClipData(state: ClipState.Clip) {
         viewModelScope.launch {
-            clipBoardRepository.insertClipData(state)
+            clipBoardRepository.insertClipData(
+                ClipBoardData.EMPTY.copy(text = state.text)
+            )
         }
     }
 
     private fun deleteClipData(id: Long) {
         viewModelScope.launch {
-            clipBoardRepository.deleteClipData(ClipBoardState.EMPTY.copy(id = id))
+            clipBoardRepository.deleteClipData(id)
         }
     }
 }

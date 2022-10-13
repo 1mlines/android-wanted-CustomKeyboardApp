@@ -1,14 +1,14 @@
 package com.hugh.data.room.model
 
-import com.hugh.model.ClipBoardState
+import com.hugh.model.ClipBoardData
 
 
-fun ClipBoardEntity.asModel() = ClipBoardState.EMPTY.copy(
+fun ClipBoardEntity.asModel() = ClipBoardData.EMPTY.copy(
     id = this.id,
     text = this.clipData
 )
 
-fun ClipBoardState.asEntity() = ClipBoardEntity.EMPTY.copy(
+fun ClipBoardData.asEntity() = ClipBoardEntity.EMPTY.copy(
     id = this.id,
     clipData = this.text
 )

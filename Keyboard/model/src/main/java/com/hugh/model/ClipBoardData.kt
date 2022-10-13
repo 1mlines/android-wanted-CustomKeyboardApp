@@ -1,12 +1,12 @@
 package com.hugh.model
 
-data class ClipBoardState(
+data class ClipBoardData(
     val id: Long,
     val text: String
 ) {
 
     companion object {
-        val EMPTY = ClipBoardState(
+        val EMPTY = ClipBoardData(
             id = 0,
             text = ""
         )
