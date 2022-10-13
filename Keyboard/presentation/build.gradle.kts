@@ -35,11 +35,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    dataBinding {
-        enable =true
+    buildFeatures {
+        compose = true
     }
-
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.3.1"
+    }
+    dataBinding {
+        enable = true
+    }
 }
 
 dependencies {
@@ -58,4 +62,6 @@ dependencies {
     kapt(Deps.Hilt.hiltCompiler)
 
     implementation(Deps.activityKtx)
+
+    Deps.Compose.composeList.forEach(::implementation)
 }
