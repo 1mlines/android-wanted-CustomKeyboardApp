@@ -255,6 +255,15 @@ class KeyboardKorean constructor(
                 val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener? = null
                 when(myText[item]){
+                    "Clip" -> {
+                        spacialKey.setImageResource(R.drawable.ic_lock_gray_24dp)
+                        spacialKey.visibility = View.VISIBLE
+                        actionButton.visibility = View.GONE
+                        myOnClickListener = getDeleteAction()
+                        spacialKey.setOnClickListener(myOnClickListener)
+                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                    }
+
                     "space" -> {
                         spacialKey.setImageResource(R.drawable.ic_space_bar)
                         spacialKey.visibility = View.VISIBLE
