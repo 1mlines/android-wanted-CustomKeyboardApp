@@ -1,6 +1,6 @@
 package com.hugh.presentation.ui.keyboard
 
-fun String.getTypeOfKR(): KRType? {
+fun String.getTypeOfKR(): KRType {
     return when (this.codePointAt(0)) {
         in firstConsonantArr[0].codePointAt(0)..firstConsonantArr[firstConsonantArr.lastIndex].codePointAt(0) -> {
             KRType.FIRST
@@ -11,10 +11,7 @@ fun String.getTypeOfKR(): KRType? {
         in lastConsonantArr[1].codePointAt(0)..lastConsonantArr[lastConsonantArr.lastIndex].codePointAt(0) -> {
             KRType.LAST
         }
-        else -> {
-            println("잘못된 문자입니다.")
-            null
-        }
+        else -> KRType.OTHERS
     }
 }
 
@@ -64,6 +61,19 @@ fun String.getSingleConsonants(): String {
         "ㄿ" -> "ㄹㅍ"
         "ㅀ" -> "ㄹㅎ"
         "ㅄ" -> "ㅂㅅ"
+        else -> this
+    }
+}
+
+fun String.getSingleVowels(): String {
+    return when (this) {
+        "ㅚ" -> "ㅗㅣ"
+        "ㅙ" -> "ㅗㅐ"
+        "ㅘ" -> "ㅗㅏ"
+        "ㅟ" -> "ㅜㅣ"
+        "ㅞ" -> "ㅜㅔ"
+        "ㅝ" -> "ㅜㅓ"
+        "ㅢ" -> "ㅡㅣ"
         else -> this
     }
 }
