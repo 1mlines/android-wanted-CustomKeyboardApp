@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -38,6 +40,7 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
@@ -75,8 +78,23 @@ fun InfoScreen(
 ) {
     var click by remember { mutableStateOf(false) }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        backgroundColor = CustomKeyBoardTheme.color.white,
+        bottomBar =
+        {
+            Box {
+                BottomShadow(alpha = 0.01f, height = 66.dp)
+                InfoBottomBar(
+                    modifier = Modifier.fillMaxWidth().background(
+                        color = CustomKeyBoardTheme.color.white
+                    ).align(Alignment.BottomCenter),
+                    onClick = {
+                        click = !click
+                    }
+                )
+            }
+        }
     ) {
         LazyColumn {
             item {
@@ -123,7 +141,7 @@ fun InfoScreen(
             }
             item {
                 Image(
-                    modifier = Modifier.fillMaxWidth().height(87.dp),
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
                     painter = painterResource(id = R.drawable.img_ad),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
@@ -158,15 +176,6 @@ fun InfoScreen(
                 navigateTestScreen = navigateTestScreen
             )
         }
-        InfoBottomBar(
-            modifier = Modifier.background(
-                color = CustomKeyBoardTheme.color
-                    .white
-            ).align(Alignment.BottomCenter),
-            onClick = {
-                click = !click
-            }
-        )
     }
 }
 
@@ -175,7 +184,7 @@ fun InfoKeyBoardItemImage(
     modifier: Modifier = Modifier
 ) {
     Image(
-        modifier = modifier.fillMaxWidth().height(264.dp)
+        modifier = modifier.fillMaxWidth().wrapContentHeight()
             .shadow(10.dp, shape = RoundedCornerShape(5.dp)),
         painter = painterResource(id = R.drawable.img_info_keyboard_item),
         contentDescription = null,
@@ -225,7 +234,7 @@ fun InfoMainContent(
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "밀당해피니스 유튜브 채널을 방문하면 “테마명” 이벤트 테마를 무료로 받을 수 있다구요?\n" +
+            text = "밀당해피니스 유튜브 채널을 방문하면 “테마명” 이벤트 테마를 무료로 받을 수 있다구요?" +
                 "지금 바로 ‘참여하기' 버튼을 눌러 새로워진 밀당해피니스 유튜브 채널을 확인해보세요!",
             style = CustomKeyBoardTheme.typography.allBody
         )
@@ -338,7 +347,9 @@ fun InfoReview(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
                     modifier = Modifier.size(13.33.dp),
                     painter = painterResource(id = R.drawable.ic_warning),
@@ -366,14 +377,7 @@ fun InfoBottomBar(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(64.dp).background(
-            brush = Brush.verticalGradient(
-                listOf(
-                    Color.Black.copy(0.012f),
-                    Color.Transparent
-                )
-            )
-        ).padding(horizontal = 12.dp),
+        modifier = modifier.height(64.dp).padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -416,7 +420,7 @@ fun InfoBottomBar(
             modifier = Modifier.height(40.dp).width(144.dp).background(
                 color = CustomKeyBoardTheme.color.allMainColor,
                 shape = RoundedCornerShape(24.dp)
-            ).clickable {
+            ).clip(RoundedCornerShape(24.dp)).clickable {
                 onClick()
             }
         ) {
@@ -442,12 +446,12 @@ fun ClickDialog(
         }
     ) {
         Surface(
-            modifier = Modifier.padding(horizontal = 40.dp).fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth().wrapContentHeight(),
             shape = RoundedCornerShape(24.dp),
             color = CustomKeyBoardTheme.color.white
         ) {
             Column(
-                modifier = Modifier.padding(horizontal = 40.dp).fillMaxWidth(),
+                modifier = Modifier.padding(horizontal = 40.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
@@ -524,6 +528,7 @@ fun ClickDialog(
                         .fillMaxWidth()
                         .height(42.dp)
                         .background(color = CustomKeyBoardTheme.color.allMainColor, shape = RoundedCornerShape(24.dp))
+                        .clip(RoundedCornerShape(24.dp))
                         .clickable { navigateTestScreen() }
                 ) {
                     Text(
@@ -542,6 +547,23 @@ fun ClickDialog(
             }
         }
     }
+}
+
+@Composable
+fun BottomShadow(alpha: Float = 0.1f, height: Dp = 8.dp) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(height)
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        CustomKeyBoardTheme.color.black.copy(alpha = alpha),
+                        Color.Transparent
+                    )
+                )
+            )
+    )
 }
 
 @Preview(showBackground = true)
