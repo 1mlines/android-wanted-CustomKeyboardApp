@@ -3,6 +3,6 @@
 
     <subtype
         android:imeSubtypeMode="keyboard"
-        android:label="CustomKeyboard" />
+        android:label="CustomKeyboardStyle" />
 
 </input-method>
