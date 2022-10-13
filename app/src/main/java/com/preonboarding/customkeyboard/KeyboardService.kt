@@ -4,10 +4,11 @@ import android.inputmethodservice.InputMethodService
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
+import com.preonboarding.customkeyboard.keyboard.KoreanKeyBoard
 
 class KeyboardService : InputMethodService() {
     private lateinit var binding: ViewKeyboardBinding
-
+    private lateinit var koreaKeyboard: KoreanKeyBoard
     override fun onCreate() {
         super.onCreate()
         binding = ViewKeyboardBinding.inflate(layoutInflater)
@@ -22,6 +23,8 @@ class KeyboardService : InputMethodService() {
                 }
                 Mode.ENGLISH -> {
                     binding.flKeyboard.removeAllViews()
+                    koreaKeyboard.inputConnection = currentInputConnection
+                    binding.flKeyboard.addView(koreaKeyboard.getLayout())
                 }
                 Mode.SYMBOL -> {
                     binding.flKeyboard.removeAllViews()
@@ -31,6 +34,10 @@ class KeyboardService : InputMethodService() {
     }
 
     override fun onCreateInputView(): View {
+        koreaKeyboard = KoreanKeyBoard(applicationContext, layoutInflater, keyboardReplacer).apply {
+            inputConnection = currentInputConnection
+            init()
+        }
         return binding.viewKeyboard
     }
 
@@ -41,7 +48,6 @@ class KeyboardService : InputMethodService() {
         if (currentInputEditorInfo.inputType == EditorInfo.TYPE_CLASS_NUMBER) {
             binding.flKeyboard.apply {
                 removeAllViews()
-                // TODO 숫자 패드
             }
         } else {
             keyboardReplacer.changeMode(Mode.ENGLISH)
