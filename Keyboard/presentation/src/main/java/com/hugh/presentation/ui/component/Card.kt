@@ -48,10 +48,11 @@ fun KeyWordCard(
 ) {
     Card(
         modifier = Modifier
+            .padding(start = 5.dp)
             .width(129.dp)
             .height(162.dp),
-        elevation = 3.dp,
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        elevation = 5.dp
     ) {
         Box {
             Image(
@@ -158,38 +159,28 @@ fun ReviewCard(
         Spacer(modifier = Modifier.width(11.dp))
         Column {
             Column(
-                modifier = Modifier.background(color = CustomKeyBoardTheme.color.allBoxGray, shape = RoundedCornerShape(20.dp)).height(54.dp)
+                modifier = Modifier.background(color = CustomKeyBoardTheme.color.allBoxGray, shape = RoundedCornerShape(20.dp)).height(54.dp),
+                verticalArrangement = Arrangement.Center
             ) {
                 Column(
                     modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp)
                 ) {
                     Text(
                         text = reviewData.reviewerName,
-                        style = CustomKeyBoardTheme.typography.subBody.copy(
-                            platformStyle = PlatformTextStyle(
-                                includeFontPadding = false
-                            )
-                        )
+                        style = CustomKeyBoardTheme.typography.subBody
                     )
                     Text(
                         text = reviewData.reviewText,
-                        style = CustomKeyBoardTheme.typography.allBodyMid.copy(
-                            platformStyle = PlatformTextStyle(
-                                includeFontPadding = false
-                            )
-                        ),
+                        style = CustomKeyBoardTheme.typography.allBodyMid,
                         color = CustomKeyBoardTheme.color.allBodyGray
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(6.dp))
             Text(
                 modifier = Modifier.padding(start = 12.dp),
                 text = reviewData.date,
-                style = CustomKeyBoardTheme.typography.subBody.copy(
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = false
-                    )
-                ),
+                style = CustomKeyBoardTheme.typography.subBody,
                 color = CustomKeyBoardTheme.color.allSubDarkGray
             )
         }

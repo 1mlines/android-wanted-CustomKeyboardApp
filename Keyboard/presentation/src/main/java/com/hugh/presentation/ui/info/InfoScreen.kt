@@ -30,10 +30,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -90,6 +93,7 @@ fun InfoScreen(
                 InfoTitle(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
+                Spacer(modifier = Modifier.height(40.dp))
             }
             item {
                 InfoMainContent(
@@ -142,6 +146,7 @@ fun InfoScreen(
                     reviewData = item,
                     isCreator = index == 0
                 )
+                Spacer(modifier = Modifier.height(16.dp))
             }
             item {
                 Spacer(modifier = Modifier.height(64.dp))
@@ -190,11 +195,13 @@ fun InfoTitle(
             text = "앙무",
             style = CustomKeyBoardTheme.typography.title
         )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = "코핀",
             style = CustomKeyBoardTheme.typography.allBodyMid,
             color = CustomKeyBoardTheme.color.allSubDarkGray
         )
+        Spacer(modifier = Modifier.height(16.dp))
         MultiStyleText(
             style = CustomKeyBoardTheme.typography.allBodyMid,
             text1 = "78",
@@ -216,9 +223,10 @@ fun InfoMainContent(
             text = "\uD83C\uDF89플레이키보드 첫 이벤트 테마를 공개합니다.\uD83C\uDF89",
             style = CustomKeyBoardTheme.typography.allTitle
         )
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "밀당해피니스 유튜브 채널을 방문하면 “테마명” 이벤트 테마를 무료로 받을 수 있다구요?\n" +
-                    "지금 바로 ‘참여하기' 버튼을 눌러 새로워진 밀당해피니스 유튜브 채널을 확인해보세요!",
+                "지금 바로 ‘참여하기' 버튼을 눌러 새로워진 밀당해피니스 유튜브 채널을 확인해보세요!",
             style = CustomKeyBoardTheme.typography.allBody
         )
     }
@@ -263,6 +271,7 @@ fun InfoKeyWord(
             style = CustomKeyBoardTheme.typography.subTitle,
             color = CustomKeyBoardTheme.color.allTitleGray
         )
+        Spacer(modifier = Modifier.height(16.dp))
         LazyRow() {
             itemsIndexed(KeyWordData.List) { index, item ->
                 if (index == 0) {
@@ -323,6 +332,7 @@ fun InfoReview(
             text2 = 10.toString(),
             color2 = CustomKeyBoardTheme.color.allMainColor
         )
+        Spacer(modifier = Modifier.height(13.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -356,7 +366,14 @@ fun InfoBottomBar(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.fillMaxWidth().height(64.dp).shadow(1.dp).padding(horizontal = 12.dp),
+        modifier = modifier.fillMaxWidth().height(64.dp).background(
+            brush = Brush.verticalGradient(
+                listOf(
+                    Color.Black.copy(0.012f),
+                    Color.Transparent
+                )
+            )
+        ).padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -386,9 +403,7 @@ fun InfoBottomBar(
             Row {
                 MultiStyleText(
                     style = CustomKeyBoardTheme.typography.subBody.copy(
-                        platformStyle = PlatformTextStyle(
-                            includeFontPadding = false
-                        )
+                        fontWeight = FontWeight.Medium
                     ),
                     text1 = "0젬 ",
                     color1 = CustomKeyBoardTheme.color.allMainColor,
@@ -408,12 +423,7 @@ fun InfoBottomBar(
             Text(
                 modifier = Modifier.align(Alignment.Center),
                 text = "구매하기",
-                style = CustomKeyBoardTheme.typography.subTitle3
-                    .copy(
-                        platformStyle = PlatformTextStyle(
-                            includeFontPadding = false
-                        )
-                    ),
+                style = CustomKeyBoardTheme.typography.subTitle3,
                 color = CustomKeyBoardTheme.color.white
             )
         }
@@ -452,6 +462,7 @@ fun ClickDialog(
                     text2 = "이 부족해요\n빠르게 충전해 보세요!",
                     color2 = CustomKeyBoardTheme.color.allTitleGray
                 )
+                Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -491,6 +502,7 @@ fun ClickDialog(
                         )
                     }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -506,6 +518,7 @@ fun ClickDialog(
                         color = CustomKeyBoardTheme.color.allMainColor
                     )
                 }
+                Spacer(modifier = Modifier.height(20.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
