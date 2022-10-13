@@ -9,6 +9,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidwantedCustomKeyboardApp">
+
+        <service android:name=".ui.keyboard.KeyBoardService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="CustomKeyboardStyle"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+
+            <intent-filter>
+                <action android:name="android.view.InputMethod"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/xml"/>
+        </service>
+
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true">
