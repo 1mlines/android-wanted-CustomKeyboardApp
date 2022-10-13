@@ -17,6 +17,7 @@ object Versions {
     const val junit = "4.13.2"
     const val junitTest = "1.1.3"
     const val espresso = "3.4.0"
+    const val activityKtx = "1.7.0-alpha01"
 
     object Hilt {
         const val hiltVersion = "2.43.2"

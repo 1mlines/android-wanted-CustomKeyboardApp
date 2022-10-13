@@ -11,6 +11,7 @@ object Deps {
     val junit by lazy { "junit:junit:${Versions.junit}" }
     val junitTest by lazy { "androidx.test.ext:junit:${Versions.junitTest}" }
     val espresso by lazy { "androidx.test.espresso:espresso-core:${Versions.espresso}" }
+    val activityKtx by lazy { "androidx.activity:activity-ktx:${Versions.activityKtx}" }
 
     object Hilt {
         private val hiltAndroid by lazy { "com.google.dagger:hilt-android:${Versions.Hilt.hiltVersion}" }

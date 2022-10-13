@@ -50,4 +50,6 @@ dependencies {
 
     Deps.Hilt.hiltList.forEach(::implementation)
     kapt(Deps.Hilt.hiltCompiler)
+
+    implementation(Deps.activityKtx)
 }
