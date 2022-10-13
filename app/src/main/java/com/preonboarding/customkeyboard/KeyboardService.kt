@@ -20,11 +20,11 @@ class KeyboardService : InputMethodService() {
             when (mode) {
                 Mode.KOREA -> {
                     binding.flKeyboard.removeAllViews()
+                    koreaKeyboard.inputConnection = currentInputConnection
+                    binding.flKeyboard.addView(koreaKeyboard.getLayout())
                 }
                 Mode.ENGLISH -> {
                     binding.flKeyboard.removeAllViews()
-                    koreaKeyboard.inputConnection = currentInputConnection
-                    binding.flKeyboard.addView(koreaKeyboard.getLayout())
                 }
                 Mode.SYMBOL -> {
                     binding.flKeyboard.removeAllViews()
@@ -50,7 +50,7 @@ class KeyboardService : InputMethodService() {
                 removeAllViews()
             }
         } else {
-            keyboardReplacer.changeMode(Mode.ENGLISH)
+            keyboardReplacer.changeMode(Mode.KOREA)
         }
     }
 }

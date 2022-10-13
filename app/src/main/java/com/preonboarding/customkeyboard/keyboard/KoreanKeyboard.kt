@@ -14,7 +14,6 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import androidx.core.view.isVisible
 import com.preonboarding.customkeyboard.KeyboardActionListener
-import com.preonboarding.customkeyboard.Mode
 import com.preonboarding.customkeyboard.R
 
 class KoreanKeyBoard(
@@ -38,17 +37,17 @@ class KoreanKeyBoard(
     override fun init() {
         combiner = KoreaCombiner(inputConnection, context)
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setLayoutParamsLandScape(binding.lineNumber)
+            /* setLayoutParamsLandScape(binding.lineNumber)*/
             setLayoutParamsLandScape(binding.lineFirst)
             setLayoutParamsLandScape(binding.lineSecond)
             setLayoutParamsLandScape(binding.lineThird)
-            setLayoutParamsLandScape(binding.lineLast)
+            /* setLayoutParamsLandScape(binding.lineLast)*/
         } else {
-            setLayoutParams(binding.lineNumber)
+            /*setLayoutParams(binding.lineNumber)*/
             setLayoutParams(binding.lineFirst)
             setLayoutParams(binding.lineSecond)
             setLayoutParams(binding.lineThird)
-            setLayoutParams(binding.lineLast)
+            /*setLayoutParams(binding.lineLast)*/
         }
 
         keysText.apply {
@@ -165,7 +164,8 @@ class KoreanKeyBoard(
                         onClickListener = doShortcutClick()
                     }
                     "!#1" -> {
-                        button.apply {
+                        button.text = key[item]
+                        /*button.apply {
                             text = key[item]
                             setOnClickListener {
                                 keyboardActionListener.changeMode(Mode.SYMBOL)
@@ -176,11 +176,12 @@ class KoreanKeyBoard(
                             override fun onClick(p0: View?) {
                                 keyboardActionListener.changeMode(Mode.SYMBOL)
                             }
-                        }
+                        }*/
 
                     }
                     "한/영" -> {
-                        button.apply {
+                        button.text = key[item]
+                        /*button.apply {
                             text = key[item]
                             setOnClickListener {
                                 keyboardActionListener.changeMode(Mode.ENGLISH)
@@ -191,7 +192,7 @@ class KoreanKeyBoard(
                             override fun onClick(p0: View?) {
                                 keyboardActionListener.changeMode(Mode.ENGLISH)
                             }
-                        }
+                        }*/
                     }
                     else -> {
                         button.apply {
