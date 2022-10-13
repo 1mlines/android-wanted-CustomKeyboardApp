@@ -11,6 +11,7 @@ class KeyBoardService : InputMethodService() {
     lateinit var keyboardView: LinearLayout
     lateinit var keyboardFrame: FrameLayout
     lateinit var keyboardKorean: KeyboardKorean
+    lateinit var keyboardClipboard: KeyboardClipboard
     //lateinit var keyboardEnglish:KeyboardEnglish
 
 
@@ -29,6 +30,11 @@ class KeyBoardService : InputMethodService() {
                     keyboardKorean.inputConnection = currentInputConnection
                     keyboardFrame.addView(keyboardKorean.getLayout())
                 }
+                2 -> {
+                    keyboardFrame.removeAllViews()
+                    keyboardClipboard.inputConnection = currentInputConnection
+                    keyboardFrame.addView(keyboardClipboard.getLayout())
+                }
             }
         }
 
@@ -43,10 +49,15 @@ class KeyBoardService : InputMethodService() {
     override fun onCreateInputView(): View {
         keyboardKorean = KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
         //keyboardEnglish = KeyboardEnglish(applicationContext, layoutInflater, keyboardInterationListener)
+        keyboardClipboard = KeyboardClipboard(applicationContext, layoutInflater, keyboardInterationListener)
+
         keyboardKorean.inputConnection = currentInputConnection
         keyboardKorean.init()
         //keyboardEnglish.inputConnection = currentInputConnection
         //keyboardEnglish.init()
+
+        keyboardClipboard.inputConnection = currentInputConnection
+        keyboardClipboard.init()
 
         return keyboardView
     }

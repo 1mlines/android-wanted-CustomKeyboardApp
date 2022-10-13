@@ -256,12 +256,14 @@ class KeyboardKorean constructor(
                 var myOnClickListener: View.OnClickListener? = null
                 when(myText[item]){
                     "Clip" -> {
-                        spacialKey.setImageResource(R.drawable.ic_lock_gray_24dp)
-                        spacialKey.visibility = View.VISIBLE
-                        actionButton.visibility = View.GONE
-                        myOnClickListener = getDeleteAction()
-                        spacialKey.setOnClickListener(myOnClickListener)
-                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        actionButton.text = myText[item]
+                        buttons.add(actionButton)
+                        myOnClickListener = object : View.OnClickListener{
+                            override fun onClick(p0: View?) {
+                                keyboardInterationListener.modechange(2)
+                            }
+                        }
+                        actionButton.setOnClickListener(myOnClickListener)
                     }
 
                     "space" -> {
