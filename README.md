@@ -46,12 +46,55 @@ fun MainColumn() {
 
 =======
 ## 한혜원
-### 담당한 일
-- InputMethodService를 이용해 한글 키보드 구현
-### 남은 일
-- 한글 오토마타 적용이 잘 안돼서 수정 필요
+- 담당한 일
+  - InputMethodService를 이용해 한글 키보드 구현
+- 남은 일
+  - 한글 오토마타 적용이 잘 안돼서 수정 필요
+### 구현
+- 키보드 뷰로 사용하기 위해 레이아웃에 필요한 만큼의 버튼을 배치
+![image](https://user-images.githubusercontent.com/35549958/195756978-8f383f5b-1201-427b-bd9b-fba22224cfa3.png)
+
+- FrameLayout에 키보드 뷰를 붙이고 KeyboardAction 클래스를 정의해서 inputConnection을 통해 타이핑이 가능하도록 함
+```xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearlayout_keyboard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/framelayout_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+```
+```kotlin
+override fun onCreateInputView(): View {
+        keyboardView = layoutInflater.inflate(R.layout.view_keyboard, null) as LinearLayout
+        keyboardFrame = keyboardView.findViewById(R.id.framelayout_keyboard)
+        keyboardAction =
+            KeyboardAction(applicationContext, layoutInflater)
+        keyboardAction.inputConnection = currentInputConnection
+        keyboardAction.init()
+        return keyboardView
+    }
+
+override fun updateInputViewShown() {
+    super.updateInputViewShown()
+    currentInputConnection.finishComposingText()
+    keyboardInterationListener.addView()
+    /* addView()
+    * currentInputConnection.finishComposingText()
+    * keyboardFrame.removeAllViews()
+    * keyboardAction.inputConnection = currentInputConnection
+    * keyboardFrame.addView(keyboardAction.getLayout())
+    * */
+}
+```
 ### 실행영상
 
 https://user-images.githubusercontent.com/35549958/195693499-2098e7ee-3e15-40ab-8ce7-f89f799cae0d.mp4
+
+
 
 
