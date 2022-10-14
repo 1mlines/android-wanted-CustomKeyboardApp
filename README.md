@@ -372,11 +372,18 @@ ____
 
 ```kotlin
 // 키보드 버튼 구현 
+val menupadText = listOf<String>("Home", "Clip")
 val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
 val firstLineText = listOf<String>("ㅂ","ㅈ","ㄷ","ㄱ","ㅅ","ㅛ","ㅕ","ㅑ","ㅐ","ㅔ")
 val secondLineText = listOf<String>("ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ")
 val thirdLineText = listOf<String>("CAPS","ㅋ","ㅌ","ㅊ","ㅍ","ㅠ","ㅜ","ㅡ","DEL")
 val fourthLineText = listOf<String>("!#1","한/영",",","space",".","Enter")
+
+val menupadLine = koreanLayout.findViewById<LinearLayout>(
+            R.id.menupad_line
+        )
+        val numpadLine = koreanLayout.findViewById<LinearLayout>(
+            R.id.numpad_line
 ```
 
 ```kotlin
@@ -384,6 +391,22 @@ val fourthLineText = listOf<String>("!#1","한/영",",","space",".","Enter")
 interface KeyboardInterationListener {
     fun modechange(mode:Int)
 }
+
+override fun modechange(mode: Int) {
+            currentInputConnection.finishComposingText()
+            when(mode) {
+                1 -> {
+                    keyboardFrame.removeAllViews()
+                    keyboardKorean.inputConnection = currentInputConnection
+                    keyboardFrame.addView(keyboardKorean.getLayout())
+                }
+                2 -> {
+                    keyboardFrame.removeAllViews()
+                    keyboardClipboard.inputConnection = currentInputConnection
+                    keyboardFrame.addView(keyboardClipboard.getLayout())
+                }
+            }
+        }
 ```
 
 ```kotlin
@@ -397,6 +420,16 @@ interface KeyboardInterationListener {
     spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
     spacialKey.setBackgroundResource(R.drawable.key_background)
 }
+
+"Fav" -> {
+                        spacialKey.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                        spacialKey.visibility = View.VISIBLE
+                        actionButton.visibility = View.GONE
+                        myOnClickListener = getFavoriteData()
+                        spacialKey.setOnClickListener(myOnClickListener)
+                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                    }
 ```
 
 
