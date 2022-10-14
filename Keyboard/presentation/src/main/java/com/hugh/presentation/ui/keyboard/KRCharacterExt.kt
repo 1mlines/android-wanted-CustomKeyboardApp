@@ -19,7 +19,7 @@ fun String.getDoubleVowel(vowel: String): String = when {
     vowel == "ㅗ" && this == "ㅏ" -> "ㅘ"
     vowel == "ㅜ" && this == "ㅣ" -> "ㅟ"
     vowel == "ㅜ" && this == "ㅔ" -> "ㅞ"
-    vowel == "ㅜ" && this == "ㅓ" -> "ㅝ수"
+    vowel == "ㅜ" && this == "ㅓ" -> "ㅝ"
     vowel == "ㅡ" && this == "ㅣ" -> "ㅢ"
     else -> this
 }
