@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.model.ClipBoardData
-import com.hugh.presentation.action.ClipBoardHandler
-import com.hugh.presentation.action.ClipBoardAction
-import com.hugh.presentation.action.ClipState
+import com.hugh.presentation.action.clipAction.ClipBoardHandler
+import com.hugh.presentation.action.clipAction.ClipBoardAction
+import com.hugh.presentation.action.clipAction.ClipState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

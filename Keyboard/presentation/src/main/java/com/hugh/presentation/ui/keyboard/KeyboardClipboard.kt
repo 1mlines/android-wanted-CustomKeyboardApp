@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputConnection
 import androidx.databinding.DataBindingUtil
+import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.presentation.R
 import com.hugh.presentation.databinding.KeyboardClipboardBinding
 import com.hugh.presentation.extension.dip
@@ -13,6 +14,7 @@ import com.hugh.presentation.extension.dip
 class KeyboardClipboard constructor(
     private val layoutInflater: LayoutInflater,
     private val inputConnection: InputConnection?,
+    private val clipBoardRepository: ClipBoardRepository,
     private val rootHeight: Int
 ) {
     private lateinit var clipboardBinding: KeyboardClipboardBinding

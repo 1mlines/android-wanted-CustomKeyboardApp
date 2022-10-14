@@ -4,7 +4,7 @@
     <data>
         <variable
             name="actor"
-            type="com.hugh.presentation.action.ClipBoardActor" />
+            type="com.hugh.presentation.action.clipAction.ClipBoardActor" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

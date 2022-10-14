@@ -1,4 +1,4 @@
-package com.hugh.presentation.action
+package com.hugh.presentation.action.clipAction
 
 class ClipBoardActor(private val keyboardHandler: ClipBoardHandler) {
 
