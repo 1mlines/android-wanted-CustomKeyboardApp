@@ -278,14 +278,14 @@ class KoreanKeyBoard(
             sendKeyEvent(
                 KeyEvent(
                     eventTime, eventTime,
-                    KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0,
+                    KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                     KeyEvent.FLAG_SOFT_KEYBOARD
                 )
             )
             sendKeyEvent(
                 KeyEvent(
                     SystemClock.uptimeMillis(), eventTime,
-                    KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL, 0, 0, 0, 0,
+                    KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER, 0, 0, 0, 0,
                     KeyEvent.FLAG_SOFT_KEYBOARD
                 )
             )
