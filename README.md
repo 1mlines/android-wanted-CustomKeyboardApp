@@ -352,10 +352,6 @@ internal fun NavGraphBuilder.keyboardTestGraph(
     }
 }
 ```
-
-### 네비게이션
-https://user-images.githubusercontent.com/62296097/195755028-ac5b8fed-1bf4-48ad-9583-ba61529f6aa1.mp4
-
 ----
 
 ## 디바이스 크기 대응
@@ -366,11 +362,42 @@ https://user-images.githubusercontent.com/62296097/195755028-ac5b8fed-1bf4-48ad-
 ### 태블릿과 기타 디바이스에서 레이아웃이 깨지지 않게 UI를 구성했습니다.
 
 
-
 ____
 
 
 ## 권혁준
+
+<img width="308" alt="image" src="https://user-images.githubusercontent.com/70066242/195756265-42763c51-d928-4218-a654-caafc7bc6a2c.png">
+
+
+```kotlin
+// 키보드 버튼 구현 
+val numpadText = listOf<String>("1","2","3","4","5","6","7","8","9","0")
+val firstLineText = listOf<String>("ㅂ","ㅈ","ㄷ","ㄱ","ㅅ","ㅛ","ㅕ","ㅑ","ㅐ","ㅔ")
+val secondLineText = listOf<String>("ㅁ","ㄴ","ㅇ","ㄹ","ㅎ","ㅗ","ㅓ","ㅏ","ㅣ")
+val thirdLineText = listOf<String>("CAPS","ㅋ","ㅌ","ㅊ","ㅍ","ㅠ","ㅜ","ㅡ","DEL")
+val fourthLineText = listOf<String>("!#1","한/영",",","space",".","Enter")
+```
+
+```kotlin
+// 특정 모드에 따른 키보드 화면 구성 설정 
+interface KeyboardInterationListener {
+    fun modechange(mode:Int)
+}
+```
+
+```kotlin
+// 기능에 따라 키보드 기능 구현 
+"Enter" -> {
+    spacialKey.setImageResource(R.drawable.ic_enter)
+    spacialKey.visibility = View.VISIBLE
+    actionButton.visibility = View.GONE
+    myOnClickListener = getEnterAction()
+    spacialKey.setOnClickListener(myOnClickListener)
+    spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+    spacialKey.setBackgroundResource(R.drawable.key_background)
+}
+```
 
 
 ## Convention
