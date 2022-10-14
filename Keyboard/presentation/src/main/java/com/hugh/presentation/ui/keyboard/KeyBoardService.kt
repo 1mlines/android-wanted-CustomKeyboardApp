@@ -2,60 +2,62 @@ package com.hugh.presentation.ui.keyboard
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.view.ViewTreeObserver
+import androidx.databinding.DataBindingUtil
 import com.hugh.presentation.R
+import com.hugh.presentation.databinding.KeyboardViewBinding
 
-class KeyBoardService : InputMethodService() {
+class KeyBoardService : InputMethodService(), ViewTreeObserver.OnGlobalLayoutListener {
 
-    lateinit var keyboardView: LinearLayout
-    lateinit var keyboardFrame: FrameLayout
-    lateinit var keyboardKorean: KeyboardKorean
-    lateinit var keyboardClipboard: KeyboardClipboard
-
-
-    val keyboardInterationListener = object : KeyboardInterationListener {
-        override fun modechange(mode: Int) {
-            currentInputConnection.finishComposingText()
-            when(mode) {
-                1 -> {
-                    keyboardFrame.removeAllViews()
-                    keyboardKorean.inputConnection = currentInputConnection
-                    keyboardFrame.addView(keyboardKorean.getLayout())
-                }
-                2 -> {
-                    keyboardFrame.removeAllViews()
-                    keyboardClipboard.inputConnection = currentInputConnection
-                    keyboardFrame.addView(keyboardClipboard.getLayout())
-                }
-            }
-        }
-
-    }
+    private lateinit var keyboardViewBinding: KeyboardViewBinding
+    private lateinit var keyboardKorean: KeyboardKorean
+    private lateinit var keyboardClipboard: KeyboardClipboard
 
     override fun onCreate() {
         super.onCreate()
-        keyboardView = layoutInflater.inflate(R.layout.keyboard_view, null) as LinearLayout
-        keyboardFrame = keyboardView.findViewById(R.id.keyboard_frame)
+
+        keyboardViewBinding =
+            DataBindingUtil.inflate(layoutInflater, R.layout.keyboard_view, null, false)
     }
 
     override fun onCreateInputView(): View {
-        keyboardKorean = KeyboardKorean(layoutInflater, keyboardInterationListener)
-        keyboardClipboard = KeyboardClipboard(layoutInflater, keyboardInterationListener)
+        keyboardKorean = KeyboardKorean(
+            layoutInflater,
+            currentInputConnection
+        ).also { it.init() }
 
-        keyboardKorean.inputConnection = currentInputConnection
-        keyboardKorean.init()
+        keyboardViewBinding.keyboardFrame.addView(keyboardKorean.getLayout())
+        keyboardViewBinding.keyboardFrame.viewTreeObserver.addOnGlobalLayoutListener(this)
 
-        keyboardClipboard.inputConnection = currentInputConnection
-        keyboardClipboard.init()
+        keyboardViewBinding.actionKeyHome.keyButton.apply {
+            text = "Home"
 
-        return keyboardView
+            setOnClickListener {
+                keyboardViewBinding.keyboardFrame.removeAllViews()
+                keyboardViewBinding.keyboardFrame.addView(keyboardKorean.getLayout())
+            }
+        }
+
+        keyboardViewBinding.actionKeyClipboard.keyButton.apply {
+            text = "Clip"
+
+            setOnClickListener {
+                keyboardViewBinding.keyboardFrame.removeAllViews()
+                keyboardViewBinding.keyboardFrame.addView(keyboardClipboard.getLayout())
+            }
+        }
+
+        return keyboardViewBinding.root
     }
 
-    override fun updateInputViewShown() {
-        super.updateInputViewShown()
-        currentInputConnection.finishComposingText()
-        keyboardFrame.removeAllViews()
-        keyboardInterationListener.modechange(1)
+    override fun onGlobalLayout() {
+        keyboardClipboard =
+            KeyboardClipboard(
+                layoutInflater,
+                currentInputConnection,
+                keyboardViewBinding.keyboardFrame.measuredHeight
+            ).also { it.init() }
+
+        keyboardViewBinding.keyboardFrame.viewTreeObserver.removeOnGlobalLayoutListener(this)
     }
 }
