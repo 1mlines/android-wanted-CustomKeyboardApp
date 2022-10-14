@@ -1,3 +1,85 @@
 <resources>
     <string name="app_name">android-wanted-CustomKeyboardApp</string>
+    <string-array name="number">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>0</item>
+    </string-array>
+    <string-array name="first_line_korea">
+        <item>ㅂ</item>
+        <item>ㅈ</item>
+        <item>ㄷ</item>
+        <item>ㄱ</item>
+        <item>ㅅ</item>
+        <item>ㅛ</item>
+        <item>ㅕ</item>
+        <item>ㅑ</item>
+        <item>ㅐ</item>
+        <item>ㅔ</item>
+    </string-array>
+    <string-array name="second_line_korea">
+        <item>ㅁ</item>
+        <item>ㄴ</item>
+        <item>ㅇ</item>
+        <item>ㄹ</item>
+        <item>ㅎ</item>
+        <item>ㅗ</item>
+        <item>ㅓ</item>
+        <item>ㅏ</item>
+        <item>ㅣ</item>
+    </string-array>
+    <string-array name="third_line_korea">
+        <item>Shift</item>
+        <item>ㅋ</item>
+        <item>ㅌ</item>
+        <item>ㅊ</item>
+        <item>ㅍ</item>
+        <item>ㅠ</item>
+        <item>ㅜ</item>
+        <item>ㅡ</item>
+        <item>DEL</item>
+    </string-array>
+    <string-array name="last_line">
+        <item>!#1</item>
+        <item>한/영</item>
+        <item>Shortcut</item>
+        <item>Space</item>
+        <item>.</item>
+        <item>Enter</item>
+    </string-array>
+
+    <string name="event_title">🎉플레이키보드 첫 이벤트 테마를 공개합니다.🎉</string>
+    <string name="event_description">밀당해피니스 유튜브 채널을 방문하면 "테마명" 이벤트 테마를 무료로 받을 수 있다구요?\n지금 바로 "참여하기" 버튼을 눌러 새로워진 밀당 해피니스 유튜브 채널을 확인해보세요!</string>
+    <string name="tag1">이벤트</string>
+    <string name="tag2">캐릭터</string>
+    <string name="tag3">새</string>
+    <string name="tag4">동물</string>
+    <string name="tag5">앙증맞은</string>
+    <string name="tag6">동글동글</string>
+    <string name="keyword1">신나💃</string>
+    <string name="keyword2">기대💗</string>
+    <string name="keyword3">놀이💗</string>
+    <string name="vote_emoji1">😊</string>
+    <string name="vote_emoji2">😍</string>
+    <string name="vote_emoji3">😉</string>
+    <string name="vote_emoji4">🤣</string>
+    <string name="vote_title1">맘에들어요</string>
+    <string name="vote_title2">심쿵했어요</string>
+    <string name="vote_title3">응원해요</string>
+    <string name="vote_title4">갖고싶어요</string>
+    <string name="review_creator_name">크리에이터명</string>
+    <string name="review_creator">구매해주셔서 감사합니다💖</string>
+    <string name="review_customer_name">o달빔o</string>
+    <string name="review_customer">아진짜 귀여워요 !!!!</string>
+    <string name="dialog_recharge">이 부족해요</string>
+    <string name="dialog_recharge2">빠르게 충전해 보세요!</string>
+
+
 </resources>
