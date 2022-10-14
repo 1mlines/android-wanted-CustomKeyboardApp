@@ -277,7 +277,93 @@ fun String.getSingleVowels(): String = when (this) {
 
 ```
 
-## 김현국
+## 김현국 - UI
+
+<img src="https://user-images.githubusercontent.com/62296097/195742795-00d74e6d-b141-4abf-bfd0-f34158d13d94.gif">
+
+Jetpack compose로 구현하였습니다.
+
+____
+## Typography & Color 적용
+
+```kotlin
+val customKeyBoardTypography = CustomKeyBoardTypography(
+    title = TextStyle(fontWeight = FontWeight.Bold, fontSize = 20.sp, lineHeight = 28.sp),
+    allTitle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 14.sp, lineHeight = 24.sp),
+    allBodyMid = TextStyle(fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp),
+    allBody = TextStyle(fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 24.sp),
+    subTitle = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp, lineHeight = 24.sp),
+    ...
+) 
+
+// USED
+val AllMainColor = Color(0xFFFF417D)
+val AllTitleGray = Color(0xFF42444C)
+val AllSubDarkGray = Color(0xFF919299)
+...
+
+object CustomKeyBoardTheme {
+    val typography: CustomKeyBoardTypography
+        @Composable
+        get() = LocalCustomKeyBoardTypography.current
+
+    val color: Colors
+        @Composable
+        get() = LocalCustomKeyBoardColor.current
+}
+
+Ex)
+Text(
+    text = "테스트",
+    style = CustomKeyBoard.typography.allBodyMid,
+    color = CustomKeyBoard.color.allMainColor
+)
+```
+</br>
+
+## Navigation구현 
+```kotlin
+sealed class NavigationRoute(val route: String) {
+    object InfoScreenGraph : NavigationRoute("info_screen") {
+        object InfoScreen : NavigationRoute("info_screen.screen")
+    }
+    object KeyBoardTestScreenGraph : NavigationRoute("keyboard_test_screen") {
+        object KeyBoardTestScreen : NavigationRoute("keyboard_test_screen.screen")
+        object ClipBoardTestScreen : NavigationRoute("keyboard_test_screen.clip_board")
+    }
+}
+```
+
+```kotlin
+internal fun NavGraphBuilder.keyboardTestGraph(
+    customKeyBoardAppState: CustomKeyBoardAppState
+) {
+    navigation(
+        route = NavigationRoute.KeyBoardTestScreenGraph.route,
+        startDestination = NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route
+    ) {
+        composable(
+            route = NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route
+        ) {(...)}
+
+        composable(
+            route = NavigationRoute.KeyBoardTestScreenGraph.ClipBoardTestScreen.route
+        ) { (...)}
+    }
+}
+```
+----
+
+## 디바이스 크기 대응
+<img src="https://user-images.githubusercontent.com/62296097/195751483-09780c94-97ff-4095-9b59-2f2343ae7922.png" width =200 height = 400>
+<img src="https://user-images.githubusercontent.com/62296097/195751490-a97247e3-5b6a-4257-af4e-b47d34a0ca01.png" width =400 height = 500>
+<img src="https://user-images.githubusercontent.com/62296097/195751493-b9a8d069-91c9-4d57-9d47-ca377e8b28f5.png" width =200 height = 400>
+
+### 태블릿과 기타 디바이스에서 레이아웃이 깨지지 않게 UI를 구성했습니다.
+
+
+____
+
 
 ## 권혁준
 
