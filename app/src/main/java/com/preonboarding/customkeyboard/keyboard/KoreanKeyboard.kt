@@ -236,14 +236,12 @@ class KoreanKeyBoard(
     override fun doDeleteClick(): View.OnClickListener {
         return View.OnClickListener {
             val cursor = inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
-            cursor?.let {
-                if (cursor.length >= 2) {
-                    inputConnection?.finishComposingText()
-                    sendKeyEvent()
-                    combiner.clear()
-                } else {
-                    combiner.delete()
-                }
+            if (cursor != null && cursor.length >= 2) {
+                inputConnection?.finishComposingText()
+                sendKeyEvent()
+                combiner.clear()
+            } else {
+                combiner.delete()
             }
         }
     }
