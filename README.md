@@ -42,4 +42,4 @@ fun MainColumn() {
 ### 남은 일
 - 다이얼로그 
 - padding,해상도처리,하드코딩 수정
-- scaffold,apativeLayout,composeState 추가?
+- scaffold,apativeLayout or constraintLayout,composeState 추가
