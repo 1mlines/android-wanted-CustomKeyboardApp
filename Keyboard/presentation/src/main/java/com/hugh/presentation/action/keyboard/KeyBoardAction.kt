@@ -1,6 +1,6 @@
 package com.hugh.presentation.action.keyboard
 
-sealed class KeyBoardAction {
+sealed class KeyBoardAction() {
 
     object Space: KeyBoardAction()
     object Delete: KeyBoardAction()
