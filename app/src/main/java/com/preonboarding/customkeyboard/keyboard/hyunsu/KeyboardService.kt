@@ -1,10 +1,9 @@
-package com.preonboarding.customkeyboard
+package com.preonboarding.customkeyboard.keyboard.hyunsu
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
-import com.preonboarding.customkeyboard.keyboard.KoreanKeyBoard
 
 class KeyboardService : InputMethodService() {
     private lateinit var binding: ViewKeyboardBinding

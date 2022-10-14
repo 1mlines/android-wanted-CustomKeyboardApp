@@ -13,9 +13,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidwantedCustomKeyboardApp"
         tools:targetApi="31">
+        <activity
+            android:name=".presentation.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="stateVisible|adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
         <service
-            android:name=".KeyboardService"
+            android:name=".keyboard.hyewon.KeyboardService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <meta-data
+                android:name="android.view.im"
+                android:resource="@xml/input_method" />
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".keyboard.hyunsu.KeyboardService"
             android:enabled="true"
             android:exported="true"
             android:label="WantedCustomKeyboard"
@@ -29,20 +56,6 @@
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
-
-        <activity
-            android:name=".presentation.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
     </application>
 
 

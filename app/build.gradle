@@ -36,6 +36,16 @@ android {
     buildFeatures {
         viewBinding true
     }
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/layouts/hyewon',
+                            'src/main/res/layouts/hyunsu',
+                            'src/main/res'
+                    ]
+        }
+    }
 }
 
 dependencies {

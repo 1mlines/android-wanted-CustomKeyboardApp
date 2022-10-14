@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="keyboardBoarder">#F5F0FF</color>
+    <color name="keyboardBackground">#FFFFFFFF</color>
+    <color name="keyboardDivider">#fff</color>
+    <color name="keyboardPressed">#782CFF</color>
+    <color name="setting_header_background">#0099ff</color>
+    <drawable name="screen_background_holo_light">#fff3f3f3</drawable>
 </resources>
