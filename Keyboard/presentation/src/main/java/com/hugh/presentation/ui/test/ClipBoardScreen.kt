@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
+import com.hugh.presentation.action.compose.test.TestAction
 import com.hugh.presentation.ui.component.SearchBar
 import com.hugh.presentation.ui.component.Tag
 import com.hugh.presentation.ui.info.data.TagsData
@@ -25,16 +26,16 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
 @Composable
 fun ClipBoardTestRoute(
-    onClickBackButton: () -> Unit
+    navigateClipBoard: (TestAction) -> Unit
 ) {
     ClipBoardTestScreen(
-        onClickBackButton = onClickBackButton
+        navigateClipBoard = navigateClipBoard
     )
 }
 
 @Composable
 fun ClipBoardTestScreen(
-    onClickBackButton: () -> Unit
+    navigateClipBoard: (TestAction) -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -43,7 +44,7 @@ fun ClipBoardTestScreen(
             modifier = Modifier.padding(start = 10.dp)
         ) {
             SearchBar(
-                onClickBackButton = onClickBackButton
+                navigateClipBoard = navigateClipBoard
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(

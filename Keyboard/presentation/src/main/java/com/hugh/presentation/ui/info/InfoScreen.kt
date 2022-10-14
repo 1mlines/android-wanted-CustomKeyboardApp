@@ -47,6 +47,7 @@ import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import com.hugh.presentation.R
+import com.hugh.presentation.action.compose.info.InfoAction
 import com.hugh.presentation.ui.component.KeyWordCard
 import com.hugh.presentation.ui.component.MultiStyleText
 import com.hugh.presentation.ui.component.ReviewCard
@@ -65,7 +66,7 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
 @Composable
 fun InfoRoute(
-    navigateTestScreen: () -> Unit
+    navigateTestScreen: (InfoAction) -> Unit
 ) {
     InfoScreen(
         navigateTestScreen = navigateTestScreen
@@ -74,7 +75,7 @@ fun InfoRoute(
 
 @Composable
 fun InfoScreen(
-    navigateTestScreen: () -> Unit
+    navigateTestScreen: (InfoAction) -> Unit
 ) {
     var click by remember { mutableStateOf(false) }
 
@@ -442,7 +443,7 @@ fun InfoBottomBar(
 @Composable
 fun ClickDialog(
     changeVisible: () -> Unit,
-    navigateTestScreen: () -> Unit
+    navigateTestScreen: (InfoAction) -> Unit
 ) {
     Dialog(
         onDismissRequest = {
@@ -533,7 +534,9 @@ fun ClickDialog(
                         .height(42.dp)
                         .background(color = CustomKeyBoardTheme.color.allMainColor, shape = RoundedCornerShape(24.dp))
                         .clip(RoundedCornerShape(24.dp))
-                        .clickable { navigateTestScreen() }
+                        .clickable {
+                            navigateTestScreen(InfoAction.NavigationKeyBoard)
+                        }
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),

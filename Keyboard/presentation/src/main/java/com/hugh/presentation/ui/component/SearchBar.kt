@@ -35,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.hugh.presentation.action.compose.test.TestAction
 import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
 /**
@@ -44,7 +45,7 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchBar(
-    onClickBackButton: () -> Unit
+    navigateClipBoard: (TestAction) -> Unit
 ) {
     val focusRequest = remember { FocusRequester.Default }
 
@@ -115,7 +116,7 @@ fun SearchBar(
                 modifier = Modifier.align(Alignment.Center).clip(
                     RoundedCornerShape(5.dp)
                 )
-                    .clickable { onClickBackButton() },
+                    .clickable { navigateClipBoard(TestAction.GoBack) },
                 text = "닫기",
                 style = CustomKeyBoardTheme.typography.subTitle,
                 color = CustomKeyBoardTheme.color.allBtnGray

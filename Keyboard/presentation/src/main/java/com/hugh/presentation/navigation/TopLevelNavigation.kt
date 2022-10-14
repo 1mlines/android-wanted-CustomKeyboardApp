@@ -3,6 +3,8 @@ package com.hugh.presentation.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.hugh.presentation.action.compose.info.InfoAction
+import com.hugh.presentation.action.compose.test.TestAction
 import com.hugh.presentation.ui.info.InfoRoute
 import com.hugh.presentation.ui.main.CustomKeyBoardAppState
 import com.hugh.presentation.ui.test.ClipBoardTestRoute
@@ -12,7 +14,7 @@ import com.hugh.presentation.ui.test.TestRoute
  * @Created by 김현국 2022/10/12
  */
 internal fun NavGraphBuilder.infoGraph(
-    customKeyBoardAppState: CustomKeyBoardAppState
+    navigateTestScreen: (InfoAction) -> Unit
 ) {
     navigation(
         route = NavigationRoute.InfoScreenGraph.route,
@@ -22,13 +24,13 @@ internal fun NavGraphBuilder.infoGraph(
             route = NavigationRoute.InfoScreenGraph.InfoScreen.route
         ) {
             InfoRoute(
-                navigateTestScreen = { customKeyBoardAppState.navigateRoute(NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route) }
+                navigateTestScreen = navigateTestScreen
             )
         }
     }
 }
 internal fun NavGraphBuilder.keyboardTestGraph(
-    customKeyBoardAppState: CustomKeyBoardAppState
+    navigateClipBoard: (TestAction) -> Unit
 ) {
     navigation(
         route = NavigationRoute.KeyBoardTestScreenGraph.route,
@@ -38,9 +40,7 @@ internal fun NavGraphBuilder.keyboardTestGraph(
             route = NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route
         ) {
             TestRoute(
-                navigateClipBoard = {
-                    customKeyBoardAppState.navigateRoute(NavigationRoute.KeyBoardTestScreenGraph.ClipBoardTestScreen.route)
-                }
+                navigateClipBoard = navigateClipBoard
             )
         }
 
@@ -48,9 +48,7 @@ internal fun NavGraphBuilder.keyboardTestGraph(
             route = NavigationRoute.KeyBoardTestScreenGraph.ClipBoardTestScreen.route
         ) {
             ClipBoardTestRoute(
-                onClickBackButton = {
-                    customKeyBoardAppState.navigateBackStack()
-                }
+                navigateClipBoard = navigateClipBoard
             )
         }
     }
