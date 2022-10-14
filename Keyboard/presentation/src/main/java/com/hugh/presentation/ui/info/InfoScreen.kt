@@ -262,7 +262,11 @@ fun InfoTag(
 
         ) {
             TagsData.List.forEach {
-                Tag(tagText = it.tagTitle)
+                Tag(
+                    tagText = it.tagTitle,
+                    color = CustomKeyBoardTheme.color.allBodyGray,
+                    style = CustomKeyBoardTheme.typography.allBodyMid
+                )
             }
         }
     }
