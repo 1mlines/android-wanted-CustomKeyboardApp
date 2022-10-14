@@ -38,12 +38,14 @@ class KoreanKeyBoard(
     override fun init() {
         combiner = KoreaCombiner(inputConnection)
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setLayoutParamsLandScape(binding.lineKeyboardToolbar.llToolbar)
             setLayoutParamsLandScape(binding.lineNumber)
             setLayoutParamsLandScape(binding.lineFirst)
             setLayoutParamsLandScape(binding.lineSecond)
             setLayoutParamsLandScape(binding.lineThird)
             /* setLayoutParamsLandScape(binding.lineLast)*/
         } else {
+            setLayoutParams(binding.lineKeyboardToolbar.llToolbar)
             setLayoutParams(binding.lineNumber)
             setLayoutParams(binding.lineFirst)
             setLayoutParams(binding.lineSecond)
@@ -62,7 +64,7 @@ class KoreanKeyBoard(
         }
         lineList.apply {
             clear()
-            add(binding.lineKeyboardToolbar.lineKeyboardToolbar)
+            add(binding.lineKeyboardToolbar.llToolbar)
             add(binding.lineNumber)
             add(binding.lineFirst)
             add(binding.lineSecond)
