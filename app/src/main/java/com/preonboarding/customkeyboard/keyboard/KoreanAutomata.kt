@@ -3,14 +3,14 @@ package com.preonboarding.customkeyboard.keyboard
 import android.view.inputmethod.InputConnection
 
 class KoreanAutomata(private val inputConnection: InputConnection){
-    private var cho: Char = '\u0000'
-    private var jun: Char = '\u0000'
-    private var jon: Char = '\u0000'
-    private var jonFlag: Char = '\u0000'
-    private var doubleJonFlag: Char = '\u0000'
-    var junFlag: Char = '\u0000'
+    private var choSeong: Char = '\u0000'
+    private var jungSeong: Char = '\u0000'
+    private var jongSeong: Char = '\u0000'
+    private var jongFlag: Char = '\u0000'
+    private var doubleJongFlag: Char = '\u0000'
+    private var jungFlag: Char = '\u0000'
 
-    private val chos: List<Int> = listOf(
+    private val choSeongList: List<Int> = listOf(
         0x3131,
         0x3132,
         0x3134,
@@ -31,7 +31,7 @@ class KoreanAutomata(private val inputConnection: InputConnection){
         0x314d,
         0x314e
     )
-    private val juns: List<Int> = listOf(
+    private val jungSeongList: List<Int> = listOf(
         0x314f,
         0x3150,
         0x3151,
@@ -54,7 +54,7 @@ class KoreanAutomata(private val inputConnection: InputConnection){
         0x3162,
         0x3163
     )
-    private val jons: List<Int> = listOf(
+    private val jongSeongList: List<Int> = listOf(
         0x0000,
         0x3131,
         0x3132,
@@ -92,116 +92,116 @@ class KoreanAutomata(private val inputConnection: InputConnection){
      * 3: 모음 + 자음 + 모음입력상태(초 중 종성)
      * 초성과 종성에 들어갈 수 있는 문자가 다르기 때문에 필요에 맞게 수정이 필요함.(chos != jons)
      */
-    private var state = 0
+    private var state = SyllableState.Empty
 
     fun clear() {
-        cho = '\u0000'
-        jun = '\u0000'
-        jon = '\u0000'
-        jonFlag = '\u0000'
-        doubleJonFlag = '\u0000'
-        junFlag = '\u0000'
+        choSeong = '\u0000'
+        jungSeong = '\u0000'
+        jongSeong = '\u0000'
+        jongFlag = '\u0000'
+        doubleJongFlag = '\u0000'
+        jungFlag = '\u0000'
     }
 
     private fun makeHan(): Char {
-        if (state == 0) {
+        if (state == SyllableState.Empty) {
             return '\u0000'
         }
-        if (state == 1) {
-            return cho
+        if (state == SyllableState.ChoSeong) {
+            return choSeong
         }
-        val choIndex = chos.indexOf(cho.code)
-        val junIndex = juns.indexOf(jun.code)
-        val jonIndex = jons.indexOf(jon.code)
+        val choIndex = choSeongList.indexOf(choSeong.code)
+        val jungIndex = jungSeongList.indexOf(jungSeong.code)
+        val jongIndex = jongSeongList.indexOf(jongSeong.code)
 
-        val makeResult = 0xAC00 + 28 * 21 * (choIndex) + 28 * (junIndex) + jonIndex
+        val makeResult = 0xAC00 + 28 * 21 * (choIndex) + 28 * (jungIndex) + jongIndex
 
         return makeResult.toChar()
     }
 
     fun commit(c: Char) {
-        if (chos.indexOf(c.code) < 0 && juns.indexOf(c.code) < 0 && jons.indexOf(c.code) < 0) {
+        if (choSeongList.indexOf(c.code) < 0 && jungSeongList.indexOf(c.code) < 0 && jongSeongList.indexOf(c.code) < 0) {
             directlyCommit()
             inputConnection.commitText(c.toString(), 1)
             return
         }
         when (state) {
-            0 -> {
-                if (juns.indexOf(c.code) >= 0) {
+            SyllableState.Empty -> {
+                if (jungSeongList.indexOf(c.code) >= 0) {
                     inputConnection.commitText(c.toString(), 1)
                     clear()
                 } else {//초성일 경우
-                    state = 1
-                    cho = c
-                    inputConnection.setComposingText(cho.toString(), 1)
+                    state = SyllableState.ChoSeong
+                    choSeong = c
+                    inputConnection.setComposingText(choSeong.toString(), 1)
                 }
             }
-            1 -> {
-                if (chos.indexOf(c.code) >= 0) {
-                    inputConnection.commitText(cho.toString(), 1)
+            SyllableState.ChoSeong -> {
+                if (choSeongList.indexOf(c.code) >= 0) {
+                    inputConnection.commitText(choSeong.toString(), 1)
                     clear()
-                    cho = c
-                    inputConnection.setComposingText(cho.toString(), 1)
+                    choSeong = c
+                    inputConnection.setComposingText(choSeong.toString(), 1)
                 } else {//중성일 경우
-                    state = 2
-                    jun = c
+                    state = SyllableState.ChoJungSeong
+                    jungSeong = c
                     inputConnection.setComposingText(makeHan().toString(), 1)
                 }
             }
-            2 -> {
-                if (juns.indexOf(c.code) >= 0) {
+            SyllableState.ChoJungSeong -> {
+                if (jungSeongList.indexOf(c.code) >= 0) {
                     if (doubleJunEnable(c)) {
                         inputConnection.setComposingText(makeHan().toString(), 1)
                     } else {
                         inputConnection.commitText(makeHan().toString(), 1)
                         inputConnection.commitText(c.toString(), 1)
                         clear()
-                        state = 0
+                        state = SyllableState.Empty
                     }
-                } else if (jons.indexOf(c.code) >= 0) {//종성이 들어왔을 경우
-                    jon = c
+                } else if (jongSeongList.indexOf(c.code) >= 0) {//종성이 들어왔을 경우
+                    jongSeong = c
                     inputConnection.setComposingText(makeHan().toString(), 1)
-                    state = 3
+                    state = SyllableState.ChoJungJongSeong
                 } else {
                     directlyCommit()
-                    cho = c
-                    state = 1
+                    choSeong = c
+                    state = SyllableState.ChoSeong
                     inputConnection.setComposingText(makeHan().toString(), 1)
                 }
             }
-            3 -> {
-                if (jons.indexOf(c.code) >= 0) {
+            SyllableState.ChoJungJongSeong -> {
+                if (jongSeongList.indexOf(c.code) >= 0) {
                     if (doubleJonEnable(c)) {
                         inputConnection.setComposingText(makeHan().toString(), 1)
                     } else {
                         inputConnection.commitText(makeHan().toString(), 1)
                         clear()
-                        state = 1
-                        cho = c
-                        inputConnection.setComposingText(cho.toString(), 1)
+                        state = SyllableState.ChoSeong
+                        choSeong = c
+                        inputConnection.setComposingText(choSeong.toString(), 1)
                     }
 
-                } else if (chos.indexOf(c.code) >= 0) {
+                } else if (choSeongList.indexOf(c.code) >= 0) {
                     inputConnection.commitText(makeHan().toString(), 1)
-                    state = 1
+                    state = SyllableState.ChoSeong
                     clear()
-                    cho = c
-                    inputConnection.setComposingText(cho.toString(), 1)
+                    choSeong = c
+                    inputConnection.setComposingText(choSeong.toString(), 1)
                 } else {//중성이 들어올 경우
                     val temp: Char
-                    if (doubleJonFlag == '\u0000') {
-                        temp = jon
-                        jon = '\u0000'
+                    if (doubleJongFlag == '\u0000') {
+                        temp = jongSeong
+                        jongSeong = '\u0000'
                         inputConnection.commitText(makeHan().toString(), 1)
                     } else {
-                        temp = doubleJonFlag
-                        jon = jonFlag
+                        temp = doubleJongFlag
+                        jongSeong = jongFlag
                         inputConnection.commitText(makeHan().toString(), 1)
                     }
-                    state = 2
+                    state = SyllableState.ChoJungSeong
                     clear()
-                    cho = temp
-                    jun = c
+                    choSeong = temp
+                    jungSeong = c
                     inputConnection.setComposingText(makeHan().toString(), 1)
                 }
             }
@@ -214,47 +214,47 @@ class KoreanAutomata(private val inputConnection: InputConnection){
     }
 
     fun directlyCommit() {
-        if (state == 0) {
+        if (state == SyllableState.Empty) {
             return
         }
         inputConnection.commitText(makeHan().toString(), 1)
-        state = 0
+        state = SyllableState.Empty
         clear()
     }
 
     fun delete() {
         when (state) {
-            0 -> {
+            SyllableState.Empty -> {
                 inputConnection.deleteSurroundingText(1, 0)
             }
-            1 -> {
-                cho = '\u0000'
-                state = 0
+            SyllableState.ChoSeong -> {
+                choSeong = '\u0000'
+                state = SyllableState.Empty
                 inputConnection.setComposingText("", 1)
                 inputConnection.commitText("", 1)
             }
-            2 -> {
-                if (junFlag != '\u0000') {
-                    jun = junFlag
-                    junFlag = '\u0000'
-                    state = 2
+            SyllableState.ChoJungSeong -> {
+                if (jungFlag != '\u0000') {
+                    jungSeong = jungFlag
+                    jungFlag = '\u0000'
+                    state = SyllableState.ChoJungSeong
                     inputConnection.setComposingText(makeHan().toString(), 1)
                 } else {
-                    jun = '\u0000'
-                    junFlag = '\u0000'
-                    state = 1
-                    inputConnection.setComposingText(cho.toString(), 1)
+                    jungSeong = '\u0000'
+                    jungFlag = '\u0000'
+                    state = SyllableState.ChoSeong
+                    inputConnection.setComposingText(choSeong.toString(), 1)
                 }
             }
-            3 -> {
-                if (doubleJonFlag == '\u0000') {
-                    jon = '\u0000'
-                    state = 2
+            SyllableState.ChoJungJongSeong -> {
+                if (doubleJongFlag == '\u0000') {
+                    jongSeong = '\u0000'
+                    state = SyllableState.ChoJungSeong
                 } else {
-                    jon = jonFlag
-                    jonFlag = '\u0000'
-                    doubleJonFlag = '\u0000'
-                    state = 3
+                    jongSeong = jongFlag
+                    jongFlag = '\u0000'
+                    doubleJongFlag = '\u0000'
+                    state = SyllableState.ChoJungJongSeong
                 }
                 inputConnection.setComposingText(makeHan().toString(), 1)
             }
@@ -262,47 +262,47 @@ class KoreanAutomata(private val inputConnection: InputConnection){
     }
 
     private fun doubleJunEnable(c: Char): Boolean {
-        when (jun) {
+        when (jungSeong) {
             'ㅗ' -> {
                 if (c == 'ㅏ') {
-                    junFlag = jun
-                    jun = 'ㅘ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅘ'
                     return true
                 }
                 if (c == 'ㅐ') {
-                    junFlag = jun
-                    jun = 'ㅙ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅙ'
                     return true
                 }
                 if (c == 'ㅣ') {
-                    junFlag = jun
-                    jun = 'ㅚ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅚ'
                     return true
                 }
                 return false
             }
             'ㅜ' -> {
                 if (c == 'ㅓ') {
-                    junFlag = jun
-                    jun = 'ㅝ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅝ'
                     return true
                 }
                 if (c == 'ㅔ') {
-                    junFlag = jun
-                    jun = 'ㅞ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅞ'
                     return true
                 }
                 if (c == 'ㅣ') {
-                    junFlag = jun
-                    jun = 'ㅟ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅟ'
                     return true
                 }
                 return false
             }
             'ㅡ' -> {
                 if (c == 'ㅣ') {
-                    junFlag = jun
-                    jun = 'ㅢ'
+                    jungFlag = jungSeong
+                    jungSeong = 'ㅢ'
                     return true
                 }
                 return false
@@ -314,61 +314,61 @@ class KoreanAutomata(private val inputConnection: InputConnection){
     }
 
     private fun doubleJonEnable(c: Char): Boolean {
-        jonFlag = jon
-        doubleJonFlag = c
-        when (jon) {
+        jongFlag = jongSeong
+        doubleJongFlag = c
+        when (jongSeong) {
             'ㄱ' -> {
                 if (c == 'ㅅ') {
-                    jon = 'ㄳ'
+                    jongSeong = 'ㄳ'
                     return true
                 }
                 return false
             }
             'ㄴ' -> {
                 if (c == 'ㅈ') {
-                    jon = 'ㄵ'
+                    jongSeong = 'ㄵ'
                     return true
                 }
                 if (c == 'ㅎ') {
-                    jon = 'ㄶ'
+                    jongSeong = 'ㄶ'
                     return true
                 }
                 return false
             }
             'ㄹ' -> {
                 if (c == 'ㄱ') {
-                    jon = 'ㄺ'
+                    jongSeong = 'ㄺ'
                     return true
                 }
                 if (c == 'ㅁ') {
-                    jon = 'ㄻ'
+                    jongSeong = 'ㄻ'
                     return true
                 }
                 if (c == 'ㅂ') {
-                    jon = 'ㄼ'
+                    jongSeong = 'ㄼ'
                     return true
                 }
                 if (c == 'ㅅ') {
-                    jon = 'ㄽ'
+                    jongSeong = 'ㄽ'
                     return true
                 }
                 if (c == 'ㅌ') {
-                    jon = 'ㄾ'
+                    jongSeong = 'ㄾ'
                     return true
                 }
                 if (c == 'ㅍ') {
-                    jon = 'ㄿ'
+                    jongSeong = 'ㄿ'
                     return true
                 }
                 if (c == 'ㅎ') {
-                    jon = 'ㅀ'
+                    jongSeong = 'ㅀ'
                     return true
                 }
                 return false
             }
             'ㅂ' -> {
                 if (c == 'ㅅ') {
-                    jon = 'ㅄ'
+                    jongSeong = 'ㅄ'
                     return true
                 }
                 return false
@@ -377,19 +377,5 @@ class KoreanAutomata(private val inputConnection: InputConnection){
                 return false
             }
         }
-    }
-
-    fun junAvailable(): Boolean {
-        if (jun == 'ㅙ' || jun == 'ㅞ' || jun == 'ㅢ' || jun == 'ㅐ' || jun == 'ㅔ' || jun == 'ㅛ' || jun == 'ㅒ' || jun == 'ㅖ') {
-            return false
-        }
-        return true
-    }
-
-    fun isDoubleJun(): Boolean {
-        if (jun == 'ㅙ' || jun == 'ㅞ' || jun == 'ㅚ' || jun == 'ㅝ' || jun == 'ㅟ' || jun == 'ㅘ' || jun == 'ㅢ') {
-            return true
-        }
-        return false
     }
 }

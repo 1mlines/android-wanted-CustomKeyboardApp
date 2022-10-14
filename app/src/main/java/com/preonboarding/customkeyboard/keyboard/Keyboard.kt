@@ -23,10 +23,10 @@ class Keyboard constructor(
     private var layoutInflater: LayoutInflater
 ) {
 
-    lateinit var binding: LayoutKeyboardBinding
-    var isShift: Boolean = false
-    var buttons: MutableList<TextView> = mutableListOf<TextView>()
-    lateinit var koreanAutomata: KoreanAutomata
+    private lateinit var binding: LayoutKeyboardBinding
+    private var isShift: Boolean = false
+    private var buttons: MutableList<TextView> = mutableListOf()
+    private lateinit var koreanAutomata: KoreanAutomata
     var inputConnection: InputConnection? = null
     var downView: View? = null
     private val textsList = ArrayList<List<String>>()
@@ -36,27 +36,27 @@ class Keyboard constructor(
         binding = LayoutKeyboardBinding.inflate(layoutInflater)
         koreanAutomata = KoreanAutomata(inputConnection!!)
 
-        val numpadText = listOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
-        val firstLineText = listOf<String>("ㅂ", "ㅈ", "ㄷ", "ㄱ", "ㅅ", "ㅛ", "ㅕ", "ㅑ", "ㅐ", "ㅔ")
-        val secondLineText = listOf<String>("ㅁ", "ㄴ", "ㅇ", "ㄹ", "ㅎ", "ㅗ", "ㅓ", "ㅏ", "ㅣ")
-        val thirdLineText = listOf<String>("Shift", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "Back")
-        val fourthLineText = listOf<String>("1@#", "한/영", "?", "space", ".", "Enter")
+        val numPadText = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
+        val firstLineText = listOf("ㅂ", "ㅈ", "ㄷ", "ㄱ", "ㅅ", "ㅛ", "ㅕ", "ㅑ", "ㅐ", "ㅔ")
+        val secondLineText = listOf("ㅁ", "ㄴ", "ㅇ", "ㄹ", "ㅎ", "ㅗ", "ㅓ", "ㅏ", "ㅣ")
+        val thirdLineText = listOf("Shift", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "Back")
+        val fourthLineText = listOf("1@#", "한/영", "?", "space", ".", "Enter")
 
         textsList.clear()
-        textsList.add(numpadText)
+        textsList.add(numPadText)
         textsList.add(firstLineText)
         textsList.add(secondLineText)
         textsList.add(thirdLineText)
         textsList.add(fourthLineText)
 
-        val numpadLine = binding.numpadLine
+        val numPadLine = binding.numpadLine
         val firstLine = binding.firstLine
         val secondLine = binding.secondLine
         val thirdLine = binding.thirdLine
         val fourthLine = binding.fourthLine
 
         linearLayoutList.clear()
-        linearLayoutList.add(numpadLine)
+        linearLayoutList.add(numPadLine)
         linearLayoutList.add(firstLine)
         linearLayoutList.add(secondLine)
         linearLayoutList.add(thirdLine)
@@ -200,9 +200,9 @@ class Keyboard constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
             }
-            val cursorcs: CharSequence? =
+            val cursors: CharSequence? =
                 inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
-            if (cursorcs != null && cursorcs.length >= 2) {
+            if (cursors != null && cursors.length >= 2) {
 
                 val eventTime = SystemClock.uptimeMillis()
                 inputConnection?.finishComposingText()
@@ -227,7 +227,7 @@ class Keyboard constructor(
                 koreanAutomata.directlyCommit()
                 inputConnection?.commitText(actionButton.text.toString(), 1)
             } catch (e: NumberFormatException) {
-                koreanAutomata.commit(actionButton.text.toString().toCharArray().get(0))
+                koreanAutomata.commit(actionButton.text.toString().toCharArray()[0])
             }
             if (isShift) {
                 keyChange()
@@ -237,7 +237,7 @@ class Keyboard constructor(
         return clickListener
     }
 
-    fun getOnTouchListener(clickListener: View.OnClickListener): View.OnTouchListener {
+    private fun getOnTouchListener(clickListener: View.OnClickListener): View.OnTouchListener {
         val handler = Handler(Looper.getMainLooper())
         val initialInterval = 500
         val normalInterval = 100
@@ -275,13 +275,13 @@ class Keyboard constructor(
         return onTouchListener
     }
 
-    fun getSpaceAction(): View.OnClickListener {
+    private fun getSpaceAction(): View.OnClickListener {
         return View.OnClickListener {
             koreanAutomata.commitSpace()
         }
     }
 
-    fun getDeleteAction(): View.OnClickListener {
+    private fun getDeleteAction(): View.OnClickListener {
         return View.OnClickListener {
             val cursors: CharSequence? =
                 inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
@@ -310,13 +310,13 @@ class Keyboard constructor(
         }
     }
 
-    fun getShiftAction(): View.OnClickListener {
+    private fun getShiftAction(): View.OnClickListener {
         return View.OnClickListener {
             keyChange()
         }
     }
 
-    fun getEnterAction(): View.OnClickListener {
+    private fun getEnterAction(): View.OnClickListener {
         return View.OnClickListener {
             koreanAutomata.directlyCommit()
             val eventTime = SystemClock.uptimeMillis()
