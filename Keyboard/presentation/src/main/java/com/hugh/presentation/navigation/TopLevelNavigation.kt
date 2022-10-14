@@ -47,7 +47,11 @@ internal fun NavGraphBuilder.keyboardTestGraph(
         composable(
             route = NavigationRoute.KeyBoardTestScreenGraph.ClipBoardTestScreen.route
         ) {
-            ClipBoardTestRoute()
+            ClipBoardTestRoute(
+                onClickBackButton = {
+                    customKeyBoardAppState.navigateBackStack()
+                }
+            )
         }
     }
 }
