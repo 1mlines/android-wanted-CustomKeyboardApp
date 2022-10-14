@@ -13,6 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import com.hugh.presentation.action.compose.InfoNavTarget
 import com.hugh.presentation.action.compose.TestNavTarget
+import com.hugh.presentation.action.compose.info.InfoActionActor
+import com.hugh.presentation.action.compose.test.TestActionActor
 import com.hugh.presentation.navigation.NavigationRoute
 import com.hugh.presentation.navigation.infoGraph
 import com.hugh.presentation.navigation.keyboardTestGraph
@@ -35,8 +37,10 @@ fun CustomKeyBoardApp() {
     ) { paddingValues ->
         Box {
             val infoScreenViewModel: InfoScreenViewModel = hiltViewModel()
+            val infoActor by lazy { InfoActionActor(infoScreenViewModel) }
 
             val testScreenViewModel: TestScreenViewModel = hiltViewModel()
+            val testActor by lazy { TestActionActor(testScreenViewModel) }
 
             LaunchedEffect(key1 = infoScreenViewModel.navTarget) {
                 infoScreenViewModel.navTarget.onEach { target ->
@@ -69,10 +73,10 @@ fun CustomKeyBoardApp() {
                 startDestination = NavigationRoute.InfoScreenGraph.route
             ) {
                 infoGraph(
-                    navigateTestScreen = infoScreenViewModel::clickAction
+                    navigateTestScreen = infoActor::navigationKeyBoardScreen
                 )
                 keyboardTestGraph(
-                    navigateClipBoard = testScreenViewModel::clickAction
+                    navigateClipBoard = testActor::navigationClipBoardScreen
                 )
             }
         }
