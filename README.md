@@ -352,6 +352,12 @@ internal fun NavGraphBuilder.keyboardTestGraph(
     }
 }
 ```
+
+### 네비게이션 동작
+
+
+https://user-images.githubusercontent.com/62296097/195755028-ac5b8fed-1bf4-48ad-9583-ba61529f6aa1.mp4
+
 ----
 
 ## 디바이스 크기 대응
