@@ -2,7 +2,7 @@ package com.preonboarding.customkeyboard.keyboard
 
 import android.view.inputmethod.InputConnection
 
-open class HangulMaker {
+open class KoreanAutomata {
     private var cho: Char = '\u0000'
     private var jun: Char = '\u0000'
     private var jon: Char = '\u0000'

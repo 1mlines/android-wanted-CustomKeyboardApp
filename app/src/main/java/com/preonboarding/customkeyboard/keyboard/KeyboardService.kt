@@ -2,43 +2,44 @@ package com.preonboarding.customkeyboard.keyboard
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.myhome.rpgkeyboard.KeyboardInterationListener
-import com.preonboarding.customkeyboard.R
+import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
 
 class KeyboardService : InputMethodService() {
 
-    lateinit var keyboardView: LinearLayout
-    lateinit var keyboardFrame: FrameLayout
-
-    lateinit var keyboardKorean: KeyboardKorean
-
+    lateinit var linearLayout: LinearLayout
+    lateinit var frameLayout: FrameLayout
+    lateinit var keyboard: Keyboard
+    lateinit var binding: ViewKeyboardBinding
     val keyboardInterationListener = object : KeyboardInterationListener {
-        //inputconnection이 null일경우 재요청하는 부분 필요함
-        override fun modechange(mode: Int) {
+        override fun addView() {
             currentInputConnection.finishComposingText()
-            keyboardFrame.removeAllViews()
-            keyboardKorean.inputConnection = currentInputConnection
-            keyboardFrame.addView(keyboardKorean.getLayout())
+            frameLayout.removeAllViews()
+            //keyboard.setInputConnection(currentInputConnection)
+            keyboard.inputConnection = currentInputConnection
+            frameLayout.addView(keyboard.getLayout())
         }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        binding = ViewKeyboardBinding.inflate(layoutInflater)
+    }
     override fun onCreateInputView(): View {
-        keyboardView = layoutInflater.inflate(R.layout.view_keyboard, null) as LinearLayout
-        keyboardFrame = keyboardView.findViewById(R.id.framelayout_keyboard)
-
-        keyboardKorean =
-            KeyboardKorean(applicationContext, layoutInflater, keyboardInterationListener)
-        keyboardKorean.inputConnection = currentInputConnection
-        keyboardKorean.init()
-        return keyboardView
+        linearLayout = binding.linearlayoutKeyboard
+        frameLayout = binding.framelayoutKeyboard
+        keyboard =
+            Keyboard(applicationContext, layoutInflater)
+        keyboard.inputConnection = currentInputConnection
+        keyboard.init()
+        return binding.root
     }
 
     override fun updateInputViewShown() {
         super.updateInputViewShown()
         currentInputConnection.finishComposingText()
-        keyboardInterationListener.modechange(1)
+        keyboardInterationListener.addView()
     }
 }
