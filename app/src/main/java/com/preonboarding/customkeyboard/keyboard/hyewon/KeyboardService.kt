@@ -5,17 +5,18 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
+import com.preonboarding.customkeyboard.databinding.ViewKeyboardHyewonBinding
 
 class KeyboardService : InputMethodService() {
 
     private lateinit var linearLayout: LinearLayout
     private lateinit var frameLayout: FrameLayout
     private lateinit var keyboard: Keyboard
-    private lateinit var binding: ViewKeyboardBinding
+    private lateinit var binding: ViewKeyboardHyewonBinding
 
     override fun onCreate() {
         super.onCreate()
-        binding = ViewKeyboardBinding.inflate(layoutInflater)
+        binding = ViewKeyboardHyewonBinding.inflate(layoutInflater)
     }
 
     override fun onCreateInputView(): View {

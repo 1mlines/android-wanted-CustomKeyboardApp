@@ -13,23 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidwantedCustomKeyboardApp"
         tools:targetApi="31">
-
-        <service
-            android:name=".KeyboardService"
-            android:enabled="true"
-            android:exported="true"
-            android:label="WantedCustomKeyboard"
-            android:permission="android.permission.BIND_INPUT_METHOD">
-
-            <meta-data
-                android:name="android.view.im"
-                android:resource="@xml/custom_keyboard" />
-
-            <intent-filter>
-                <action android:name="android.view.InputMethod" />
-            </intent-filter>
-        </service>
-
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true"
@@ -44,6 +27,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <service
             android:name=".keyboard.hyewon.KeyboardService"
             android:enabled="true"
@@ -56,6 +40,21 @@
                 <action android:name="android.view.InputMethod" />
             </intent-filter>
         </service>
+<!--        <service-->
+<!--            android:name=".keyboard.hyunsu.KeyboardService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true"-->
+<!--            android:label="WantedCustomKeyboard"-->
+<!--            android:permission="android.permission.BIND_INPUT_METHOD">-->
+
+<!--            <meta-data-->
+<!--                android:name="android.view.im"-->
+<!--                android:resource="@xml/custom_keyboard" />-->
+
+<!--            <intent-filter>-->
+<!--                <action android:name="android.view.InputMethod" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
     </application>
 
 
