@@ -32,6 +32,34 @@ fun MainColumn() {
     }
 }
 ```
+
+Custom Typography를 적용하였습니다.
+
+```kotlin
+
+valNotoSansKR=FontFamily(
+Font(R.font.noto_sanskr_bold, FontWeight.Bold),
+Font(R.font.noto_sanskr_black, FontWeight.Black),
+Font(R.font.noto_sanskr_light, FontWeight.Light),
+Font(R.font.noto_sanskr_medium, FontWeight.Medium),
+Font(R.font.noto_sanskr_regular, FontWeight.Normal),
+Font(R.font.noto_sanskr_thin, FontWeight.Thin)
+)
+
+valLocalTypography=staticCompositionLocalOf{
+ReplacementMyTypography(
+        title_20_bold =myTypography.title_20_bold,
+        title_16_bold =myTypography.title_16_bold,
+        title_14 =myTypography.title_14,
+        body_16 =myTypography.body_16,
+        body_14 =myTypography.body_14,
+        body_12 =myTypography.body_12,
+        body_10 =myTypography.body_10,
+        sub_title =myTypography.sub_title
+    )
+}
+
+```
 ![KakaoTalk_20221014_122634781](https://user-images.githubusercontent.com/55780312/195756870-60ee5571-408d-4400-8f85-e62a0d26783b.jpg)
 
 ![KakaoTalk_20221014_122634781_01](https://user-images.githubusercontent.com/55780312/195756882-9c00dc42-f362-4d60-a65d-ac2ea4e9402b.jpg)
