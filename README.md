@@ -67,9 +67,9 @@ ReplacementMyTypography(
 ![KakaoTalk_20221014_122634781_02](https://user-images.githubusercontent.com/55780312/195756894-d44d4c05-c419-4301-a0c7-111b862b2fce.jpg)
 
 ### 남은 일
-- 다이얼로그 
-- padding,해상도처리,하드코딩 수정
-- scaffold,apativeLayout or constraintLayout,composeState 추가
+- 다이얼로그
+- padding,해상도처리 수정
+- scaffold,apativeLayout or constraintLayout 추가
 
 
 =======
