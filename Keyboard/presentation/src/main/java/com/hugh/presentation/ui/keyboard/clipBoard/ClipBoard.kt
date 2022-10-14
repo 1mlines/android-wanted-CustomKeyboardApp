@@ -1,4 +1,4 @@
-package com.hugh.presentation.ui.keyboard
+package com.hugh.presentation.ui.keyboard.clipBoard
 
 import android.app.ActionBar.LayoutParams
 import android.view.LayoutInflater
@@ -10,14 +10,21 @@ import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.presentation.R
 import com.hugh.presentation.databinding.KeyboardClipboardBinding
 import com.hugh.presentation.extension.dip
+import kotlinx.coroutines.*
 
-class KeyboardClipboard constructor(
+class ClipBoard constructor(
     private val layoutInflater: LayoutInflater,
     private val inputConnection: InputConnection?,
     private val clipBoardRepository: ClipBoardRepository,
     private val rootHeight: Int
 ) {
     private lateinit var clipboardBinding: KeyboardClipboardBinding
+
+    private val job = Job() + CoroutineExceptionHandler { _, throwable ->
+
+    }
+
+    private val clipScope = CoroutineScope(job)
 
     fun init() {
         clipboardBinding =
@@ -28,6 +35,20 @@ class KeyboardClipboard constructor(
         }
 
         clipboardBinding.root.layoutParams = layoutParams
+
+        clipboardBinding.clipBoardRecyclerView.apply {
+            adapter = ClipAdapter()
+        }
+
+        clipScope.launch {
+            clipBoardRepository.getClipsFlow().collect {
+                (clipboardBinding.clipBoardRecyclerView.adapter as ClipAdapter).submitList(it)
+            }
+        }
+    }
+
+    fun cancel() {
+        clipScope.cancel()
     }
 
     fun getLayout(): View {

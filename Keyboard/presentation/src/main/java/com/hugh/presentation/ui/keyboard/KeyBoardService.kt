@@ -66,4 +66,9 @@ class KeyBoardService : InputMethodService() {
 
         return keyboardViewBinding.root
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        keyboardController.cancel()
+    }
 }

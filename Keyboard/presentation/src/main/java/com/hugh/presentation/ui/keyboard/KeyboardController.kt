@@ -7,6 +7,7 @@ import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.presentation.action.keyboardAction.KeyboardAction
 import com.hugh.presentation.action.keyboardAction.KeyboardHandler
 import com.hugh.presentation.action.keyboardAction.KeyboardState
+import com.hugh.presentation.ui.keyboard.clipBoard.ClipBoard
 
 class KeyboardController(
     private val layoutInflater: LayoutInflater,
@@ -16,6 +17,22 @@ class KeyboardController(
 
     var rootHeight = 0
     var isFirst = true
+
+    private val keyboardKorean: KeyboardKorean by lazy {
+        KeyboardKorean(
+            layoutInflater,
+            inputConnection
+        ).also { it.init() }
+    }
+
+    private val clipKeyboard: ClipBoard by lazy {
+        ClipBoard(
+            layoutInflater,
+            inputConnection,
+            clipBoardRepository,
+            rootHeight
+        ).also { it.init() }
+    }
 
     override fun keyboardAction(action: KeyboardAction) {
         when (action) {
@@ -29,11 +46,6 @@ class KeyboardController(
     }
 
     private fun createNumberKeyboard(block: (KeyboardState) -> Unit) {
-        val keyboardKorean = KeyboardKorean(
-            layoutInflater,
-            inputConnection
-        ).also { it.init() }
-
         if (isFirst) {
             keyboardKorean.getLayout().viewTreeObserver.addOnGlobalLayoutListener(object :
                 ViewTreeObserver.OnGlobalLayoutListener {
@@ -54,17 +66,14 @@ class KeyboardController(
     }
 
     private fun createClipKeyboard(block: (KeyboardState) -> Unit) {
-        val clipKeyboard = KeyboardClipboard(
-            layoutInflater,
-            inputConnection,
-            clipBoardRepository,
-            rootHeight
-        ).also { it.init() }
-
         block(
             KeyboardState.Keyboard(
                 view = clipKeyboard.getLayout()
             )
         )
+    }
+
+    fun cancel() {
+        clipKeyboard.cancel()
     }
 }
