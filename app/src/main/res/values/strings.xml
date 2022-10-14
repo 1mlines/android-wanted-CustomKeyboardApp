@@ -54,7 +54,6 @@
         <item>.</item>
         <item>Enter</item>
     </string-array>
-
     <string name="event_title">🎉플레이키보드 첫 이벤트 테마를 공개합니다.🎉</string>
     <string name="event_description">밀당해피니스 유튜브 채널을 방문하면 "테마명" 이벤트 테마를 무료로 받을 수 있다구요?\n지금 바로 "참여하기" 버튼을 눌러 새로워진 밀당 해피니스 유튜브 채널을 확인해보세요!</string>
     <string name="tag1">이벤트</string>
@@ -78,8 +77,7 @@
     <string name="review_creator">구매해주셔서 감사합니다💖</string>
     <string name="review_customer_name">o달빔o</string>
     <string name="review_customer">아진짜 귀여워요 !!!!</string>
-    <string name="dialog_recharge">이 부족해요</string>
+    <string name="dialog_recharge"> 이 부족해요</string>
     <string name="dialog_recharge2">빠르게 충전해 보세요!</string>
-
 
 </resources>

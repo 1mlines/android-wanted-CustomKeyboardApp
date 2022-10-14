@@ -1,6 +1,7 @@
 package com.preonboarding.customkeyboard.presentation
 
 
+import android.graphics.Color.blue
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,10 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -54,8 +53,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-//TODO 해상도처리,scaffold,adaptiveLayout,하드코딩 수정
 
 @Composable
 fun MainColumn() {
@@ -223,7 +220,6 @@ fun ListTags() {
 
 @Composable
 fun ListKeyWords() {
-    //TODO : svg image
 
     Text(
         text = "이런 키워드에 반응해요",
@@ -476,7 +472,8 @@ fun ListReview(sampleReview: MutableList<Review>) {
                     Text(
                         text = "크리에이터",
                         style = TextStyle(color = Color.White, fontSize = 10.sp),
-                        modifier = Modifier.offset(y = -15.dp)
+                        modifier = Modifier
+                            .offset(y = -15.dp)
                             .background(colorResource(id = R.color.main), RoundedCornerShape(24.dp))
                             .padding(horizontal = 6.dp)
                     )
@@ -484,7 +481,9 @@ fun ListReview(sampleReview: MutableList<Review>) {
 
                 Column() {
                     Column(
-                        modifier = Modifier.wrapContentSize().padding(horizontal = 12.dp)
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .padding(horizontal = 12.dp)
                             .background(
                                 colorResource(id = R.color.background),
                                 RoundedCornerShape(20.dp)
@@ -501,25 +500,33 @@ fun ListReview(sampleReview: MutableList<Review>) {
                             modifier = Modifier.padding(horizontal = 12.dp)
                         )
                     }
-                    Text(text = "1일", color = colorResource(id = R.color.background),modifier = Modifier.padding(horizontal = 12.dp))
+                    Text(
+                        text = "1일",
+                        color = colorResource(id = R.color.background),
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
                 }
             }
         }
 
 
         items(sampleReview) { sampleReview ->
-            Row(modifier = Modifier.padding(horizontal = 8.dp),horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profile),
-                        contentDescription = null,
-                        modifier = Modifier.size(50.dp),
-                        contentScale = ContentScale.Crop
-                    )
+            Row(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.profile),
+                    contentDescription = null,
+                    modifier = Modifier.size(50.dp),
+                    contentScale = ContentScale.Crop
+                )
                 Column() {
                     Column(
                         modifier = Modifier
-                            .wrapContentSize().padding(start = 8.dp)
+                            .wrapContentSize()
+                            .padding(start = 8.dp)
                             .background(
                                 colorResource(id = R.color.background),
                                 RoundedCornerShape(20.dp)
@@ -616,9 +623,9 @@ fun DiamondDialog(openDialog: MutableState<Boolean>) {
     if (openDialog.value) {
         CustomDialog(onDismissRequest = { openDialog.value = false }) {
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp)
-                    .background(Color.White)
-                    ,horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .background(Color.White), horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.keyword1),
@@ -644,7 +651,7 @@ fun DiamondDialog(openDialog: MutableState<Boolean>) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -689,12 +696,14 @@ fun DiamondDialog(openDialog: MutableState<Boolean>) {
                     ),
                     style = TextStyle(color = Color.White, fontSize = 14.sp),
                     onClick = { openDialog.value = false },
-                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 24.dp)
+                    modifier = Modifier
+                        .padding(vertical = 16.dp, horizontal = 24.dp)
                         .background(
                             colorResource(id = R.color.main),
                             RoundedCornerShape(24.dp)
                         )
-                        .align(Alignment.CenterHorizontally).padding(8.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(8.dp)
 
                 )
 
@@ -715,10 +724,14 @@ fun CustomDialog(
     Dialog(
         onDismissRequest = onDismissRequest,
         properties = properties
-    ) {Surface(
-        modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth().wrapContentHeight(),
-        shape = RoundedCornerShape(24.dp)
-    ){content()}
+    ) {
+        Surface(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(24.dp)
+        ) { content() }
 
     }
 }
