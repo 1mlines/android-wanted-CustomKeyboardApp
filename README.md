@@ -37,6 +37,60 @@
 </div>
 
 ## 서강휘
+### 맡은 역할
+- 아키텍처 설계
+- 단축키 및 클립보드 구현
+
+
+
+### 아키텍처 구조
+![image](https://user-images.githubusercontent.com/45396949/195513569-51892f24-703c-4632-8ce2-3b3639cd84b2.png)
+
+- Domain 영역을 구현할 필요가 없어서 Data Layer와 Ui Layer로 구성했습니다.
+- Data Layer는 repository interface 및 repositoryImpl을 포함하고 있으며 Room에 대한 정보를 갖습니다. 
+- Ui Layer는 View와 관련된 작업이 존재하며, 정의된 Action에 의해 State를 생성합니다. 
+
+### 프로젝트 구조
+![image](https://user-images.githubusercontent.com/45396949/195514368-9cb5a761-f7c0-4f92-8614-f0bc26f4b9a1.png)
+- Gradle
+   - KTS 를 통해 gradle을 Kotlin Script로 구성하였습니다.
+
+- buildSrc
+   - buildSrc는 dsl을 이용하여 생성한 모듈이며, 멀티 모듈에서 Dependency 및 Version을 효율적으로 관리하기 위해 생성했습니다.
+
+- Keyboard 
+   - presentation은 Ui Layer를 의미하며 ViewModel 및 activity가 존재합니다.
+   - data는 Data Layer를 의미하며 Room 및 Repository에 대한 정보를 갖습니다.
+
+### 단방향 아키텍처 패턴
+![image](https://user-images.githubusercontent.com/45396949/195514960-d13c9839-a80d-4c1d-934e-9c9f9d3b5f12.png)
+
+**Action** 
+
+![image](https://user-images.githubusercontent.com/45396949/195515768-c618e03b-5948-4e40-89c6-d5a0659dddc1.png)
+- 유저의 intent를 정의한 것을 의미합니다. 
+
+**Actor**
+
+![image](https://user-images.githubusercontent.com/45396949/195515802-74d0988e-413d-4123-a113-ca557fccc0f7.png)
+- 유저의 action에 의해 실행되어야 할 내부 로직을 바인딩하는 역할을 합니다. 
+
+**Handler**
+
+![image](https://user-images.githubusercontent.com/45396949/195515619-2dc81744-308d-48ab-925f-b0019c8430fe.png)
+- Action을 파라미터로 갖는 메소드가 존재하는 인터페이스입니다. 
+- Action처리를 하나의 메소드에서 처리하기 위해 선언합니다.
+   
+![image](https://user-images.githubusercontent.com/45396949/195516187-2cc4cdb0-7324-4e2c-a1ac-9e736ec74e2d.png)
+- action을 한곳으로 관리할 수 있으며, action에 따라 처리해야하는 메소드를 호출합니다. 
+- Action이 수행 될 때마다 항상 새 객체인 State를 발행합니다. 
+
+**State**
+
+![image](https://user-images.githubusercontent.com/45396949/195515838-cb53b6e5-83ae-4ccd-9cae-bce3e0e59e29.png)
+- Action에 의해 생성되는 State를 의미합니다. 
+- State 내부 값들은 불변으로 항상 값을 할당해야 합니다.
+
 
 ## 김영진
 ### 맡은 역할
