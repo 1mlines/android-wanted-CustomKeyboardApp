@@ -34,6 +34,7 @@ class KeyboardViewModel @Inject constructor(
             is ClipBoardAction.Delete -> {
                 deleteClipData(action.id)
             }
+            is ClipBoardAction.Paste -> TODO()
         }
     }
 

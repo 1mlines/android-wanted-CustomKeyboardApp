@@ -2,13 +2,29 @@ package com.hugh.presentation.ui.keyboard.clipBoard
 
 import androidx.recyclerview.widget.RecyclerView
 import com.hugh.model.ClipBoardData
+import com.hugh.presentation.action.clipAction.ClipBoardActor
 import com.hugh.presentation.databinding.ClipItemBinding
 
-class ClipViewHolder(private val binding: ClipItemBinding) : RecyclerView.ViewHolder(binding.root) {
+/**
+ * Created by 서강휘
+ */
 
-    fun bind(data: ClipBoardData) {
-        binding.clip = data
+class ClipViewHolder(
+    private val binding: ClipItemBinding,
+    private val clipBoardActor: ClipBoardActor
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bind(clip: ClipBoardData) {
+        binding.clip = clip
         binding.executePendingBindings()
+
+        binding.clipText.setOnClickListener {
+            clipBoardActor.paste(clip.text)
+        }
+
+        binding.deleteFrameLayout.rootView.setOnClickListener {
+            clipBoardActor.deleteClipData(clip.id)
+        }
     }
 
 }

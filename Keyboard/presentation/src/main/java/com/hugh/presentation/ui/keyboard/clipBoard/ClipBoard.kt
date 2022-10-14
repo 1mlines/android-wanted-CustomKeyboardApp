@@ -1,58 +1,74 @@
 package com.hugh.presentation.ui.keyboard.clipBoard
 
 import android.app.ActionBar.LayoutParams
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputConnection
 import androidx.databinding.DataBindingUtil
-import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.presentation.R
+import com.hugh.presentation.action.clipAction.ClipBoardActor
 import com.hugh.presentation.databinding.KeyboardClipboardBinding
 import com.hugh.presentation.extension.dip
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
+/**
+ * Created by 서강휘
+ */
 
 class ClipBoard constructor(
+    private val context: Context,
     private val layoutInflater: LayoutInflater,
-    private val inputConnection: InputConnection?,
-    private val clipBoardRepository: ClipBoardRepository,
-    private val rootHeight: Int
+    private val rootHeight: Int,
+    private val clipController: ClipController,
+    private val keyboardScope: CoroutineScope
 ) {
     private lateinit var clipboardBinding: KeyboardClipboardBinding
-
-    private val job = Job() + CoroutineExceptionHandler { _, throwable ->
-
+    private val clipBoardActor: ClipBoardActor by lazy {
+        ClipBoardActor(clipController)
     }
 
-    private val clipScope = CoroutineScope(job)
+    private val clipboardManager =
+        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     fun init() {
         clipboardBinding =
-            DataBindingUtil.inflate(layoutInflater, R.layout.keyboard_clipboard, null, false)
+            DataBindingUtil.inflate<KeyboardClipboardBinding?>(
+                layoutInflater,
+                R.layout.keyboard_clipboard,
+                null,
+                false
+            ).apply {
+                val layoutParams =
+                    LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rootHeight).apply {
+                        marginStart = 10.dip()
+                    }
 
-        val layoutParams = LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rootHeight).apply {
-            marginStart = 10.dip()
-        }
-
-        clipboardBinding.root.layoutParams = layoutParams
+                root.layoutParams = layoutParams
+            }
 
         clipboardBinding.clipBoardRecyclerView.apply {
-            adapter = ClipAdapter()
+            adapter = ClipAdapter(clipBoardActor)
         }
 
-        clipScope.launch {
-            clipBoardRepository.getClipsFlow().collect {
+        clipboardManager.addPrimaryClipChangedListener {
+            clipboardManager.primaryClip?.let { clipData ->
+                clipBoardActor.copy(
+                    clipData.getItemAt(0).text.toString()
+                )
+            }
+        }
+
+        keyboardScope.launch {
+            clipController.clipFlow.collect {
                 (clipboardBinding.clipBoardRecyclerView.adapter as ClipAdapter).submitList(it)
             }
         }
     }
 
-    fun cancel() {
-        clipScope.cancel()
-    }
-
     fun getLayout(): View {
         return clipboardBinding.root
     }
-
 }

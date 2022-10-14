@@ -9,7 +9,9 @@ import com.hugh.presentation.action.keyboardAction.KeyboardAction
 import com.hugh.presentation.action.keyboardAction.KeyboardState
 import com.hugh.presentation.databinding.KeyboardViewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @AndroidEntryPoint
 class KeyBoardService : InputMethodService() {
@@ -19,6 +21,9 @@ class KeyBoardService : InputMethodService() {
 
     private lateinit var keyboardViewBinding: KeyboardViewBinding
     private lateinit var keyboardController: KeyboardController
+
+    private lateinit var keyboardCoroutineContext: CoroutineContext
+    private lateinit var keyboardScope: CoroutineScope
 
     private fun navigationBlock(): (KeyboardState) -> Unit = { state ->
         when (state) {
@@ -37,8 +42,19 @@ class KeyBoardService : InputMethodService() {
     }
 
     override fun onCreateInputView(): View {
+        keyboardCoroutineContext =
+            Dispatchers.Main + SupervisorJob() + CoroutineExceptionHandler { _, throwable -> }
+        keyboardScope = CoroutineScope(keyboardCoroutineContext)
+
         keyboardController =
-            KeyboardController(layoutInflater, currentInputConnection, clipBoardRepository)
+            KeyboardController(
+                context = applicationContext,
+                layoutInflater = layoutInflater,
+                inputConnection = currentInputConnection,
+                clipBoardRepository = clipBoardRepository,
+                hangulUtil = HangulUtil(),
+                keyboardScope = keyboardScope
+            )
 
         keyboardController.keyboardAction(
             KeyboardAction.NavigateNumberKeyboard(navigationBlock())
@@ -67,8 +83,13 @@ class KeyBoardService : InputMethodService() {
         return keyboardViewBinding.root
     }
 
+    override fun onFinishInputView(finishingInput: Boolean) {
+        super.onFinishInputView(finishingInput)
+        keyboardScope.cancel()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        keyboardController.cancel()
+        keyboardScope.cancel()
     }
 }
