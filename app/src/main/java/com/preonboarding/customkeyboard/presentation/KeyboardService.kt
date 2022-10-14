@@ -4,11 +4,13 @@ import android.inputmethodservice.InputMethodService
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
+import com.preonboarding.customkeyboard.presentation.clipboard.KeyboardClipboard
 import com.preonboarding.customkeyboard.presentation.keyboard.KoreanKeyBoard
 
 class KeyboardService : InputMethodService() {
     private lateinit var binding: ViewKeyboardBinding
     private lateinit var koreaKeyboard: KoreanKeyBoard
+    private lateinit var keyboardClipboard: KeyboardClipboard
     override fun onCreate() {
         super.onCreate()
         binding = ViewKeyboardBinding.inflate(layoutInflater)
@@ -29,12 +31,22 @@ class KeyboardService : InputMethodService() {
                 Mode.SYMBOL -> {
                     binding.flKeyboard.removeAllViews()
                 }
+                Mode.CLIPBOARD -> {
+                    binding.flKeyboard.removeAllViews()
+                    keyboardClipboard.inputConnection = currentInputConnection
+                    binding.flKeyboard.addView(keyboardClipboard.getLayout())
+                }
             }
         }
     }
 
     override fun onCreateInputView(): View {
         koreaKeyboard = KoreanKeyBoard(applicationContext, layoutInflater, keyboardReplacer).apply {
+            inputConnection = currentInputConnection
+            init()
+        }
+
+        keyboardClipboard = KeyboardClipboard(applicationContext, layoutInflater, keyboardReplacer).apply {
             inputConnection = currentInputConnection
             init()
         }
