@@ -1,7 +1,6 @@
 package com.preonboarding.customkeyboard.presentation
 
 
-import android.graphics.Color.blue
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,10 +34,10 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.preonboarding.customkeyboard.R
 import com.preonboarding.customkeyboard.data.local.entity.Review
 import com.preonboarding.customkeyboard.presentation.ui.theme.ReplacementTheme
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,6 +104,10 @@ fun ImageKeyBoard() {
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
+                .border(
+                    1.dp,
+                    Color.White, RectangleShape
+                )
         )
     }
 }
@@ -240,6 +243,10 @@ fun ListKeyWords() {
                         .height(100.dp)
                         .width(100.dp)
                         .padding(8.dp)
+                        .border(
+                            1.dp,
+                            Color.White, RectangleShape
+                        )
                 )
                 Text(
                     text = stringResource(id = R.string.keyword1),
@@ -263,6 +270,10 @@ fun ListKeyWords() {
                         .height(100.dp)
                         .width(100.dp)
                         .padding(8.dp)
+                        .border(
+                            1.dp,
+                            Color.White, RectangleShape
+                        )
                 )
                 Text(
                     text = stringResource(id = R.string.keyword2),
@@ -285,7 +296,11 @@ fun ListKeyWords() {
                     modifier = Modifier
                         .height(100.dp)
                         .width(100.dp)
-                        .padding(8.dp), contentScale = ContentScale.Crop
+                        .padding(8.dp)
+                        .border(
+                            1.dp,
+                            Color.White, RectangleShape
+                        ), contentScale = ContentScale.Crop
                 )
                 Text(
                     text = stringResource(id = R.string.keyword3),
@@ -393,6 +408,10 @@ fun ImageBanner() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 50.dp)
+            .border(
+                1.dp,
+                Color.White, RectangleShape
+            )
     )
 }
 
@@ -424,6 +443,10 @@ fun TextReviewTitle() {
             modifier = Modifier
                 .padding(end = 12.dp)
                 .align(Alignment.CenterVertically)
+                .border(
+                    1.dp,
+                    Color.White, RectangleShape
+                )
         )
         Text(
             text = "테마를 구매해야 리뷰를 남길 수 있어요", modifier = Modifier
@@ -435,6 +458,10 @@ fun TextReviewTitle() {
             contentDescription = null, modifier = Modifier
                 .align(Alignment.CenterVertically)
                 .padding(end = 16.dp)
+                .border(
+                    1.dp,
+                    Color.White, RectangleShape
+                )
 
         )
 
@@ -466,14 +493,18 @@ fun ListReview(sampleReview: MutableList<Review>) {
                         painter = painterResource(id = R.drawable.profile),
                         contentDescription = null,
                         modifier = Modifier
-                            .size(50.dp),
+                            .size(50.dp)
+                            .border(
+                                1.dp,
+                                Color.White, RectangleShape
+                            ),
                         contentScale = ContentScale.Crop
                     )
                     Text(
                         text = "크리에이터",
                         style = TextStyle(color = Color.White, fontSize = 10.sp),
                         modifier = Modifier
-                            .offset(y = -15.dp)
+                            .offset(x = -6.dp, y = -15.dp)
                             .background(colorResource(id = R.color.main), RoundedCornerShape(24.dp))
                             .padding(horizontal = 6.dp)
                     )
@@ -491,12 +522,12 @@ fun ListReview(sampleReview: MutableList<Review>) {
                     ) {
                         Text(
                             text = stringResource(id = R.string.review_creator_name),
-                            style = ReplacementTheme.NewTypography.sub_title,
+                            style = ReplacementTheme.NewTypography.sub_title.copy(fontSize = 12.sp),
                             modifier = Modifier.padding(horizontal = 12.dp)
                         )
                         Text(
                             text = stringResource(id = R.string.review_creator),
-                            style = ReplacementTheme.NewTypography.body_14,
+                            style = ReplacementTheme.NewTypography.body_14.copy(fontSize = 12.sp),
                             modifier = Modifier.padding(horizontal = 12.dp)
                         )
                     }
@@ -519,14 +550,19 @@ fun ListReview(sampleReview: MutableList<Review>) {
                 Image(
                     painter = painterResource(id = R.drawable.profile),
                     contentDescription = null,
-                    modifier = Modifier.size(50.dp),
+                    modifier = Modifier
+                        .size(50.dp)
+                        .border(
+                            1.dp,
+                            Color.White, RectangleShape
+                        ),
                     contentScale = ContentScale.Crop
                 )
                 Column() {
                     Column(
                         modifier = Modifier
                             .wrapContentSize()
-                            .padding(start = 8.dp)
+                            .padding(start = 16.dp)
                             .background(
                                 colorResource(id = R.color.background),
                                 RoundedCornerShape(20.dp)
@@ -579,6 +615,10 @@ fun BottomNav() {
                     .align(Alignment.CenterVertically)
                     .height(12.dp)
                     .width(12.dp)
+                    .border(
+                        1.dp,
+                        Color.White, RectangleShape
+                    )
             )
             Text(
                 text = " 5",
@@ -634,6 +674,10 @@ fun DiamondDialog(openDialog: MutableState<Boolean>) {
                         .height(100.dp)
                         .width(100.dp)
                         .padding(8.dp)
+                        .border(
+                            1.dp,
+                            Color.White, RectangleShape
+                        )
                 )
                 Text(
                     buildAnnotatedString {
@@ -666,13 +710,20 @@ fun DiamondDialog(openDialog: MutableState<Boolean>) {
                         Spacer(modifier = Modifier.width(24.dp))
                         Image(
                             painter = painterResource(id = R.drawable.diamond),
-                            contentDescription = null
+                            contentDescription = null,
+                            modifier = Modifier.border(
+                                1.dp,
+                                Color.White, RectangleShape
+                            )
                         )
                         Text(text = "5", color = colorResource(id = R.color.blue))
                         Spacer(modifier = Modifier.width(24.dp))
                         Image(
                             painter = painterResource(id = R.drawable.ic_baseline_keyboard_arrow_right_24),
-                            contentDescription = null
+                            contentDescription = null, modifier = Modifier.border(
+                                1.dp,
+                                Color.White, RectangleShape
+                            )
                         )
                     }
 
