@@ -29,13 +29,13 @@ class KoreanKeyBoard(
     private lateinit var combiner: KoreaCombiner
 
     fun getLayout(): LinearLayout {
-        combiner = KoreaCombiner(inputConnection, context)
+        combiner = KoreaCombiner(inputConnection)
         setLayoutComponents()
         return binding.layoutKeyboard
     }
 
     override fun init() {
-        combiner = KoreaCombiner(inputConnection, context)
+        combiner = KoreaCombiner(inputConnection)
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             /* setLayoutParamsLandScape(binding.lineNumber)*/
             setLayoutParamsLandScape(binding.lineFirst)

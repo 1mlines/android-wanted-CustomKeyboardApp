@@ -2,11 +2,9 @@ package com.preonboarding.customkeyboard.keyboard
 
 import android.content.Context
 import android.view.inputmethod.InputConnection
-import com.preonboarding.customkeyboard.R
 
 class KoreaCombiner(
     private val inputConnection: InputConnection?,
-    private val context: Context
 ) {
     private var chosung: Char = '\u0000'
     private var jungsung: Char = '\u0000'
@@ -36,7 +34,7 @@ class KoreaCombiner(
         0x314d,
         0x314e
     )
-    private val juns: List<Int> =listOf(
+    private val juns: List<Int> = listOf(
         0x314f,
         0x3150,
         0x3151,
@@ -157,7 +155,7 @@ class KoreaCombiner(
         val junIndex = juns.indexOf(jungsung.code)
         val jonIndex = jons.indexOf(jongsung.code)
 
-        val result = 0xAC00 + 28 * 21 * choIndex + 28 * junIndex + jonIndex
+        val result = 0xAC00 + 28 * 21 * (choIndex) + 28 * (junIndex) + jonIndex
         return result.toChar()
     }
 
@@ -266,7 +264,7 @@ class KoreaCombiner(
         }
     }
 
-    private fun isDoubleJonEnable(c: Char): Boolean {
+    private fun isDoubleJunEnable(c: Char): Boolean {
         when (jungsung) {
             'ㅗ' -> {
                 if (c == 'ㅏ') {
@@ -318,7 +316,7 @@ class KoreaCombiner(
         }
     }
 
-    private fun isDoubleJunEnable(c: Char): Boolean {
+    private fun isDoubleJonEnable(c: Char): Boolean {
         jonFlag = jongsung
         doubleJonFlag = c
         when (jongsung) {
@@ -382,19 +380,5 @@ class KoreaCombiner(
                 return false
             }
         }
-    }
-
-    fun isJungsungAvailable(): Boolean {
-        if (jungsung == 'ㅙ' || jungsung == 'ㅞ' || jungsung == 'ㅢ' || jungsung == 'ㅐ' || jungsung == 'ㅔ' || jungsung == 'ㅛ' || jungsung == 'ㅒ' || jungsung == 'ㅖ') {
-            return false
-        }
-        return true
-    }
-
-    fun isDoubleJunsung(): Boolean {
-        if (jungsung == 'ㅙ' || jungsung == 'ㅞ' || jungsung == 'ㅚ' || jungsung == 'ㅝ' || jungsung == 'ㅟ' || jungsung == 'ㅘ' || jungsung == 'ㅢ') {
-            return true
-        }
-        return false
     }
 }
