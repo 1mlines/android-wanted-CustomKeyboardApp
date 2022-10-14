@@ -28,7 +28,7 @@
                 android:value="" />
         </activity>
         <service
-            android:name=".keyboard.KeyboardService"
+            android:name=".keyboard.hyewon.KeyboardService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_INPUT_METHOD">

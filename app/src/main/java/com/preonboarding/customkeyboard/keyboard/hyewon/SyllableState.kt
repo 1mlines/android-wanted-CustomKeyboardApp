@@ -1,4 +1,4 @@
-package com.preonboarding.customkeyboard.keyboard
+package com.preonboarding.customkeyboard.keyboard.hyewon
 
 enum class SyllableState {
     Empty,
