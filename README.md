@@ -31,12 +31,12 @@ fun MainColumn() {
     }
 }
 ```
+![KakaoTalk_20221014_122634781](https://user-images.githubusercontent.com/55780312/195756870-60ee5571-408d-4400-8f85-e62a0d26783b.jpg)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fae066b6-871b-4b27-999a-344d97317a54/Untitled.jpeg)
+![KakaoTalk_20221014_122634781_01](https://user-images.githubusercontent.com/55780312/195756882-9c00dc42-f362-4d60-a65d-ac2ea4e9402b.jpg)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0af94fa9-141b-48f8-ac32-3cbb04da3da2/Untitled.jpeg)
+![KakaoTalk_20221014_122634781_02](https://user-images.githubusercontent.com/55780312/195756894-d44d4c05-c419-4301-a0c7-111b862b2fce.jpg)
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dbb1676f-406f-4fb5-82a9-4cb50ec1aa73/Untitled.jpeg)
 
 ### 남은 일
 - padding,해상도처리,하드코딩 수정
