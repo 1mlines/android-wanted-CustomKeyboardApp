@@ -50,6 +50,16 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/layouts/hyewon',
+                            'src/main/res/layouts/hyunsu',
+                            'src/main/res'
+                    ]
+        }
+    }
 }
 
 dependencies {

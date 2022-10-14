@@ -1,6 +1,5 @@
-package com.preonboarding.customkeyboard.keyboard
+package com.preonboarding.customkeyboard.keyboard.hyunsu
 
-import android.content.Context
 import android.view.inputmethod.InputConnection
 
 class KoreaCombiner(
