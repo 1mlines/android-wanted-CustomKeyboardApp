@@ -352,6 +352,10 @@ internal fun NavGraphBuilder.keyboardTestGraph(
     }
 }
 ```
+
+### 네비게이션
+https://user-images.githubusercontent.com/62296097/195755028-ac5b8fed-1bf4-48ad-9583-ba61529f6aa1.mp4
+
 ----
 
 ## 디바이스 크기 대응
@@ -360,6 +364,7 @@ internal fun NavGraphBuilder.keyboardTestGraph(
 <img src="https://user-images.githubusercontent.com/62296097/195751493-b9a8d069-91c9-4d57-9d47-ca377e8b28f5.png" width =200 height = 400>
 
 ### 태블릿과 기타 디바이스에서 레이아웃이 깨지지 않게 UI를 구성했습니다.
+
 
 
 ____
