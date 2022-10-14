@@ -38,8 +38,20 @@ fun MainColumn() {
 
 ![KakaoTalk_20221014_122634781_02](https://user-images.githubusercontent.com/55780312/195756894-d44d4c05-c419-4301-a0c7-111b862b2fce.jpg)
 
-
 ### 남은 일
 - 다이얼로그 
 - padding,해상도처리,하드코딩 수정
 - scaffold,apativeLayout or constraintLayout,composeState 추가
+
+
+=======
+## 한혜원
+### 담당한 일
+- InputMethodService를 이용해 한글 키보드 구현
+### 남은 일
+- 한글 오토마타 적용이 잘 안돼서 수정 필요
+### 실행영상
+
+https://user-images.githubusercontent.com/35549958/195693499-2098e7ee-3e15-40ab-8ce7-f89f799cae0d.mp4
+
+
