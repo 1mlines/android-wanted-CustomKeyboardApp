@@ -17,7 +17,6 @@ class KeyboardService : InputMethodService() {
         override fun addView() {
             currentInputConnection.finishComposingText()
             frameLayout.removeAllViews()
-            //keyboard.setInputConnection(currentInputConnection)
             keyboard.inputConnection = currentInputConnection
             frameLayout.addView(keyboard.getLayout())
         }

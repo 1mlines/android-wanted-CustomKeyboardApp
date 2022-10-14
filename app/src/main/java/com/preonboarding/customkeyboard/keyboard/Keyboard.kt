@@ -3,8 +3,8 @@ package com.preonboarding.customkeyboard.keyboard
 import android.content.Context
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
-import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.LayoutInflater
@@ -28,16 +28,12 @@ class Keyboard constructor(
     var buttons: MutableList<TextView> = mutableListOf<TextView>()
     lateinit var koreanAutomata: KoreanAutomata
     var inputConnection: InputConnection? = null
-        set(inputConnection) {
-            field = inputConnection
-        }
     var downView: View? = null
     private val textsList = ArrayList<List<String>>()
     private val linearLayoutList = ArrayList<LinearLayout>()
 
     fun init() {
         binding = LayoutKeyboardBinding.inflate(layoutInflater)
-        Log.d("TAG", inputConnection.toString())
         koreanAutomata = KoreanAutomata(inputConnection!!)
 
         val numpadText = listOf<String>("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
@@ -204,9 +200,9 @@ class Keyboard constructor(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 inputConnection?.requestCursorUpdates(InputConnection.CURSOR_UPDATE_IMMEDIATE)
             }
-            val cursors: CharSequence? =
+            val cursorcs: CharSequence? =
                 inputConnection?.getSelectedText(InputConnection.GET_TEXT_WITH_STYLES)
-            if (cursors != null && cursors.length >= 2) {
+            if (cursorcs != null && cursorcs.length >= 2) {
 
                 val eventTime = SystemClock.uptimeMillis()
                 inputConnection?.finishComposingText()
@@ -227,10 +223,11 @@ class Keyboard constructor(
                 koreanAutomata.clear()
             }
             try {
+                val myText = Integer.parseInt(actionButton.text.toString())
                 koreanAutomata.directlyCommit()
                 inputConnection?.commitText(actionButton.text.toString(), 1)
             } catch (e: NumberFormatException) {
-                koreanAutomata.commit(actionButton.text.toString().toCharArray()[0])
+                koreanAutomata.commit(actionButton.text.toString().toCharArray().get(0))
             }
             if (isShift) {
                 keyChange()
@@ -241,7 +238,7 @@ class Keyboard constructor(
     }
 
     fun getOnTouchListener(clickListener: View.OnClickListener): View.OnTouchListener {
-        val handler = Handler()
+        val handler = Handler(Looper.getMainLooper())
         val initialInterval = 500
         val normalInterval = 100
         val handlerRunnable = object : Runnable {

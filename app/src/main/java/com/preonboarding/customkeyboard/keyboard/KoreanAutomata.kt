@@ -2,7 +2,7 @@ package com.preonboarding.customkeyboard.keyboard
 
 import android.view.inputmethod.InputConnection
 
-open class KoreanAutomata {
+class KoreanAutomata(private val inputConnection: InputConnection){
     private var cho: Char = '\u0000'
     private var jun: Char = '\u0000'
     private var jon: Char = '\u0000'
@@ -92,12 +92,7 @@ open class KoreanAutomata {
      * 3: 모음 + 자음 + 모음입력상태(초 중 종성)
      * 초성과 종성에 들어갈 수 있는 문자가 다르기 때문에 필요에 맞게 수정이 필요함.(chos != jons)
      */
-    protected var state = 0
-    private lateinit var inputConnection: InputConnection
-
-    constructor(inputConnection: InputConnection) {
-        this.inputConnection = inputConnection
-    }
+    private var state = 0
 
     fun clear() {
         cho = '\u0000'
@@ -108,31 +103,31 @@ open class KoreanAutomata {
         junFlag = '\u0000'
     }
 
-    fun makeHan(): Char {
+    private fun makeHan(): Char {
         if (state == 0) {
             return '\u0000'
         }
         if (state == 1) {
             return cho
         }
-        val choIndex = chos.indexOf(cho.toInt())
-        val junIndex = juns.indexOf(jun.toInt())
-        val jonIndex = jons.indexOf(jon.toInt())
+        val choIndex = chos.indexOf(cho.code)
+        val junIndex = juns.indexOf(jun.code)
+        val jonIndex = jons.indexOf(jon.code)
 
         val makeResult = 0xAC00 + 28 * 21 * (choIndex) + 28 * (junIndex) + jonIndex
 
         return makeResult.toChar()
     }
 
-    open fun commit(c: Char) {
-        if (chos.indexOf(c.toInt()) < 0 && juns.indexOf(c.toInt()) < 0 && jons.indexOf(c.toInt()) < 0) {
+    fun commit(c: Char) {
+        if (chos.indexOf(c.code) < 0 && juns.indexOf(c.code) < 0 && jons.indexOf(c.code) < 0) {
             directlyCommit()
             inputConnection.commitText(c.toString(), 1)
             return
         }
         when (state) {
             0 -> {
-                if (juns.indexOf(c.toInt()) >= 0) {
+                if (juns.indexOf(c.code) >= 0) {
                     inputConnection.commitText(c.toString(), 1)
                     clear()
                 } else {//초성일 경우
@@ -142,7 +137,7 @@ open class KoreanAutomata {
                 }
             }
             1 -> {
-                if (chos.indexOf(c.toInt()) >= 0) {
+                if (chos.indexOf(c.code) >= 0) {
                     inputConnection.commitText(cho.toString(), 1)
                     clear()
                     cho = c
@@ -154,7 +149,7 @@ open class KoreanAutomata {
                 }
             }
             2 -> {
-                if (juns.indexOf(c.toInt()) >= 0) {
+                if (juns.indexOf(c.code) >= 0) {
                     if (doubleJunEnable(c)) {
                         inputConnection.setComposingText(makeHan().toString(), 1)
                     } else {
@@ -163,7 +158,7 @@ open class KoreanAutomata {
                         clear()
                         state = 0
                     }
-                } else if (jons.indexOf(c.toInt()) >= 0) {//종성이 들어왔을 경우
+                } else if (jons.indexOf(c.code) >= 0) {//종성이 들어왔을 경우
                     jon = c
                     inputConnection.setComposingText(makeHan().toString(), 1)
                     state = 3
@@ -175,7 +170,7 @@ open class KoreanAutomata {
                 }
             }
             3 -> {
-                if (jons.indexOf(c.toInt()) >= 0) {
+                if (jons.indexOf(c.code) >= 0) {
                     if (doubleJonEnable(c)) {
                         inputConnection.setComposingText(makeHan().toString(), 1)
                     } else {
@@ -186,14 +181,14 @@ open class KoreanAutomata {
                         inputConnection.setComposingText(cho.toString(), 1)
                     }
 
-                } else if (chos.indexOf(c.toInt()) >= 0) {
+                } else if (chos.indexOf(c.code) >= 0) {
                     inputConnection.commitText(makeHan().toString(), 1)
                     state = 1
                     clear()
                     cho = c
                     inputConnection.setComposingText(cho.toString(), 1)
                 } else {//중성이 들어올 경우
-                    var temp: Char = '\u0000'
+                    val temp: Char
                     if (doubleJonFlag == '\u0000') {
                         temp = jon
                         jon = '\u0000'
@@ -218,7 +213,7 @@ open class KoreanAutomata {
         inputConnection.commitText(" ", 1)
     }
 
-    open fun directlyCommit() {
+    fun directlyCommit() {
         if (state == 0) {
             return
         }
@@ -227,7 +222,7 @@ open class KoreanAutomata {
         clear()
     }
 
-    open fun delete() {
+    fun delete() {
         when (state) {
             0 -> {
                 inputConnection.deleteSurroundingText(1, 0)
@@ -266,7 +261,7 @@ open class KoreanAutomata {
         }
     }
 
-    fun doubleJunEnable(c: Char): Boolean {
+    private fun doubleJunEnable(c: Char): Boolean {
         when (jun) {
             'ㅗ' -> {
                 if (c == 'ㅏ') {
@@ -318,7 +313,7 @@ open class KoreanAutomata {
         }
     }
 
-    fun doubleJonEnable(c: Char): Boolean {
+    private fun doubleJonEnable(c: Char): Boolean {
         jonFlag = jon
         doubleJonFlag = c
         when (jon) {
