@@ -8,9 +8,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.ExperimentalTextApi
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
@@ -20,7 +20,9 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 @OptIn(ExperimentalTextApi::class)
 @Composable
 fun Tag(
-    tagText: String
+    tagText: String,
+    color: Color,
+    style: TextStyle
 ) {
     Row(
         modifier = Modifier
@@ -33,20 +35,8 @@ fun Tag(
         Text(
             modifier = Modifier.padding(horizontal = 10.3.dp, vertical = 4.dp),
             text = tagText,
-            style = CustomKeyBoardTheme.typography.allBodyMid.copy(
-                platformStyle = PlatformTextStyle(
-                    includeFontPadding = false
-                )
-            ),
-            color = CustomKeyBoardTheme.color.allBodyGray
+            style = style,
+            color = color
         )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewTag() {
-    CustomKeyBoardTheme() {
-        Tag("하이하이")
     }
 }
