@@ -23,7 +23,7 @@ import java.lang.Runnable
 class KeyboardKorean constructor(
     var layoutInflater: LayoutInflater,
     private var inputConnection: InputConnection?
-) : PopupMenu.OnMenuItemClickListener  {
+) : PopupMenu.OnMenuItemClickListener {
 
     private lateinit var keyboardKoreanBinding: KeyboardKoreanBinding
     private val keyboard = Keyboard()
@@ -212,11 +212,12 @@ class KeyboardKorean constructor(
                 val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener?
                 when (myText[item]) {
-                    "FAV" -> {
+                    "FAV" -> {  popupAction()
                         spacialKey.setImageResource(R.drawable.ic_zam)
                         spacialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
                         myOnClickListener = popupAction()
+                        // todo  popupAction() 사용 시 화면 마비.. => 다른 메서드 사용하면 잘 돌아감..
                         spacialKey.setOnClickListener(myOnClickListener)
                         spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                         spacialKey.setBackgroundResource(R.drawable.key_background)
@@ -238,6 +239,7 @@ class KeyboardKorean constructor(
                         myOnClickListener = getDeleteAction()
                         spacialKey.setOnClickListener(myOnClickListener)
                         spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        spacialKey.setBackgroundResource(R.drawable.key_background)
                     }
                     "CAPS" -> {
                         spacialKey.setImageResource(R.drawable.ic_caps_unlock)
@@ -271,10 +273,10 @@ class KeyboardKorean constructor(
 
     private fun popupAction(): View.OnClickListener {
         return View.OnClickListener {
-            var popup = PopupMenu(it.context, it)
-            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
-            popup.setOnMenuItemClickListener(this)
-            popup.show()
+            val popup = PopupMenu(it.context, it)
+                popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+                popup.setOnMenuItemClickListener(this)
+                popup.show()
         }
     }
 
@@ -308,13 +310,15 @@ class KeyboardKorean constructor(
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
+   override fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.item1 -> Log.d("TAG", "onMenuItemClick: 앜1")
-            R.id.item2 -> Log.d("TAG", "onMenuItemClick: 앜2")
-            R.id.item3 -> Log.d("TAG", "onMenuItemClick: 앜3")
-            R.id.item4 -> Log.d("TAG", "onMenuItemClick: 앜4")
+            R.id.item1 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
+            R.id.item2 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
+            R.id.item3 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
+            R.id.item4 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
+                //Log.d("TAG", "onMenuItemClick: 444")
         }
         return item != null
     }
+
 }
