@@ -14,17 +14,24 @@ class ClipViewHolder(
     private val clipBoardActor: ClipBoardActor
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private lateinit var clipBoardData: ClipBoardData
+
+    init {
+        binding.clipText.setOnClickListener {
+            clipBoardActor.paste(clipBoardData.text)
+        }
+
+        binding.deleteLayout.setOnClickListener {
+            clipBoardActor.deleteClipData(clipBoardData.id)
+        }
+    }
+
+
     fun bind(clip: ClipBoardData) {
         binding.clip = clip
         binding.executePendingBindings()
 
-        binding.clipText.setOnClickListener {
-            clipBoardActor.paste(clip.text)
-        }
-
-        binding.deleteFrameLayout.rootView.setOnClickListener {
-            clipBoardActor.deleteClipData(clip.id)
-        }
+        clipBoardData = clip
     }
 
 }
