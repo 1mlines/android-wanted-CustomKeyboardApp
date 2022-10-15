@@ -25,7 +25,7 @@ class ClipController(
 
     val clipFlow = clipBoardRepository.getClipsFlow()
 
-    private val insertFlow = MutableStateFlow(ClipState.Clip(text = ""))
+    private val insertFlow = MutableSharedFlow<ClipState.Clip>()
 
     init {
         keyboardScope.launch {
