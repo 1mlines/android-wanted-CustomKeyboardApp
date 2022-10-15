@@ -5,6 +5,6 @@ package com.hugh.presentation.action.compose.info
  */
 class InfoActionActor(private val infoActionHandler: InfoActionHandler) {
     fun navigationKeyBoardScreen(action: InfoAction) {
-        infoActionHandler.clickAction(action)
+        infoActionHandler.navigateAction(action)
     }
 }
