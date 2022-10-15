@@ -8,17 +8,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
+import com.hugh.presentation.action.compose.TestNavTarget
 import com.hugh.presentation.action.compose.test.TestAction
+import com.hugh.presentation.action.compose.test.TestActionActor
 import com.hugh.presentation.ui.component.SearchBar
 import com.hugh.presentation.ui.component.Tag
 import com.hugh.presentation.ui.info.data.TagsData
+import com.hugh.presentation.ui.main.CustomKeyBoardAppState
 import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * @Created by 김현국 2022/10/13
@@ -26,10 +32,22 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
 @Composable
 fun ClipBoardTestRoute(
-    navigateClipBoard: (TestAction) -> Unit
+    customKeyBoardAppState: CustomKeyBoardAppState,
+    testScreenViewModel: TestScreenViewModel
 ) {
+    val testActionActor by lazy { TestActionActor(testScreenViewModel) }
+    LaunchedEffect(key1 = testScreenViewModel.navTarget) {
+        testScreenViewModel.navTarget.onEach { state ->
+            when (state) {
+                TestNavTarget.GoBack -> {
+                    customKeyBoardAppState.navigateBackStack()
+                }
+                else -> {}
+            }
+        }.launchIn(this)
+    }
     ClipBoardTestScreen(
-        navigateClipBoard = navigateClipBoard
+        navigateClipBoard = testActionActor::navigationClipBoardScreen
     )
 }
 
@@ -44,7 +62,8 @@ fun ClipBoardTestScreen(
             modifier = Modifier.padding(start = 10.dp)
         ) {
             SearchBar(
-                navigateClipBoard = navigateClipBoard
+                navigate = { navigateClipBoard(TestAction.GoBack) },
+                placeHolderText = "테마 검색"
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(

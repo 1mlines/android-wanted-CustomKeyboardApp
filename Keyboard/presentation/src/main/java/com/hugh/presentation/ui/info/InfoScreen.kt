@@ -24,6 +24,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +44,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.SizeMode
 import com.hugh.presentation.R
+import com.hugh.presentation.action.compose.InfoNavTarget
 import com.hugh.presentation.action.compose.info.InfoAction
+import com.hugh.presentation.action.compose.info.InfoActionActor
+import com.hugh.presentation.navigation.NavigationRoute
 import com.hugh.presentation.ui.component.KeyWordCard
 import com.hugh.presentation.ui.component.MultiStyleText
 import com.hugh.presentation.ui.component.ReviewCard
@@ -58,7 +63,10 @@ import com.hugh.presentation.ui.info.data.KeyWordData
 import com.hugh.presentation.ui.info.data.ReviewData
 import com.hugh.presentation.ui.info.data.TagsData
 import com.hugh.presentation.ui.info.data.ThemeData
+import com.hugh.presentation.ui.main.CustomKeyBoardAppState
 import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * @Created by 김현국 2022/10/12
@@ -66,10 +74,23 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
 @Composable
 fun InfoRoute(
-    navigateTestScreen: (InfoAction) -> Unit
+    customKeyBoardAppState: CustomKeyBoardAppState,
+    infoScreenViewModel: InfoScreenViewModel = hiltViewModel()
 ) {
+    val infoActor by lazy { InfoActionActor(infoScreenViewModel) }
+    LaunchedEffect(key1 = infoScreenViewModel.navTarget) {
+        infoScreenViewModel.navTarget.onEach { state ->
+            when (state) {
+                InfoNavTarget.KeyBoardTestScreen -> {
+                    customKeyBoardAppState.navigateRoute(
+                        NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route
+                    )
+                }
+            }
+        }.launchIn(this)
+    }
     InfoScreen(
-        navigateTestScreen = navigateTestScreen
+        navigateTestScreen = infoActor::navigationKeyBoardScreen
     )
 }
 
@@ -87,9 +108,12 @@ fun InfoScreen(
             Box {
                 BottomShadow(alpha = 0.01f, height = 66.dp)
                 InfoBottomBar(
-                    modifier = Modifier.fillMaxWidth().background(
-                        color = CustomKeyBoardTheme.color.white
-                    ).align(Alignment.BottomCenter),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = CustomKeyBoardTheme.color.white
+                        )
+                        .align(Alignment.BottomCenter),
                     onClick = {
                         click = !click
                     }
@@ -142,7 +166,9 @@ fun InfoScreen(
             }
             item {
                 Image(
-                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
                     painter = painterResource(id = R.drawable.img_ad),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
@@ -185,7 +211,9 @@ fun InfoKeyBoardItemImage(
     modifier: Modifier = Modifier
 ) {
     Image(
-        modifier = modifier.fillMaxWidth().wrapContentHeight()
+        modifier = modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
             .shadow(10.dp, shape = RoundedCornerShape(5.dp)),
         painter = painterResource(id = R.drawable.img_info_keyboard_item),
         contentDescription = null,
@@ -382,7 +410,9 @@ fun InfoBottomBar(
     onClick: () -> Unit
 ) {
     Row(
-        modifier = modifier.height(64.dp).padding(horizontal = 12.dp),
+        modifier = modifier
+            .height(64.dp)
+            .padding(horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -402,11 +432,7 @@ fun InfoBottomBar(
                 Text(
                     text = "5",
                     color = CustomKeyBoardTheme.color.themeInfoGem,
-                    style = CustomKeyBoardTheme.typography.subTitle.copy(
-                        platformStyle = PlatformTextStyle(
-                            includeFontPadding = false
-                        )
-                    )
+                    style = CustomKeyBoardTheme.typography.subTitle
                 )
             }
             Row {
@@ -422,12 +448,17 @@ fun InfoBottomBar(
             }
         }
         Box(
-            modifier = Modifier.height(40.dp).width(144.dp).background(
-                color = CustomKeyBoardTheme.color.allMainColor,
-                shape = RoundedCornerShape(24.dp)
-            ).clip(RoundedCornerShape(24.dp)).clickable {
-                onClick()
-            }
+            modifier = Modifier
+                .height(40.dp)
+                .width(144.dp)
+                .background(
+                    color = CustomKeyBoardTheme.color.allMainColor,
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .clip(RoundedCornerShape(24.dp))
+                .clickable {
+                    onClick()
+                }
         ) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
@@ -451,7 +482,10 @@ fun ClickDialog(
         }
     ) {
         Surface(
-            modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .wrapContentHeight(),
             shape = RoundedCornerShape(24.dp),
             color = CustomKeyBoardTheme.color.white
         ) {
@@ -498,11 +532,7 @@ fun ClickDialog(
                         Text(
                             text = "5",
                             color = CustomKeyBoardTheme.color.themeInfoGem,
-                            style = CustomKeyBoardTheme.typography.subTitle.copy(
-                                platformStyle = PlatformTextStyle(
-                                    includeFontPadding = false
-                                )
-                            )
+                            style = CustomKeyBoardTheme.typography.subTitle
                         )
                         Spacer(modifier = Modifier.width(24.dp))
                         Image(
@@ -532,21 +562,19 @@ fun ClickDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(42.dp)
-                        .background(color = CustomKeyBoardTheme.color.allMainColor, shape = RoundedCornerShape(24.dp))
+                        .background(
+                            color = CustomKeyBoardTheme.color.allMainColor,
+                            shape = RoundedCornerShape(24.dp)
+                        )
                         .clip(RoundedCornerShape(24.dp))
                         .clickable {
-                            navigateTestScreen(InfoAction.NavigationKeyBoard)
+                            navigateTestScreen(InfoAction.NavigateKeyBoard)
                         }
                 ) {
                     Text(
                         modifier = Modifier.align(Alignment.Center),
                         text = "충전하고 바로 사용하기",
-                        style = CustomKeyBoardTheme.typography.subTitle3
-                            .copy(
-                                platformStyle = PlatformTextStyle(
-                                    includeFontPadding = false
-                                )
-                            ),
+                        style = CustomKeyBoardTheme.typography.subTitle3,
                         color = CustomKeyBoardTheme.color.white
                     )
                 }
