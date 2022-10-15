@@ -2,6 +2,7 @@ package com.hugh.presentation.ui.keyboard
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.presentation.R
@@ -42,24 +43,6 @@ class KeyBoardService : InputMethodService() {
     }
 
     override fun onCreateInputView(): View {
-        keyboardCoroutineContext =
-            Dispatchers.Main.immediate + SupervisorJob() + CoroutineExceptionHandler { _, throwable -> }
-        keyboardScope = CoroutineScope(keyboardCoroutineContext)
-
-        keyboardController =
-            KeyboardController(
-                context = applicationContext,
-                layoutInflater = layoutInflater,
-                inputConnection = currentInputConnection,
-                clipBoardRepository = clipBoardRepository,
-                hangulUtil = HangulUtil(),
-                keyboardScope = keyboardScope
-            )
-
-        keyboardController.keyboardAction(
-            KeyboardAction.NavigateNumberKeyboard(navigationBlock())
-        )
-
         keyboardViewBinding.actionKeyHome.keyButton.apply {
             text = "Home"
 
@@ -81,6 +64,28 @@ class KeyBoardService : InputMethodService() {
         }
 
         return keyboardViewBinding.root
+    }
+
+    override fun onStartInputView(info: EditorInfo?, restarting: Boolean) {
+        super.onStartInputView(info, restarting)
+
+        keyboardCoroutineContext =
+            Dispatchers.Main.immediate + SupervisorJob() + CoroutineExceptionHandler { _, throwable -> }
+        keyboardScope = CoroutineScope(keyboardCoroutineContext)
+
+        keyboardController =
+            KeyboardController(
+                context = applicationContext,
+                layoutInflater = layoutInflater,
+                inputConnection = currentInputConnection,
+                clipBoardRepository = clipBoardRepository,
+                hangulUtil = HangulUtil(),
+                keyboardScope = keyboardScope
+            )
+
+        keyboardController.keyboardAction(
+            KeyboardAction.NavigateNumberKeyboard(navigationBlock())
+        )
     }
 
     override fun onFinishInputView(finishingInput: Boolean) {
