@@ -9,9 +9,7 @@ fun List<ClipboardEntity>.mapToClipboard(): List<Clipboard> {
     this.map { entity ->
         clipboardList.add(
             Clipboard(
-                id = entity.id,
                 clipData = entity.clipData,
-                isDeleted = false
             )
         )
     }

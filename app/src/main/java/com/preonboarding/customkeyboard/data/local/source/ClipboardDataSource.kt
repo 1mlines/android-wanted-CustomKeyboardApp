@@ -7,5 +7,7 @@ interface ClipboardDataSource {
 
     suspend fun insertClipData(clipboardEntity: ClipboardEntity)
 
-    suspend fun deleteClipData(id: Int)
+    suspend fun deleteClipData(clipboard: ClipboardEntity)
+
+    suspend fun getClipData(clipData: String): ClipboardEntity
 }

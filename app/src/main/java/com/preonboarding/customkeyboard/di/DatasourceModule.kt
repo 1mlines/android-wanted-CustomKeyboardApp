@@ -12,8 +12,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class DatasourceModule {
 
-    @Singleton
     @Binds
+    @Singleton
     abstract fun bindsClipboardDataSource(
         clipboardDataSourceImpl: ClipboardDataSourceImpl
     ): ClipboardDataSource

@@ -1,5 +1,6 @@
 package com.preonboarding.customkeyboard.domain.repository
 
+import com.preonboarding.customkeyboard.data.local.entity.ClipboardEntity
 import com.preonboarding.customkeyboard.domain.model.Clipboard
 import kotlinx.coroutines.flow.Flow
 
@@ -9,5 +10,7 @@ interface ClipboardRepository {
 
     suspend fun insertClipData(clipData: String)
 
-    suspend fun deleteClipData(id: Int)
+    suspend fun deleteClipData(clipboard: ClipboardEntity)
+
+    suspend fun getClipData(clipData: String) : ClipboardEntity
 }
