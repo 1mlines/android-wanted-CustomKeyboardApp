@@ -45,10 +45,208 @@ InputMethodService를 활용하여 어느 앱에서나 작동하는 두벌식 �
 </table>
 </div>
 
+## 이재성
+- 프로젝트 베이스 작업
+- 클립보드를 위한 키보드 툴바 구현 및 키보드 레이아웃 전환
+- 클립보드 관련 Room 데이터베이스 세팅
+
+### 프로젝트 베이스 작업
+<img src="https://user-images.githubusercontent.com/51078673/195991183-46be0dcb-3607-473e-9d4e-20aa69c0788b.png" width=400 />
+
+- 클린 아키텍쳐를 프로젝트의 아키텍쳐로 선정 후 구현
+- 필요한 라이브러리의 Dependency 세팅
+- Hilt를 통한 의존성 주입 적용
+
+<br>
+
+### 클립보드 키보드 툴바
+<img src="https://user-images.githubusercontent.com/51078673/195992248-bed20c5a-9d01-4c34-8e53-c44a9a734ddf.gif" width=300 />
+
+``` kotlin
+private fun setLayoutComponents() {
+
+    for (i in lineList.indices) {
+        val children = lineList[i].children.toList()
+        val toolbarText = keysText[i]
+        for (item in children.indices) {
+            val button = children[item].findViewById<Button>(R.id.btn_key)
+
+            var keyboardActionListener: View.OnClickListener? = null
+            when (toolbarText[item]) {
+                "키보드" -> {
+                    button.text = toolbarText[item]
+                    actionButtons.add(button)
+
+                    keyboardActionListener = View.OnClickListener {
+                        keyboardListener.changeMode(Mode.KOREA)
+                    }
+
+                    button.setOnClickListener(keyboardActionListener)
+                }
+
+                "클립보드" -> {
+                    button.text = toolbarText[item]
+                    actionButtons.add(button)
+                    keyboardActionListener = View.OnClickListener {
+                        keyboardListener.changeMode(Mode.CLIPBOARD)
+                    }
+                    button.setOnClickListener(keyboardActionListener)
+                }
+            }
+            children[item].setOnClickListener(keyboardActionListener)
+        }
+    }
+}
+```
+* 툴바의 `키보드`, `클립보드`를 클릭할 때, 리스너를 통한 키보드 레이아웃 전환
+
+### Room 데이터베이스 세팅 + 의존성 주입 (Hilt)
+* Database
+``` kotlin
+// ClipboardDao.kt
+@Dao
+interface ClipboardDao {
+
+    @Query("SELECT * FROM `Clipboard.db`")
+    suspend fun getAllClipData(): List<ClipboardEntity>
+
+    @Delete
+    suspend fun deleteClipData(clipboard: ClipboardEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertClipData(clipboardEntity: ClipboardEntity)
+
+    @Query("SELECT * FROM `Clipboard.db` WHERE clipData = :clipData")
+    suspend fun getClipData(clipData: String): ClipboardEntity
+}
+
+// ClipboardDatabase.kt
+@Database(
+    entities = [ClipboardEntity::class],
+    version = 1,
+    exportSchema = false
+)
+abstract class ClipboardDatabase : RoomDatabase() {
+    abstract fun clipboardDao(): ClipboardDao
+}
+
+// ClipboardEntity.kt
+@Entity(tableName = DATABASE_NAME)
+data class ClipboardEntity(
+    @PrimaryKey
+    val clipData: String
+)
+```
+* Source Impl, Repository Impl, UseCase Impl
+``` kotlin
+class ClipboardDataSourceImpl @Inject constructor(
+    private val clipboardDao: ClipboardDao
+) : ClipboardDataSource {
+
+    override suspend fun getAllClipData(): List<ClipboardEntity> {
+        return clipboardDao.getAllClipData()
+    }
+
+    override suspend fun insertClipData(clipboardEntity: ClipboardEntity) {
+        return clipboardDao.insertClipData(clipboardEntity)
+    }
+
+    override suspend fun deleteClipData(clipboard: ClipboardEntity) {
+        return clipboardDao.deleteClipData(clipboard)
+    }
+
+    override suspend fun getClipData(clipData: String): ClipboardEntity {
+        return clipboardDao.getClipData(clipData)
+    }
+}
+
+class ClipboardRepositoryImpl @Inject constructor(
+    private val dataSource: ClipboardDataSource,
+    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
+) : ClipboardRepository {
+
+    override fun getAllClipData(): Flow<List<Clipboard>> = flow {
+        val result = dataSource.getAllClipData().mapToClipboard()
+        emit(result)
+    }.flowOn(defaultDispatcher)
+
+    override suspend fun insertClipData(clipData: String) {
+        dataSource.insertClipData(
+            ClipboardEntity(clipData = clipData)
+        )
+    }
+
+    override suspend fun deleteClipData(clipboard: ClipboardEntity) {
+        dataSource.deleteClipData(clipboard)
+    }
+
+    override suspend fun getClipData(clipData: String): ClipboardEntity =
+        dataSource.getClipData(clipData)
+
+}
+
+class RoomUseCaseImpl @Inject constructor(
+    private val clipboardRepository: ClipboardRepository
+) : RoomUseCase {
+
+    override suspend fun deleteClipData(clipboard: ClipboardEntity) {
+        clipboardRepository.deleteClipData(clipboard)
+    }
+
+    override suspend fun insertClipData(data: String) {
+        clipboardRepository.insertClipData(data)
+    }
+
+    override fun getAllClipData(): Flow<List<Clipboard>> {
+        return clipboardRepository.getAllClipData()
+    }
+
+    override suspend fun getClipData(clipData: String): ClipboardEntity =
+        clipboardRepository.getClipData(clipData)
+
+}
+```
+
+* KeyboardService
+``` kotlin
+@AndroidEntryPoint
+class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChangedListener {
+    @Inject
+    lateinit var roomUseCase: RoomUseCase
+
+    ...
+
+    private val serviceJob = SupervisorJob()
+    private val serviceScope = CoroutineScope(Dispatchers.Main + serviceJob)
+
+    override fun onCreate() {
+        super.onCreate()
+        binding = ViewKeyboardBinding.inflate(layoutInflater)
+        
+        ...
+        
+        serviceScope.launch {
+            roomUseCase.getAllClipData().collect { list ->
+                clipList.update {
+                    list.toList()
+                }
+            }
+        }
+    }
+    
+    ...
+    
+    override fun onDestroy() {
+        super.onDestroy()
+        serviceScope.cancel()
+    }
+```
+* Service에 ViewModel을 사용할 수 없었고 Service가 Lifecycle Aware하지 않기 때문에 `Service#onCreate`시점과 `Service#onDestroy`시점에 직접 Job을 관리하도록 구현
+
+
 ## 황준성
 - 맡은 부분
     - 첫번째 화면(Compose를 이용한 UI 표현)
-
 
 간단하게 전체 화면을 Column에 담아서 차례로 표현했습니다.
 
@@ -297,4 +495,4 @@ override fun onCreateInputView(): View {
 |:---|---|
 | <img src = "https://user-images.githubusercontent.com/86879099/195979528-f202087c-5971-42e8-89b0-204bda619e1f.gif" width = 200 height = 400>| <img src = "https://user-images.githubusercontent.com/86879099/195979745-42c09c15-35b3-479d-ad4e-6d61680f6084.gif" width = 200 height = 400>|
 
-## 이재성
+
