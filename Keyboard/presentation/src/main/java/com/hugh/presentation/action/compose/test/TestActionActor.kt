@@ -6,6 +6,6 @@ package com.hugh.presentation.action.compose.test
 class TestActionActor(private val testActionHandler: TestActionHandler) {
 
     fun navigationClipBoardScreen(action: TestAction) {
-        testActionHandler.clickAction(action)
+        testActionHandler.navigateAction(action)
     }
 }
