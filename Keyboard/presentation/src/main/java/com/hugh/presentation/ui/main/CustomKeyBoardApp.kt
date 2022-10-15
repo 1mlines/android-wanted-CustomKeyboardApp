@@ -31,12 +31,8 @@ fun CustomKeyBoardApp() {
                 navController = customKeyBoardAppState.navController,
                 startDestination = NavigationRoute.InfoScreenGraph.route
             ) {
-                infoGraph(
-                    customKeyBoardAppState = customKeyBoardAppState
-                )
-                keyboardTestGraph(
-                    customKeyBoardAppState = customKeyBoardAppState
-                )
+                infoGraph(customKeyBoardAppState)
+                keyboardTestGraph(customKeyBoardAppState)
             }
         }
     }
