@@ -145,12 +145,7 @@ fun ReviewCard(
                         Text(
                             modifier = Modifier.align(Alignment.Center),
                             text = "크리에이터",
-                            style = CustomKeyBoardTheme.typography.thirdSubBody
-                                .copy(
-                                    platformStyle = PlatformTextStyle(
-                                        includeFontPadding = false
-                                    )
-                                ),
+                            style = CustomKeyBoardTheme.typography.thirdSubBody,
                             color = CustomKeyBoardTheme.color.white
                         )
                     }

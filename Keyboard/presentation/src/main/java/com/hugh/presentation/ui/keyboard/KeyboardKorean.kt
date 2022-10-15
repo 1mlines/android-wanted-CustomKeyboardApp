@@ -16,8 +16,9 @@ import com.hugh.presentation.R
 import com.hugh.presentation.databinding.KeyboardKoreanBinding
 
 class KeyboardKorean constructor(
-    var layoutInflater: LayoutInflater,
-    private var inputConnection: InputConnection?
+    private val layoutInflater: LayoutInflater,
+    private val inputConnection: InputConnection?,
+    private val hangulUtil: HangulUtil
 ) : PopupMenu.OnMenuItemClickListener {
 
     private lateinit var keyboardKoreanBinding: KeyboardKoreanBinding
@@ -53,6 +54,7 @@ class KeyboardKorean constructor(
         layoutLines.add(keyboardKoreanBinding.thirdLine)
         layoutLines.add(keyboardKoreanBinding.fourthLine)
         setLayoutComponents()
+
     }
 
     fun getLayout(): View {
@@ -185,7 +187,6 @@ class KeyboardKorean constructor(
                         spacialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
                         myOnClickListener = popupAction()
-                        // todo  popupAction() 사용 시 화면 마비.. => 다른 메서드 사용하면 잘 돌아감..
                         spacialKey.setOnClickListener(myOnClickListener)
                         spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                         spacialKey.setBackgroundResource(R.drawable.key_background)

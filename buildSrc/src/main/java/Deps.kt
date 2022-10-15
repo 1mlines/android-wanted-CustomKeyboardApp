@@ -59,7 +59,8 @@ object Deps {
             composeFlowLayout,
             composeLiveData,
             composeMaterialIcon,
-            composeMaterialIconExtended
+            composeMaterialIconExtended,
+            composeHiltNavigation
         )
     }
 }

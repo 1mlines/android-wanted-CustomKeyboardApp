@@ -1,5 +1,7 @@
 package com.hugh.presentation.navigation
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -7,6 +9,7 @@ import com.hugh.presentation.ui.info.InfoRoute
 import com.hugh.presentation.ui.main.CustomKeyBoardAppState
 import com.hugh.presentation.ui.test.ClipBoardTestRoute
 import com.hugh.presentation.ui.test.TestRoute
+import com.hugh.presentation.ui.test.TestScreenViewModel
 
 /**
  * @Created by 김현국 2022/10/12
@@ -21,9 +24,7 @@ internal fun NavGraphBuilder.infoGraph(
         composable(
             route = NavigationRoute.InfoScreenGraph.InfoScreen.route
         ) {
-            InfoRoute(
-                navigateTestScreen = { customKeyBoardAppState.navigateRoute(NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route) }
-            )
+            InfoRoute(customKeyBoardAppState)
         }
     }
 }
@@ -37,21 +38,17 @@ internal fun NavGraphBuilder.keyboardTestGraph(
         composable(
             route = NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route
         ) {
-            TestRoute(
-                navigateClipBoard = {
-                    customKeyBoardAppState.navigateRoute(NavigationRoute.KeyBoardTestScreenGraph.ClipBoardTestScreen.route)
-                }
-            )
+            TestRoute(customKeyBoardAppState)
         }
 
         composable(
             route = NavigationRoute.KeyBoardTestScreenGraph.ClipBoardTestScreen.route
-        ) {
-            ClipBoardTestRoute(
-                onClickBackButton = {
-                    customKeyBoardAppState.navigateBackStack()
-                }
-            )
+        ) { backStackEntry ->
+            val parentEntry = remember(backStackEntry) {
+                customKeyBoardAppState.navController.getBackStackEntry(NavigationRoute.KeyBoardTestScreenGraph.KeyBoardTestScreen.route)
+            }
+            val testScreenViewModel: TestScreenViewModel = hiltViewModel(parentEntry)
+            ClipBoardTestRoute(customKeyBoardAppState,testScreenViewModel)
         }
     }
 }
