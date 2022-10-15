@@ -1,6 +1,7 @@
 package com.hugh.presentation.ui.keyboard
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.*
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -9,6 +10,7 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import androidx.activity.viewModels
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -215,7 +217,7 @@ class KeyboardKorean constructor(
                         spacialKey.setImageResource(R.drawable.ic_zam)
                         spacialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
-                        myOnClickListener = getSpaceAction()
+                        myOnClickListener = popupAction()
                         spacialKey.setOnClickListener(myOnClickListener)
                         spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
                         spacialKey.setBackgroundResource(R.drawable.key_background)
@@ -265,6 +267,14 @@ class KeyboardKorean constructor(
                 }
                 children[item].setOnClickListener(myOnClickListener)
             }
+        }
+    }
+
+    private fun popupAction(): View.OnClickListener {
+        return View.OnClickListener {
+            var popup = PopupMenu(it.context, it)
+            popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+            popup.show()
         }
     }
 
