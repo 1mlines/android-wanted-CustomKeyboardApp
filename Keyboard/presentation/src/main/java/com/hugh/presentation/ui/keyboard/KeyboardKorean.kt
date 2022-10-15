@@ -1,24 +1,20 @@
 package com.hugh.presentation.ui.keyboard
 
-import android.annotation.SuppressLint
-import android.content.Context
-import android.os.*
-import android.util.Log
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputConnection
-import android.widget.*
-import androidx.activity.viewModels
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.PopupMenu
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.LifecycleOwner
 import com.hugh.presentation.R
 import com.hugh.presentation.action.keyboard.KeyBoardActor
 import com.hugh.presentation.databinding.KeyboardKoreanBinding
-import kotlinx.coroutines.*
-import java.lang.Runnable
 
 class KeyboardKorean constructor(
     var layoutInflater: LayoutInflater,
@@ -212,8 +208,8 @@ class KeyboardKorean constructor(
                 val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener?
                 when (myText[item]) {
-                    "FAV" -> {  popupAction()
-                        spacialKey.setImageResource(R.drawable.ic_zam)
+                    "FAV" -> {
+                        spacialKey.setImageResource(R.drawable.img_keyword_1)
                         spacialKey.visibility = View.VISIBLE
                         actionButton.visibility = View.GONE
                         myOnClickListener = popupAction()
@@ -274,11 +270,12 @@ class KeyboardKorean constructor(
     private fun popupAction(): View.OnClickListener {
         return View.OnClickListener {
             val popup = PopupMenu(it.context, it)
-                popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+                popup.menuInflater?.inflate(R.menu.popup_menu, popup.menu)
                 popup.setOnMenuItemClickListener(this)
                 popup.show()
+            }
         }
-    }
+
 
     private fun getSpaceAction(): View.OnClickListener {
         return View.OnClickListener {
@@ -316,7 +313,6 @@ class KeyboardKorean constructor(
             R.id.item2 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
             R.id.item3 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
             R.id.item4 -> inputConnection?.let { hangulUtil.updateLetter(it, item.title.toString()) }
-                //Log.d("TAG", "onMenuItemClick: 444")
         }
         return item != null
     }
