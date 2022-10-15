@@ -1,6 +1,9 @@
 package com.preonboarding.customkeyboard.presentation
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.inputmethodservice.InputMethodService
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
@@ -9,16 +12,15 @@ import com.preonboarding.customkeyboard.presentation.clipboard.ClipboardActionLi
 import com.preonboarding.customkeyboard.presentation.clipboard.KeyboardClipboard
 import com.preonboarding.customkeyboard.presentation.keyboard.KoreanKeyBoard
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class KeyboardService : InputMethodService() {
+class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChangedListener {
     @Inject
     lateinit var roomUseCase: RoomUseCase
+
+    private lateinit var clipboardManager: ClipboardManager
 
     private lateinit var binding: ViewKeyboardBinding
     private lateinit var koreaKeyboard: KoreanKeyBoard
@@ -30,7 +32,8 @@ class KeyboardService : InputMethodService() {
     override fun onCreate() {
         super.onCreate()
         binding = ViewKeyboardBinding.inflate(layoutInflater)
-
+        clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipboardManager.addPrimaryClipChangedListener(this)
     }
 
     private val keyboardReplacer = object : KeyboardActionListener {
@@ -59,11 +62,21 @@ class KeyboardService : InputMethodService() {
 
     private val clipboardListener = object : ClipboardActionListener {
         override fun deleteClipData(id: Int) {
-            // job - delete
+            serviceScope.launch {
+                roomUseCase.deleteClipData(id)
+            }
         }
 
         override fun copyClipData(text: String) {
+            serviceScope.launch {
+                roomUseCase.insertClipData(text)
+            }
+        }
 
+        override fun getClipData() {
+            serviceScope.launch {
+                roomUseCase.getAllClipData()
+            }
         }
     }
 
@@ -74,7 +87,12 @@ class KeyboardService : InputMethodService() {
         }
 
         keyboardClipboard =
-            KeyboardClipboard(applicationContext, layoutInflater, keyboardReplacer, clipboardListener).apply {
+            KeyboardClipboard(
+                applicationContext,
+                layoutInflater,
+                keyboardReplacer,
+                clipboardListener
+            ).apply {
                 inputConnection = currentInputConnection
                 init()
             }
@@ -98,5 +116,15 @@ class KeyboardService : InputMethodService() {
         super.onDestroy()
 
         serviceScope.cancel()
+    }
+
+    override fun onPrimaryClipChanged() {
+        serviceScope.launch {
+            val clipData = clipboardManager.primaryClip
+            clipData?.let {
+                roomUseCase.insertClipData(it.getItemAt(0).text.toString())
+                Log.d("클립보드", "onPrimaryClipChanged: ${it.getItemAt(0).text}")
+            }
+        }
     }
 }
