@@ -17,8 +17,7 @@ class TestScreenViewModel @Inject constructor() : ViewModel(), TestActionHandler
 
     private val _navTarget = MutableSharedFlow<TestNavTarget>(extraBufferCapacity = 1)
     val navTarget = _navTarget.asSharedFlow()
-
-    override fun clickAction(action: TestAction) {
+    override fun navigateAction(action: TestAction) {
         when (action) {
             is TestAction.GoBack -> {
                 _navTarget.tryEmit(TestNavTarget.GoBack)
