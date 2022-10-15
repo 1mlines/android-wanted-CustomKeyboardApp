@@ -6,6 +6,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.hugh.presentation.R
 import com.hugh.presentation.action.clipAction.ClipBoardActor
@@ -63,6 +64,8 @@ class ClipBoard constructor(
 
         keyboardScope.launch {
             clipController.clipFlow.collect {
+                clipboardBinding.emptyClipboardText.isVisible = it.isEmpty()
+
                 (clipboardBinding.clipBoardRecyclerView.adapter as ClipAdapter).submitList(it)
             }
         }
