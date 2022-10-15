@@ -5,5 +5,5 @@ package com.hugh.presentation.action.compose.info
  */
 sealed class InfoAction {
 
-    object NavigationKeyBoard : InfoAction()
+    object NavigateKeyBoard : InfoAction()
 }
