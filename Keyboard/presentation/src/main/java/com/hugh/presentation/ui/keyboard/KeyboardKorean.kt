@@ -35,7 +35,7 @@ class KeyboardKorean constructor(
     private val firstLineText = listOf("ㅂ", "ㅈ", "ㄷ", "ㄱ", "ㅅ", "ㅛ", "ㅕ", "ㅑ", "ㅐ", "ㅔ")
     private val secondLineText = listOf("ㅁ", "ㄴ", "ㅇ", "ㄹ", "ㅎ", "ㅗ", "ㅓ", "ㅏ", "ㅣ")
     private val thirdLineText = listOf("CAPS", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "DEL")
-    private val fourthLineText = listOf("!#1", "한/영", ",", "space", ".", "Enter")
+    private val fourthLineText = listOf("FAV", "한/영", ",", "space", ".", "Enter")
     private val firstLongClickText = listOf("!", "@", "#", "$", "%", "^", "&", "*", "(", ")")
     private val secondLongClickText = listOf("~", "+", "-", "×", "♥", ":", ";", "'", "\"")
     private val thirdLongClickText = listOf("", "_", "<", ">", "/", ",", "?")
@@ -211,6 +211,16 @@ class KeyboardKorean constructor(
                 val spacialKey = children[item].findViewById<ImageView>(R.id.spacial_key)
                 var myOnClickListener: View.OnClickListener?
                 when (myText[item]) {
+                    "FAV" -> {
+                        spacialKey.setImageResource(R.drawable.ic_zam)
+                        spacialKey.visibility = View.VISIBLE
+                        actionButton.visibility = View.GONE
+                        myOnClickListener = getSpaceAction()
+                        spacialKey.setOnClickListener(myOnClickListener)
+                        spacialKey.setOnTouchListener(getOnTouchListener(myOnClickListener))
+                        spacialKey.setBackgroundResource(R.drawable.key_background)
+                    }
+
                     "space" -> {
                         spacialKey.setImageResource(R.drawable.ic_space_bar)
                         spacialKey.visibility = View.VISIBLE
