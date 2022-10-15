@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
-    <data>
-        <variable
-            name="actor"
-            type="com.hugh.presentation.action.keyboard.KeyBoardActor" />
 
-    </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -286,7 +281,6 @@
 
             <include
                 android:id="@+id/action_key_caps"
-                android:onClick="@{() -> actor.capsText()}"
                 layout="@layout/keyboard_item"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -343,7 +337,6 @@
 
             <include
                 android:id="@+id/action_key_del"
-                android:onClick="@{() -> actor.deleteText()}"
                 layout="@layout/keyboard_item"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -380,7 +373,6 @@
 
             <include
                 android:id="@+id/action_key_space"
-                android:onClick="@{() -> actor.spaceText()}"
                 layout="@layout/keyboard_item"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

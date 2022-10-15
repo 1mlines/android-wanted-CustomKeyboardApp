@@ -13,7 +13,6 @@ import android.widget.PopupMenu
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import com.hugh.presentation.R
-import com.hugh.presentation.action.keyboard.KeyBoardActor
 import com.hugh.presentation.databinding.KeyboardKoreanBinding
 
 class KeyboardKorean constructor(
@@ -22,8 +21,6 @@ class KeyboardKorean constructor(
 ) : PopupMenu.OnMenuItemClickListener {
 
     private lateinit var keyboardKoreanBinding: KeyboardKoreanBinding
-    private val keyboard = Keyboard()
-    private val keyBoardActor by lazy { KeyBoardActor(keyboard) }
     private var isCaps: Boolean = false
     private var buttons: MutableList<Button> = mutableListOf()
     private val hangulUtil: HangulUtil by lazy { HangulUtil() }
@@ -33,11 +30,7 @@ class KeyboardKorean constructor(
     private val secondLineText = listOf("ㅁ", "ㄴ", "ㅇ", "ㄹ", "ㅎ", "ㅗ", "ㅓ", "ㅏ", "ㅣ")
     private val thirdLineText = listOf("CAPS", "ㅋ", "ㅌ", "ㅊ", "ㅍ", "ㅠ", "ㅜ", "ㅡ", "DEL")
     private val fourthLineText = listOf("FAV", "한/영", ",", "space", ".", "Enter")
-    private val firstLongClickText = listOf("!", "@", "#", "$", "%", "^", "&", "*", "(", ")")
-    private val secondLongClickText = listOf("~", "+", "-", "×", "♥", ":", ";", "'", "\"")
-    private val thirdLongClickText = listOf("", "_", "<", ">", "/", ",", "?")
     private val myKeysText = ArrayList<List<String>>()
-    private val myLongClickKeysText = ArrayList<List<String>>()
     private val layoutLines = ArrayList<LinearLayout>()
     private var downView: View? = null
     private var capsView: ImageView? = null
@@ -45,7 +38,6 @@ class KeyboardKorean constructor(
     fun init() {
         keyboardKoreanBinding =
             DataBindingUtil.inflate(layoutInflater, R.layout.keyboard_korean, null, false)
-        keyboardKoreanBinding.actor = keyBoardActor
 
         myKeysText.clear()
         myKeysText.add(numpadText)
@@ -54,11 +46,6 @@ class KeyboardKorean constructor(
         myKeysText.add(thirdLineText)
         myKeysText.add(fourthLineText)
 
-        myLongClickKeysText.clear()
-        myLongClickKeysText.add(firstLongClickText)
-        myLongClickKeysText.add(secondLongClickText)
-        myLongClickKeysText.add(thirdLongClickText)
-
         layoutLines.clear()
         layoutLines.add(keyboardKoreanBinding.numpadLine)
         layoutLines.add(keyboardKoreanBinding.firstLine)
@@ -66,7 +53,6 @@ class KeyboardKorean constructor(
         layoutLines.add(keyboardKoreanBinding.thirdLine)
         layoutLines.add(keyboardKoreanBinding.fourthLine)
         setLayoutComponents()
-
     }
 
     fun getLayout(): View {
@@ -137,7 +123,6 @@ class KeyboardKorean constructor(
     private fun getMyClickListener(actionButton: Button): View.OnClickListener {
 
         val clickListener = (View.OnClickListener {
-
             val text = actionButton.text.toString()
             inputConnection?.let {
                 hangulUtil.updateLetter(it, text)
@@ -148,12 +133,6 @@ class KeyboardKorean constructor(
     }
 
     fun getOnTouchListener(clickListener: View.OnClickListener): View.OnTouchListener {
-        /*val job = GlobalScope.launch(Dispatchers.Default) {
-            while (isActive) {
-                clickListener.onClick(downView)
-                delay(100)
-            }
-        }*/
 
         val handler = Handler()
         val initailInterval = 500
@@ -170,24 +149,17 @@ class KeyboardKorean constructor(
                     MotionEvent.ACTION_DOWN -> {
                         handler.removeCallbacks(handlerRunnable)
                         handler.postDelayed(handlerRunnable, initailInterval.toLong())
-                        //job.cancel()
-                        //job
-
                         downView = view!!
                         clickListener.onClick(view)
                         return true
                     }
                     MotionEvent.ACTION_UP -> {
                         handler.removeCallbacks(handlerRunnable)
-                        //job.cancel()
-
                         downView = null
                         return true
                     }
                     MotionEvent.ACTION_CANCEL -> {
                         handler.removeCallbacks(handlerRunnable)
-                        //job.cancel()
-
                         downView = null
                         return true
                     }
