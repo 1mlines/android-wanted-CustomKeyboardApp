@@ -39,7 +39,7 @@
 ## 서강휘
 ### 맡은 역할
 - 아키텍처 설계
-- 단축키 및 클립보드 구현 (개발중)
+- 클립보드 구현
 
 ### 아키텍처 구조
 ![image](https://user-images.githubusercontent.com/45396949/195513569-51892f24-703c-4632-8ce2-3b3639cd84b2.png)
@@ -89,6 +89,9 @@
 - Action에 의해 생성되는 State를 의미합니다. 
 - State 내부 값들은 불변으로 항상 값을 할당해야 합니다.
 
+**클립보드 영상**
+
+https://user-images.githubusercontent.com/45396949/195967318-7224cde2-93a3-4a06-8695-2b3c2fc3d55e.mp4
 
 ## 김영진
 ### 맡은 역할
