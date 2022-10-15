@@ -3,14 +3,13 @@ package com.hugh.presentation.ui.keyboard
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.*
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputConnection
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupMenu
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
@@ -24,7 +23,7 @@ import java.lang.Runnable
 class KeyboardKorean constructor(
     var layoutInflater: LayoutInflater,
     private var inputConnection: InputConnection?
-)  {
+) : PopupMenu.OnMenuItemClickListener  {
 
     private lateinit var keyboardKoreanBinding: KeyboardKoreanBinding
     private val keyboard = Keyboard()
@@ -274,6 +273,7 @@ class KeyboardKorean constructor(
         return View.OnClickListener {
             var popup = PopupMenu(it.context, it)
             popup.menuInflater.inflate(R.menu.popup_menu, popup.menu)
+            popup.setOnMenuItemClickListener(this)
             popup.show()
         }
     }
@@ -306,5 +306,15 @@ class KeyboardKorean constructor(
                 hangulUtil.updateLetter(it, "\n")
             }
         }
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.item1 -> Log.d("TAG", "onMenuItemClick: 앜1")
+            R.id.item2 -> Log.d("TAG", "onMenuItemClick: 앜2")
+            R.id.item3 -> Log.d("TAG", "onMenuItemClick: 앜3")
+            R.id.item4 -> Log.d("TAG", "onMenuItemClick: 앜4")
+        }
+        return item != null
     }
 }
