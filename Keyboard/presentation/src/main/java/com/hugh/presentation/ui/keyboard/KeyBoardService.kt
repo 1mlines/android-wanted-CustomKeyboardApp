@@ -2,16 +2,37 @@ package com.hugh.presentation.ui.keyboard
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
+import com.hugh.data.repository.ClipBoardRepository
 import com.hugh.presentation.R
+import com.hugh.presentation.action.keyboardAction.KeyboardAction
+import com.hugh.presentation.action.keyboardAction.KeyboardState
 import com.hugh.presentation.databinding.KeyboardViewBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
-class KeyBoardService : InputMethodService(), ViewTreeObserver.OnGlobalLayoutListener {
+@AndroidEntryPoint
+class KeyBoardService : InputMethodService() {
+
+    @Inject
+    lateinit var clipBoardRepository: ClipBoardRepository
 
     private lateinit var keyboardViewBinding: KeyboardViewBinding
-    private lateinit var keyboardKorean: KeyboardKorean
-    private lateinit var keyboardClipboard: KeyboardClipboard
+    private lateinit var keyboardController: KeyboardController
+
+    private lateinit var keyboardCoroutineContext: CoroutineContext
+    private lateinit var keyboardScope: CoroutineScope
+
+    private fun navigationBlock(): (KeyboardState) -> Unit = { state ->
+        when (state) {
+            is KeyboardState.Keyboard -> {
+                keyboardViewBinding.keyboardFrame.removeAllViews()
+                keyboardViewBinding.keyboardFrame.addView(state.view)
+            }
+        }
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -21,20 +42,31 @@ class KeyBoardService : InputMethodService(), ViewTreeObserver.OnGlobalLayoutLis
     }
 
     override fun onCreateInputView(): View {
-        keyboardKorean = KeyboardKorean(
-            layoutInflater,
-            currentInputConnection
-        ).also { it.init() }
+        keyboardCoroutineContext =
+            Dispatchers.Main.immediate + SupervisorJob() + CoroutineExceptionHandler { _, throwable -> }
+        keyboardScope = CoroutineScope(keyboardCoroutineContext)
 
-        keyboardViewBinding.keyboardFrame.addView(keyboardKorean.getLayout())
-        keyboardViewBinding.keyboardFrame.viewTreeObserver.addOnGlobalLayoutListener(this)
+        keyboardController =
+            KeyboardController(
+                context = applicationContext,
+                layoutInflater = layoutInflater,
+                inputConnection = currentInputConnection,
+                clipBoardRepository = clipBoardRepository,
+                hangulUtil = HangulUtil(),
+                keyboardScope = keyboardScope
+            )
+
+        keyboardController.keyboardAction(
+            KeyboardAction.NavigateNumberKeyboard(navigationBlock())
+        )
 
         keyboardViewBinding.actionKeyHome.keyButton.apply {
             text = "Home"
 
             setOnClickListener {
-                keyboardViewBinding.keyboardFrame.removeAllViews()
-                keyboardViewBinding.keyboardFrame.addView(keyboardKorean.getLayout())
+                keyboardController.keyboardAction(
+                    KeyboardAction.NavigateNumberKeyboard(navigationBlock())
+                )
             }
         }
 
@@ -42,22 +74,22 @@ class KeyBoardService : InputMethodService(), ViewTreeObserver.OnGlobalLayoutLis
             text = "Clip"
 
             setOnClickListener {
-                keyboardViewBinding.keyboardFrame.removeAllViews()
-                keyboardViewBinding.keyboardFrame.addView(keyboardClipboard.getLayout())
+                keyboardController.keyboardAction(
+                    KeyboardAction.NavigateClipKeyboard(navigationBlock())
+                )
             }
         }
 
         return keyboardViewBinding.root
     }
 
-    override fun onGlobalLayout() {
-        keyboardClipboard =
-            KeyboardClipboard(
-                layoutInflater,
-                currentInputConnection,
-                keyboardViewBinding.keyboardFrame.measuredHeight
-            ).also { it.init() }
+    override fun onFinishInputView(finishingInput: Boolean) {
+        super.onFinishInputView(finishingInput)
+        keyboardScope.cancel()
+    }
 
-        keyboardViewBinding.keyboardFrame.viewTreeObserver.removeOnGlobalLayoutListener(this)
+    override fun onDestroy() {
+        super.onDestroy()
+        keyboardScope.cancel()
     }
 }

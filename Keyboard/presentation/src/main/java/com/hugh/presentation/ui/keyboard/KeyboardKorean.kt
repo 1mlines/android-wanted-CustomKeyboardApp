@@ -15,14 +15,14 @@ import com.hugh.presentation.R
 import com.hugh.presentation.databinding.KeyboardKoreanBinding
 
 class KeyboardKorean constructor(
-    var layoutInflater: LayoutInflater,
-    private var inputConnection: InputConnection?
+    private val layoutInflater: LayoutInflater,
+    private val inputConnection: InputConnection?,
+    private val hangulUtil: HangulUtil
 ) {
 
     private lateinit var keyboardKoreanBinding: KeyboardKoreanBinding
     private var isCaps: Boolean = false
     private var buttons: MutableList<Button> = mutableListOf()
-    private val hangulUtil: HangulUtil by lazy { HangulUtil() }
 
     private val numpadText = listOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "0")
     private val firstLineText = listOf("ㅂ", "ㅈ", "ㄷ", "ㄱ", "ㅅ", "ㅛ", "ㅕ", "ㅑ", "ㅐ", "ㅔ")
