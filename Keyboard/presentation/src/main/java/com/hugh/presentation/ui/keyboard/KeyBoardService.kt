@@ -43,7 +43,7 @@ class KeyBoardService : InputMethodService() {
 
     override fun onCreateInputView(): View {
         keyboardCoroutineContext =
-            Dispatchers.Main + SupervisorJob() + CoroutineExceptionHandler { _, throwable -> }
+            Dispatchers.Main.immediate + SupervisorJob() + CoroutineExceptionHandler { _, throwable -> }
         keyboardScope = CoroutineScope(keyboardCoroutineContext)
 
         keyboardController =
