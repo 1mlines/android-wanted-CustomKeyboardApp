@@ -1,5 +1,6 @@
 package com.preonboarding.customkeyboard.data.usecase
 
+import com.preonboarding.customkeyboard.data.local.entity.ClipboardEntity
 import com.preonboarding.customkeyboard.domain.model.Clipboard
 import com.preonboarding.customkeyboard.domain.repository.ClipboardRepository
 import com.preonboarding.customkeyboard.domain.usecase.RoomUseCase
@@ -10,8 +11,8 @@ class RoomUseCaseImpl @Inject constructor(
     private val clipboardRepository: ClipboardRepository
 ) : RoomUseCase {
 
-    override suspend fun deleteClipData(id: Int) {
-        clipboardRepository.deleteClipData(id)
+    override suspend fun deleteClipData(clipboard: ClipboardEntity) {
+        clipboardRepository.deleteClipData(clipboard)
     }
 
     override suspend fun insertClipData(data: String) {
@@ -21,4 +22,8 @@ class RoomUseCaseImpl @Inject constructor(
     override fun getAllClipData(): Flow<List<Clipboard>> {
         return clipboardRepository.getAllClipData()
     }
+
+    override suspend fun getClipData(clipData: String): ClipboardEntity =
+        clipboardRepository.getClipData(clipData)
+
 }

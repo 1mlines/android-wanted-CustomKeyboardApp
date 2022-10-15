@@ -3,16 +3,19 @@ package com.preonboarding.customkeyboard.presentation
 import android.content.ClipboardManager
 import android.content.Context
 import android.inputmethodservice.InputMethodService
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import com.preonboarding.customkeyboard.data.local.entity.ClipboardEntity
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardBinding
+import com.preonboarding.customkeyboard.domain.model.Clipboard
 import com.preonboarding.customkeyboard.domain.usecase.RoomUseCase
 import com.preonboarding.customkeyboard.presentation.clipboard.ClipboardActionListener
 import com.preonboarding.customkeyboard.presentation.clipboard.KeyboardClipboard
 import com.preonboarding.customkeyboard.presentation.keyboard.KoreanKeyBoard
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -20,6 +23,7 @@ class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChan
     @Inject
     lateinit var roomUseCase: RoomUseCase
 
+    private val clipList = MutableStateFlow<List<Clipboard>>(emptyList())
     private lateinit var clipboardManager: ClipboardManager
 
     private lateinit var binding: ViewKeyboardBinding
@@ -34,6 +38,13 @@ class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChan
         binding = ViewKeyboardBinding.inflate(layoutInflater)
         clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         clipboardManager.addPrimaryClipChangedListener(this)
+        serviceScope.launch {
+            roomUseCase.getAllClipData().collect { list ->
+                clipList.update {
+                    list.toList()
+                }
+            }
+        }
     }
 
     private val keyboardReplacer = object : KeyboardActionListener {
@@ -61,21 +72,21 @@ class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChan
     }
 
     private val clipboardListener = object : ClipboardActionListener {
-        override fun deleteClipData(id: Int) {
+        override fun deleteClipData(clipboard: ClipboardEntity) {
             serviceScope.launch {
-                roomUseCase.deleteClipData(id)
+                roomUseCase.deleteClipData(clipboard)
+                roomUseCase.getAllClipData().collect { list ->
+                    clipList.update {
+                        list.toList()
+                    }
+                }
             }
         }
 
-        override fun copyClipData(text: String) {
+        override fun copyClipData(clipData: String) {
             serviceScope.launch {
-                roomUseCase.insertClipData(text)
-            }
-        }
-
-        override fun getClipData() {
-            serviceScope.launch {
-                roomUseCase.getAllClipData()
+                val pasteText = roomUseCase.getClipData(clipData).clipData
+                currentInputConnection.commitText(pasteText, 1)
             }
         }
     }
@@ -91,14 +102,20 @@ class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChan
                 applicationContext,
                 layoutInflater,
                 keyboardReplacer,
-                clipboardListener
+                clipboardListener,
             ).apply {
                 inputConnection = currentInputConnection
                 init()
             }
+
+        serviceScope.launch {
+            clipList.collect {
+                keyboardClipboard.updateClipList(it)
+            }
+        }
+
         return binding.viewKeyboard
     }
-
 
     override fun updateInputViewShown() {
         super.updateInputViewShown()
@@ -114,7 +131,6 @@ class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChan
 
     override fun onDestroy() {
         super.onDestroy()
-
         serviceScope.cancel()
     }
 
@@ -122,8 +138,15 @@ class KeyboardService : InputMethodService(), ClipboardManager.OnPrimaryClipChan
         serviceScope.launch {
             val clipData = clipboardManager.primaryClip
             clipData?.let {
-                roomUseCase.insertClipData(it.getItemAt(0).text.toString())
-                Log.d("클립보드", "onPrimaryClipChanged: ${it.getItemAt(0).text}")
+                runCatching {
+                    roomUseCase.insertClipData(clipData.getItemAt(0).text.toString())
+                }.also {
+                    roomUseCase.getAllClipData().collect { list ->
+                        clipList.update {
+                            list.toList()
+                        }
+                    }
+                }
             }
         }
     }

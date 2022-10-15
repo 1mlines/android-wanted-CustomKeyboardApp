@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.core.view.children
 import com.preonboarding.customkeyboard.R
 import com.preonboarding.customkeyboard.databinding.ViewKeyboardClipboardBinding
+import com.preonboarding.customkeyboard.domain.model.Clipboard
 import com.preonboarding.customkeyboard.presentation.KeyboardActionListener
 import com.preonboarding.customkeyboard.presentation.Mode
 
@@ -17,9 +18,8 @@ class KeyboardClipboard(
     private val context: Context,
     private val layoutInflater: LayoutInflater,
     private val keyboardListener: KeyboardActionListener,
-    private val clipboardListener: ClipboardActionListener
+    private val clipboardListener: ClipboardActionListener,
 ) {
-
     private val height = 150
     private val config = context.resources.configuration
 
@@ -29,9 +29,7 @@ class KeyboardClipboard(
     private val lineList = ArrayList<LinearLayout>()
 
     private val clipboardAdapter: ClipboardAdapter by lazy {
-        ClipboardAdapter {
-            clipboardListener.deleteClipData(it)
-        }
+        ClipboardAdapter(clipboardListener)
     }
 
     var inputConnection: InputConnection? = null
@@ -58,6 +56,10 @@ class KeyboardClipboard(
         }
 
         binding.rvClipboard.adapter = clipboardAdapter
+    }
+
+    fun updateClipList(clipList: List<Clipboard>) {
+        clipboardAdapter.submitList(clipList.toList())
     }
 
     fun getLayout(): LinearLayout {

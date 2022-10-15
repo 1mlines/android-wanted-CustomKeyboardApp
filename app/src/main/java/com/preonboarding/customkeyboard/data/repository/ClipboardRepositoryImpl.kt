@@ -19,7 +19,6 @@ class ClipboardRepositoryImpl @Inject constructor(
 
     override fun getAllClipData(): Flow<List<Clipboard>> = flow {
         val result = dataSource.getAllClipData().mapToClipboard()
-
         emit(result)
     }.flowOn(defaultDispatcher)
 
@@ -29,7 +28,11 @@ class ClipboardRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun deleteClipData(id: Int) {
-        dataSource.deleteClipData(id)
+    override suspend fun deleteClipData(clipboard: ClipboardEntity) {
+        dataSource.deleteClipData(clipboard)
     }
+
+    override suspend fun getClipData(clipData: String): ClipboardEntity =
+        dataSource.getClipData(clipData)
+
 }

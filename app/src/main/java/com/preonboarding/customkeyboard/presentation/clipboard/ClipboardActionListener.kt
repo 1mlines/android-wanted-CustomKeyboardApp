@@ -1,9 +1,9 @@
 package com.preonboarding.customkeyboard.presentation.clipboard
 
+import com.preonboarding.customkeyboard.data.local.entity.ClipboardEntity
+
 interface ClipboardActionListener {
-    fun deleteClipData(id: Int)
+    fun deleteClipData(clipboard: ClipboardEntity)
 
-    fun copyClipData(text: String)
-
-    fun getClipData()
+    fun copyClipData(clipData: String)
 }
