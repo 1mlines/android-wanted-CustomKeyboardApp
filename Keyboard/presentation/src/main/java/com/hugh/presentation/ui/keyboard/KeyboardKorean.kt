@@ -9,17 +9,24 @@ import android.view.inputmethod.InputConnection
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.LifecycleOwner
 import com.hugh.presentation.R
+import com.hugh.presentation.action.keyboard.KeyBoardActor
 import com.hugh.presentation.databinding.KeyboardKoreanBinding
+import kotlinx.coroutines.*
+import java.lang.Runnable
 
 class KeyboardKorean constructor(
     var layoutInflater: LayoutInflater,
     private var inputConnection: InputConnection?
-) {
+)  {
 
     private lateinit var keyboardKoreanBinding: KeyboardKoreanBinding
+    private val keyboard = Keyboard()
+    private val keyBoardActor by lazy { KeyBoardActor(keyboard) }
     private var isCaps: Boolean = false
     private var buttons: MutableList<Button> = mutableListOf()
     private val hangulUtil: HangulUtil by lazy { HangulUtil() }
@@ -41,6 +48,7 @@ class KeyboardKorean constructor(
     fun init() {
         keyboardKoreanBinding =
             DataBindingUtil.inflate(layoutInflater, R.layout.keyboard_korean, null, false)
+        keyboardKoreanBinding.actor = keyBoardActor
 
         myKeysText.clear()
         myKeysText.add(numpadText)
@@ -143,6 +151,13 @@ class KeyboardKorean constructor(
     }
 
     fun getOnTouchListener(clickListener: View.OnClickListener): View.OnTouchListener {
+        /*val job = GlobalScope.launch(Dispatchers.Default) {
+            while (isActive) {
+                clickListener.onClick(downView)
+                delay(100)
+            }
+        }*/
+
         val handler = Handler()
         val initailInterval = 500
         val normalInterval = 100
@@ -153,23 +168,29 @@ class KeyboardKorean constructor(
             }
         }
         val onTouchListener = object : View.OnTouchListener {
-            @SuppressLint("ClickableViewAccessibility")
             override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
                 when (motionEvent?.action) {
                     MotionEvent.ACTION_DOWN -> {
                         handler.removeCallbacks(handlerRunnable)
                         handler.postDelayed(handlerRunnable, initailInterval.toLong())
+                        //job.cancel()
+                        //job
+
                         downView = view!!
                         clickListener.onClick(view)
                         return true
                     }
                     MotionEvent.ACTION_UP -> {
                         handler.removeCallbacks(handlerRunnable)
+                        //job.cancel()
+
                         downView = null
                         return true
                     }
                     MotionEvent.ACTION_CANCEL -> {
                         handler.removeCallbacks(handlerRunnable)
+                        //job.cancel()
+
                         downView = null
                         return true
                     }
