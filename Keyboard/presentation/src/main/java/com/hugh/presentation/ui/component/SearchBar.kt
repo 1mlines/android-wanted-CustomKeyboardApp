@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.hugh.presentation.action.compose.test.TestAction
 import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 
 /**
@@ -45,20 +44,19 @@ import com.hugh.presentation.ui.theme.CustomKeyBoardTheme
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SearchBar(
-    navigateClipBoard: (TestAction) -> Unit
+    placeHolderText: String,
+    navigate: () -> Unit
 ) {
     val focusRequest = remember { FocusRequester.Default }
-
     LaunchedEffect(key1 = Unit) {
         focusRequest.requestFocus()
     }
-
     Row(
         modifier = Modifier.fillMaxWidth().padding(top = 5.dp).height(40.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         var text by remember { mutableStateOf("") }
-        var interaction = remember { MutableInteractionSource() }
+        val interaction = remember { MutableInteractionSource() }
         BasicTextField(
             value = text,
             onValueChange = {
@@ -95,7 +93,7 @@ fun SearchBar(
                     )
                 },
                 placeholder = {
-                    Text("테마 검색")
+                    Text(placeHolderText)
                 },
                 contentPadding = TextFieldDefaults.textFieldWithoutLabelPadding(
                     top = 0.dp,
@@ -116,7 +114,7 @@ fun SearchBar(
                 modifier = Modifier.align(Alignment.Center).clip(
                     RoundedCornerShape(5.dp)
                 )
-                    .clickable { navigateClipBoard(TestAction.GoBack) },
+                    .clickable { navigate() },
                 text = "닫기",
                 style = CustomKeyBoardTheme.typography.subTitle,
                 color = CustomKeyBoardTheme.color.allBtnGray
