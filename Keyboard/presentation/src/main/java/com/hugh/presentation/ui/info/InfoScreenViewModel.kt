@@ -18,9 +18,9 @@ class InfoScreenViewModel @Inject constructor() : ViewModel(), InfoActionHandler
     private val _navTarget = MutableSharedFlow<InfoNavTarget>(extraBufferCapacity = 1)
     val navTarget = _navTarget.asSharedFlow()
 
-    override fun clickAction(action: InfoAction) {
+    override fun navigateAction(action: InfoAction) {
         when (action) {
-            is InfoAction.NavigationKeyBoard -> {
+            is InfoAction.NavigateKeyBoard -> {
                 _navTarget.tryEmit(InfoNavTarget.KeyBoardTestScreen)
             }
         }
