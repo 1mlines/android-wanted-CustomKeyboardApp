@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">android-wanted-CustomKeyboardApp</string>
+    <string-array name="toolbar">
+        <item>키보드</item>
+        <item>클립보드</item>
+    </string-array>
     <string-array name="number">
         <item>1</item>
         <item>2</item>

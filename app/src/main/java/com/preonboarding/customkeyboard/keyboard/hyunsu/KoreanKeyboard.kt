@@ -36,13 +36,15 @@ class KoreanKeyBoard(
     override fun init() {
         combiner = KoreaCombiner(inputConnection)
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            /* setLayoutParamsLandScape(binding.lineNumber)*/
+            setLayoutParamsLandScape(binding.lineKeyboardToolbar.llToolbar)
+            setLayoutParamsLandScape(binding.lineNumber)
             setLayoutParamsLandScape(binding.lineFirst)
             setLayoutParamsLandScape(binding.lineSecond)
             setLayoutParamsLandScape(binding.lineThird)
             /* setLayoutParamsLandScape(binding.lineLast)*/
         } else {
-            /*setLayoutParams(binding.lineNumber)*/
+            setLayoutParams(binding.lineKeyboardToolbar.llToolbar)
+            setLayoutParams(binding.lineNumber)
             setLayoutParams(binding.lineFirst)
             setLayoutParams(binding.lineSecond)
             setLayoutParams(binding.lineThird)
@@ -51,6 +53,7 @@ class KoreanKeyBoard(
 
         keysText.apply {
             clear()
+            add(context.resources.getStringArray(R.array.toolbar).toList())
             add(context.resources.getStringArray(R.array.number).toList())
             add(context.resources.getStringArray(R.array.first_line_korea).toList())
             add(context.resources.getStringArray(R.array.second_line_korea).toList())
@@ -59,6 +62,7 @@ class KoreanKeyBoard(
         }
         lineList.apply {
             clear()
+            add(binding.lineKeyboardToolbar.llToolbar)
             add(binding.lineNumber)
             add(binding.lineFirst)
             add(binding.lineSecond)
@@ -192,6 +196,18 @@ class KoreanKeyBoard(
                                 keyboardActionListener.changeMode(Mode.ENGLISH)
                             }
                         }*/
+                    }
+                    "키보드" -> {
+                        button.text = key[item]
+                        onClickListener = View.OnClickListener {
+                            keyboardActionListener.changeMode(Mode.KOREA)
+                        }
+                    }
+                    "클립보드" -> {
+                        button.text = key[item]
+                        onClickListener = View.OnClickListener {
+                            keyboardActionListener.changeMode(Mode.CLIPBOARD)
+                        }
                     }
                     else -> {
                         button.apply {

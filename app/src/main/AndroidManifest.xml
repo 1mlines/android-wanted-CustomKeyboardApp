@@ -33,6 +33,7 @@
             android:name=".keyboard.hyewon.KeyboardService"
             android:enabled="true"
             android:exported="true"
+            android:label="KeyboardByHyewon"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <meta-data
                 android:name="android.view.im"
@@ -46,7 +47,7 @@
             android:name=".keyboard.hyunsu.KeyboardService"
             android:enabled="true"
             android:exported="true"
-            android:label="WantedCustomKeyboard"
+            android:label="KeyboardByHyunsu"
             android:permission="android.permission.BIND_INPUT_METHOD">
 
             <meta-data

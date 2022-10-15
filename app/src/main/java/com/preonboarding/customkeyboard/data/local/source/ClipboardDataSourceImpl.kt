@@ -16,7 +16,11 @@ class ClipboardDataSourceImpl @Inject constructor(
         return clipboardDao.insertClipData(clipboardEntity)
     }
 
-    override suspend fun deleteClipData(id: Int) {
-        return clipboardDao.deleteClipData(id)
+    override suspend fun deleteClipData(clipboard: ClipboardEntity) {
+        return clipboardDao.deleteClipData(clipboard)
+    }
+
+    override suspend fun getClipData(clipData: String): ClipboardEntity {
+        return clipboardDao.getClipData(clipData)
     }
 }
