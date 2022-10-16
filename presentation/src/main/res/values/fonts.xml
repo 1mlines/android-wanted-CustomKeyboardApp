@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="NotoSansRegular" parent="android:TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/notosans_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="NotoSansBold" parent="android:TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">@font/notosans_bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="NotoSansRegular10" parent="NotoSansRegular">
+        <item name="android:textSize">@dimen/font_size_10</item>
+    </style>
+
+    <style name="NotoSansRegular12" parent="NotoSansRegular">
+        <item name="android:textSize">@dimen/font_size_12</item>
+    </style>
+
+    <style name="NotoSansRegular14" parent="NotoSansRegular">
+        <item name="android:textSize">@dimen/font_size_14</item>
+    </style>
+
+    <style name="NotoSansRegular16" parent="NotoSansRegular">
+        <item name="android:textSize">@dimen/font_size_16</item>
+    </style>
+
+    <style name="NotoSansRegular20" parent="NotoSansRegular">
+        <item name="android:textSize">@dimen/font_size_20</item>
+    </style>
+
+    <style name="NotoSansBold12" parent="NotoSansBold">
+        <item name="android:textSize">@dimen/font_size_12</item>
+    </style>
+
+    <style name="NotoSansBold14" parent="NotoSansBold">
+        <item name="android:textSize">@dimen/font_size_14</item>
+    </style>
+
+    <style name="NotoSansBold16" parent="NotoSansBold">
+        <item name="android:textSize">@dimen/font_size_16</item>
+    </style>
+
+    <style name="NotoSansBold20" parent="NotoSansBold">
+        <item name="android:textSize">@dimen/font_size_20</item>
+    </style>
+</resources>

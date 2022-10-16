@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".presentation.MainActivity">
+
+        <ImageView
+            android:id="@+id/iv_arrow_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="19dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_arrow_left_18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_keyboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="19dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/ic_keyboard"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="19dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toTopOf="@id/cl_bottom_sheet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_arrow_left">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/iv_keyboard_preview"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    app:cardCornerRadius="8dp"
+                    app:cardUseCompatPadding="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        android:src="@drawable/bg_keyboard_preview" />
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:id="@+id/tv_keyboard_title"
+                    style="@style/NotoSansBold20"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="24dp"
+                    android:text="앙무"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_keyboard_preview" />
+
+                <TextView
+                    android:id="@+id/tv_keyboard_sub_title"
+                    style="@style/NotoSansRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="4dp"
+                    android:text="코핀"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyboard_title" />
+
+                <TextView
+                    android:id="@+id/tv_keyboard_content_count"
+                    style="@style/NotoSansRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="78"
+                    android:textColor="@color/main"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyboard_sub_title" />
+
+                <TextView
+                    android:id="@+id/tv_keyboard_content_part"
+                    style="@style/NotoSansRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="명이 참여했어요"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintStart_toEndOf="@id/tv_keyboard_content_count"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyboard_sub_title" />
+
+                <TextView
+                    android:id="@+id/tv_keyboard_introduce_title"
+                    style="@style/NotoSansBold14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="40dp"
+                    android:text="플레이키보드 첫 이벤트 테마를 공개합니다."
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyboard_content_part" />
+
+                <TextView
+                    android:id="@+id/tv_keyboard_introduce_content"
+                    style="@style/NotoSansRegular14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="밀당해피니스 유튜브 채널을 방문하면 “테마명” 이벤트 테마를 무료로 받을 수 있다구요?\n지금 바로 ‘참여하기' 버튼을 눌러 새로워진 밀당해피니스 유튜브 채널을 확인해보세요!"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintEnd_toEndOf="@id/iv_keyboard_preview"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyboard_introduce_title" />
+
+                <TextView
+                    android:id="@+id/tv_tag"
+                    style="@style/NotoSansBold16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="48dp"
+                    android:text="태그"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyboard_introduce_content" />
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/cg_tag_group"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    app:chipSpacingHorizontal="4dp"
+                    app:layout_constraintEnd_toEndOf="@id/iv_keyboard_preview"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_tag">
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="이벤트" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="캐릭터" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="새" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="동물" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="앙증맞은" />
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:text="동글동글" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+                <TextView
+                    android:id="@+id/tv_keyword_title"
+                    style="@style/NotoSansBold16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="40dp"
+                    android:text="이런 키워드에 반응해요"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cg_tag_group" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_keyword"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="@id/iv_keyboard_preview"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_keyword_title"
+                    tools:listitem="@layout/item_keyword" />
+
+                <TextView
+                    android:id="@+id/tv_theme_title"
+                    style="@style/NotoSansBold16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="48dp"
+                    android:text="이 테마를 어떻게 생각하나요?"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rcv_keyword" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_smile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="😊"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_smile_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_smile_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_smile_text"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="맘에 들어요"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toStartOf="@id/tv_emoji_love_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_smile" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_smile_count"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_smile_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_smile_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_smile_text" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_love"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="😍"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_love_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_love_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_love_text"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="심쿵했어요"
+                    android:textColor="@color/main"
+                    app:layout_constraintEnd_toStartOf="@id/tv_emoji_wink_text"
+                    app:layout_constraintStart_toEndOf="@id/tv_emoji_smile_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_love" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_love_count"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1"
+                    android:textColor="@color/main"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_love_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_love_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_love_text" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_wink"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="😉"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_wink_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_wink_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_wink_text"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="응원해요"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toStartOf="@id/tv_emoji_funny_text"
+                    app:layout_constraintStart_toEndOf="@id/tv_emoji_love_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_wink" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_wink_count"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_wink_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_wink_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_wink_text" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_funny"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="😉"
+                    android:textColor="@color/black"
+                    android:textSize="30sp"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_funny_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_funny_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_theme_title" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_funny_text"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="갖고싶어요"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tv_emoji_wink_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_wink" />
+
+                <TextView
+                    android:id="@+id/tv_emoji_funny_count"
+                    style="@style/NotoSansRegular12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textColor="@color/gray"
+                    app:layout_constraintEnd_toEndOf="@+id/tv_emoji_funny_text"
+                    app:layout_constraintStart_toStartOf="@id/tv_emoji_funny_text"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_funny_text" />
+
+                <ImageView
+                    android:id="@+id/iv_ad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/bg_ad"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_emoji_smile_count" />
+
+                <TextView
+                    android:id="@+id/tv_review_title"
+                    style="@style/NotoSansBold16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="48dp"
+                    android:text="구매 리뷰"
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/iv_ad" />
+
+                <TextView
+                    android:id="@+id/tv_review_count"
+                    style="@style/NotoSansBold16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="10"
+                    android:textColor="@color/main"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_review_title"
+                    app:layout_constraintStart_toEndOf="@id/tv_review_title"
+                    app:layout_constraintTop_toTopOf="@id/tv_review_title" />
+
+                <ImageView
+                    android:id="@+id/iv_review_warning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_warning"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_review_description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_review_description" />
+
+                <TextView
+                    android:id="@+id/tv_review_description"
+                    style="@style/NotoSansRegular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="13dp"
+                    android:text="테마를 구매해야 리뷰를 남길 수 있어요."
+                    android:textColor="@color/black"
+                    app:layout_constraintStart_toEndOf="@id/iv_review_warning"
+                    app:layout_constraintTop_toBottomOf="@id/tv_review_title" />
+
+                <ImageView
+                    android:id="@+id/iv_review_arrow_down"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_arrow_down"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_review_description"
+                    app:layout_constraintEnd_toEndOf="@id/iv_keyboard_preview"
+                    app:layout_constraintTop_toTopOf="@id/tv_review_description" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcv_review"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="13dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="@id/iv_keyboard_preview"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_review_description"
+                    tools:listitem="@layout/item_review" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_bottom_sheet"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_bottom_sheet_zem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="18dp"
+                android:src="@drawable/ic_zem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_bottom_sheet_zem_count"
+                style="@style/NotoSansBold16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="12dp"
+                android:text="5"
+                android:textColor="@color/lightBlue"
+                app:layout_constraintStart_toEndOf="@id/iv_bottom_sheet_zem"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_bottom_sheet_zem_count_2"
+                style="@style/NotoSansBold12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="5dp"
+                android:text="0젬"
+                android:textColor="@color/main"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_bottom_sheet_zem" />
+
+            <TextView
+                style="@style/NotoSansBold12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 보유 중"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toBottomOf="@id/tv_bottom_sheet_zem_count_2"
+                app:layout_constraintStart_toEndOf="@id/tv_bottom_sheet_zem_count_2"
+                app:layout_constraintTop_toTopOf="@id/tv_bottom_sheet_zem_count_2" />
+
+            <TextView
+                android:id="@+id/tv_pay"
+                style="@style/NotoSansBold14"
+                android:layout_width="144dp"
+                android:layout_height="0dp"
+                android:layout_marginVertical="12dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_main_rounded_border"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="구매하기"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.preonboarding.customkeyboard.presentation.ui.main.MainViewModel" />
+    </data>
+</layout>

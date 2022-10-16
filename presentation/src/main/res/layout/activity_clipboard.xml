@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_gray"
+        android:paddingHorizontal="20dp"
+        tools:context=".clipboard.ClipboardActivity">
+
+        <EditText
+            android:id="@+id/et_clipboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_clipboard_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clipboard_title"
+            android:textColor="@color/mint"
+            style="@style/NotoSansBold12"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_clipboard"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_clipboard"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+
+            app:layout_constraintTop_toBottomOf="@id/tv_clipboard_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:listitem="@layout/item_clipboard"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.preonboarding.customkeyboard.presentation.ui.main.MainViewModel" />
+
+    </data>
+</layout>
