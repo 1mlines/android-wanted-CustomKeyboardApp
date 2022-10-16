@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">presentation</string>
+    <string name="clipBoard">클립보드</string>
+    <string name="emptyClipBoard">복사한 텍스트가 여기에 표시돼요!</string>
+</resources>
